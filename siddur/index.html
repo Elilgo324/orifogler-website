@@ -1,602 +1,566 @@
 <!doctype html>
 <html lang="he" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>סידור הגיגי אמרי</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'><rect%20width='64'%20height='64'%20rx='14'%20fill='rgb(15,92,77)'/><path%20d='M32%2010l7%2014%2016%202-12%2011%203%2016-14-8-14%208%203-16-12-11%2016-2z'%20fill='rgb(255,255,255)'/></svg>"
-    />
-    <style>
-      :root {
-        color-scheme: light;
-        --bg: #f6f3ec;
-        --surface: #ffffff;
-        --surface-soft: #fbfaf7;
-        --text: #1b1b1b;
-        --muted: #5b5b5b;
-        --accent: #0f5c4d;
-        --accent-2: #9c7b47;
-        --accent-soft: #e6f1ee;
-        --border: #e3e0d8;
-        --ring: rgba(15, 92, 77, 0.22);
-        --shadow: 0 14px 30px rgba(27, 27, 27, 0.08);
-        --shadow-soft: 0 10px 20px rgba(27, 27, 27, 0.06);
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>סידור הגיגי אמרי</title>
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'><rect%20width='64'%20height='64'%20rx='14'%20fill='rgb(15,92,77)'/><path%20d='M32%2010l7%2014%2016%202-12%2011%203%2016-14-8-14%208%203-16-12-11%2016-2z'%20fill='rgb(255,255,255)'/></svg>" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ec;
+      --surface: #ffffff;
+      --surface-soft: #fbfaf7;
+      --text: #1b1b1b;
+      --muted: #5b5b5b;
+      --accent: #0f5c4d;
+      --accent-2: #9c7b47;
+      --accent-soft: #e6f1ee;
+      --border: #e3e0d8;
+      --ring: rgba(15, 92, 77, 0.22);
+      --shadow: 0 14px 30px rgba(27, 27, 27, 0.08);
+      --shadow-soft: 0 10px 20px rgba(27, 27, 27, 0.06);
+    }
 
-      html {
-        scroll-behavior: smooth;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      body {
-        margin: 0;
-        font-family: "Heebo", "Assistant", "Arial", sans-serif;
-        background:
-          radial-gradient(1200px 600px at 85% -10%, #e8f2ef 0%, rgba(232, 242, 239, 0) 60%),
-          linear-gradient(180deg, #f7f3ec 0%, #f1eee7 100%);
-        color: var(--text);
-        line-height: 1.9;
-        font-size: 17px;
-        -webkit-font-smoothing: antialiased;
-      }
+    html {
+      scroll-behavior: smooth;
+    }
 
+    body {
+      margin: 0;
+      font-family: "Heebo", "Assistant", "Arial", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 85% -10%, #e8f2ef 0%, rgba(232, 242, 239, 0) 60%),
+        linear-gradient(180deg, #f7f3ec 0%, #f1eee7 100%);
+      color: var(--text);
+      line-height: 1.9;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: linear-gradient(120deg, #0f5c4d 0%, #2f816f 100%);
+      color: #fff;
+      padding: 44px 20px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+      transform: rotate(-12deg);
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .title {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05rem;
+    }
+
+    .controls {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 14px 16px;
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 10px 40px 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      min-width: 220px;
+      background-color: #fff;
+      background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+        linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+      background-position: calc(100% - 16px) calc(50% + 2px), calc(100% - 10px) calc(50% + 2px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      appearance: none;
+      box-shadow: 0 6px 16px rgba(15, 92, 77, 0.12);
+    }
+
+    select:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid rgba(227, 224, 216, 0.6);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(6px);
+      z-index: 10;
+    }
+
+    nav .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    nav a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(15, 92, 77, 0.15);
+    }
+
+    main {
+      padding: 18px 0 70px;
+      margin-top: -12px;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 18px auto 18px 18px;
+      width: 3px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent), rgba(15, 92, 77, 0.15));
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.35rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .source-link {
+      text-decoration: none;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .source-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(15, 92, 77, 0.14);
+    }
+
+    .block {
+      border: 1px solid rgba(227, 224, 216, 0.7);
+      background: var(--surface-soft);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-top: 14px;
+      box-shadow: 0 8px 16px rgba(27, 27, 27, 0.04);
+    }
+
+    .block:first-of-type {
+      margin-top: 0;
+    }
+
+    .block h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      color: var(--accent-2);
+    }
+
+    .text {
+      white-space: pre-line;
+      color: var(--text);
+    }
+
+    .source-content {
+      margin-top: 12px;
+    }
+
+    .source-content .mw-parser-output {
+      font-size: 1rem;
+    }
+
+    .source-content p {
+      margin: 8px 0;
+    }
+
+    .source-content h2,
+    .source-content h3 {
+      color: var(--accent-2);
+      font-size: 1.1rem;
+      margin: 16px 0 8px;
+    }
+
+    .source-content ul,
+    .source-content ol {
+      padding-right: 1.2rem;
+    }
+
+    .source-content a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(15, 92, 77, 0.35);
+    }
+
+    .source-content table {
+      max-width: 100%;
+      border-collapse: collapse;
+    }
+
+    .source-content.loading {
+      opacity: 0.7;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .controls .muted {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    footer {
+      padding: 24px 20px 46px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(15, 92, 77, 0.35);
+    }
+
+    @media (max-width: 720px) {
       header {
-        background: linear-gradient(120deg, #0f5c4d 0%, #2f816f 100%);
-        color: #fff;
-        padding: 44px 20px 48px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      header::after {
-        content: "";
-        position: absolute;
-        inset: -40% -20% auto auto;
-        width: 420px;
-        height: 420px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
-        transform: rotate(-12deg);
-        pointer-events: none;
-      }
-
-      .wrap {
-        max-width: 980px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      .title {
-        font-size: clamp(2rem, 3vw, 2.6rem);
-        margin: 0 0 8px;
-        font-weight: 700;
-      }
-
-      .subtitle {
-        margin: 0;
-        color: rgba(255, 255, 255, 0.85);
-        font-size: 1.05rem;
+        padding: 36px 18px 38px;
       }
 
       .controls {
-        margin-top: 26px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px 16px;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.14);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 14px 16px;
-        border-radius: 16px;
-        backdrop-filter: blur(6px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-      }
-
-      label {
-        font-weight: 600;
+        width: 100%;
       }
 
       select {
-        font-size: 1rem;
-        padding: 10px 40px 10px 14px;
-        border-radius: 12px;
-        border: 1px solid transparent;
-        min-width: 220px;
-        background-color: #fff;
-        background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
-          linear-gradient(135deg, var(--accent) 50%, transparent 50%);
-        background-position: calc(100% - 16px) calc(50% + 2px), calc(100% - 10px) calc(50% + 2px);
-        background-size: 6px 6px, 6px 6px;
-        background-repeat: no-repeat;
-        appearance: none;
-        box-shadow: 0 6px 16px rgba(15, 92, 77, 0.12);
-      }
-
-      select:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 4px var(--ring);
-      }
-
-      nav {
-        position: sticky;
-        top: 0;
-        background: rgba(255, 255, 255, 0.9);
-        border-bottom: 1px solid rgba(227, 224, 216, 0.6);
-        box-shadow: var(--shadow-soft);
-        backdrop-filter: blur(6px);
-        z-index: 10;
-      }
-
-      nav .wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 12px 20px;
-      }
-
-      nav a {
-        text-decoration: none;
-        color: var(--accent);
-        font-weight: 600;
-        padding: 7px 12px;
-        border-radius: 999px;
-        background: var(--accent-soft);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      nav a:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 20px rgba(15, 92, 77, 0.15);
-      }
-
-      main {
-        padding: 18px 0 70px;
-        margin-top: -12px;
+        width: 100%;
       }
 
       .section {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 28px;
-        margin-bottom: 24px;
-        box-shadow: var(--shadow);
-        position: relative;
-        overflow: hidden;
+        padding: 22px;
       }
 
-      .section::before {
-        content: "";
-        position: absolute;
-        inset: 18px auto 18px 18px;
-        width: 3px;
-        border-radius: 999px;
-        background: linear-gradient(180deg, var(--accent), rgba(15, 92, 77, 0.15));
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
+    }
 
-      .section h2 {
-        margin: 0 0 8px;
-        color: var(--accent);
-        font-size: 1.35rem;
+    @media (prefers-reduced-motion: reduce) {
+      nav a {
+        transition: none;
       }
+    }
+  </style>
+</head>
 
-      .block {
-        border: 1px solid rgba(227, 224, 216, 0.7);
-        background: var(--surface-soft);
-        border-radius: 16px;
-        padding: 16px 18px;
-        margin-top: 14px;
-        box-shadow: 0 8px 16px rgba(27, 27, 27, 0.04);
-      }
-
-      .block:first-of-type {
-        margin-top: 0;
-      }
-
-      .block h3 {
-        margin: 0 0 8px;
-        font-size: 1.05rem;
-        color: var(--accent-2);
-      }
-
-      .text {
-        white-space: pre-line;
-        color: var(--text);
-      }
-
-      .muted {
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-
-      .controls .muted {
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 500;
-      }
-
-      footer {
-        padding: 24px 20px 46px;
-        text-align: center;
-        color: var(--muted);
-      }
-
-      @media (max-width: 720px) {
-        header {
-          padding: 36px 18px 38px;
-        }
-
-        .controls {
-          width: 100%;
-        }
-
-        select {
-          width: 100%;
-        }
-
-        .section {
-          padding: 22px;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        nav a {
-          transition: none;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <div class="wrap">
-        <h1 class="title">סידור הגיגי אמרי</h1>
-        <p class="subtitle">שחרית · מנחה · ערבית · ברכת המזון</p>
-        <div class="controls">
-          <label for="nusachSelect">בחר נוסח</label>
-          <select id="nusachSelect" aria-label="בחירת נוסח תפילה">
-            <option value="sefarad">נוסח ספרד (ברירת מחדל)</option>
-            <option value="ashkenaz">נוסח אשכנז</option>
-            <option value="edot">נוסח עדות המזרח</option>
-          </select>
-          <span class="muted" id="nusachNote"></span>
-        </div>
+<body>
+  <header>
+    <div class="wrap">
+      <h1 class="title">סידור הגיגי אמרי</h1>
+      <p class="subtitle">שחרית · מנחה · ערבית · ברכת המזון</p>
+      <div class="controls">
+        <label for="nusachSelect">בחר נוסח</label>
+        <select id="nusachSelect" aria-label="בחירת נוסח תפילה">
+          <option value="sefarad">נוסח ספרד</option>
+          <option value="ashkenaz">נוסח אשכנז</option>
+          <option value="edot">נוסח עדות המזרח</option>
+        </select>
+        <span class="muted" id="nusachNote"></span>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <nav>
-      <div class="wrap">
-        <a href="#shacharit">שחרית</a>
-        <a href="#mincha">מנחה</a>
-        <a href="#maariv">ערבית</a>
-        <a href="#birkat">ברכת המזון</a>
-      </div>
-    </nav>
+  <nav>
+    <div class="wrap">
+      <a href="#shacharit">שחרית</a>
+      <a href="#mincha">מנחה</a>
+      <a href="#maariv">ערבית</a>
+      <a href="#birkat">ברכת המזון</a>
+    </div>
+  </nav>
 
-    <main class="wrap" id="content"></main>
+  <main class="wrap" id="content"></main>
 
-    <footer>
-      סידור דיגיטלי לקריאה נעימה.
-      כל הזכויות שמורות.
-    </footer>
+  <footer>
+    סידור דיגיטלי לקריאה נעימה.
+    כל הזכויות שמורות.
+    מקור הטקסטים: <a href="https://he.wikisource.org" target="_blank" rel="noopener">ויקיטקסט</a> (CC BY-SA 4.0).
+  </footer>
 
-    <script>
-      const BASE_SECTIONS = [
-        {
-          id: "shacharit",
-          title: "תפילת שחרית",
-          blocks: [
-            {
-              title: "ברכות השחר",
-              text: `ברוך אתה ה' אלוהינו מלך העולם, הנותן לשכוי בינה להבחין בין יום ובין לילה.
-ברוך אתה ה' אלוהינו מלך העולם, פוקח עיוורים.
-ברוך אתה ה' אלוהינו מלך העולם, מתיר אסורים.
-ברוך אתה ה' אלוהינו מלך העולם, זוקף כפופים.
-ברוך אתה ה' אלוהינו מלך העולם, מלביש ערומים.
-ברוך אתה ה' אלוהינו מלך העולם, הנותן ליעף כוח.
-ברוך אתה ה' אלוהינו מלך העולם, רוקע הארץ על המים.
-ברוך אתה ה' אלוהינו מלך העולם, שעשה לי כל צרכי.
-ברוך אתה ה' אלוהינו מלך העולם, אוזר ישראל בגבורה.
-ברוך אתה ה' אלוהינו מלך העולם, עוטר ישראל בתפארה.
-ברוך אתה ה' אלוהינו מלך העולם, שלא עשני גוי.
-ברוך אתה ה' אלוהינו מלך העולם, שלא עשני עבד.
-ברוך אתה ה' אלוהינו מלך העולם, שלא עשני אשה.
+  <script>
+    const WIKISOURCE_API = "https://he.wikisource.org/w/api.php";
 
-אלוהי נשמה שנתת בי טהורה היא, אתה בראתה, אתה יצרתה, אתה נפחתה בי, ואתה משמרה בקרבי.
-ואתה עתיד ליטלה ממני ולהחזירה בי לעתיד לבוא.
-כל זמן שהנשמה בקרבי, מודה אני לפניך ה' אלוהי ואלוהי אבותי, ריבון כל המעשים, אדון כל הנשמות.
-ברוך אתה ה' המחזיר נשמות לפגרים מתים.
+    const SIDUR = {
+      sefarad: {
+        label: "נוסח ספרד",
+        note: "",
+        sections: [
+          {
+            id: "shacharit",
+            title: "תפילת שחרית",
+            page: "סידור/נוסח ספרד/חול/שחרית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/שחרית"
+          },
+          {
+            id: "mincha",
+            title: "תפילת מנחה",
+            page: "סידור/נוסח ספרד/חול/מנחה",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/מנחה"
+          },
+          {
+            id: "maariv",
+            title: "תפילת ערבית",
+            page: "סידור/נוסח ספרד/חול/ערבית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/ערבית"
+          },
+          {
+            id: "birkat",
+            title: "ברכת המזון",
+            page: "סידור/נוסח ספרד/ברכת המזון",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/ברכת_המזון"
+          }
+        ]
+      },
+      ashkenaz: {
+        label: "נוסח אשכנז",
+        note: "",
+        sections: [
+          {
+            id: "shacharit",
+            title: "תפילת שחרית",
+            page: "סידור/נוסח אשכנז/חול/שחרית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/שחרית"
+          },
+          {
+            id: "mincha",
+            title: "תפילת מנחה",
+            page: "סידור/נוסח אשכנז/חול/מנחה",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/מנחה"
+          },
+          {
+            id: "maariv",
+            title: "תפילת ערבית",
+            page: "סידור/נוסח אשכנז/חול/ערבית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/ערבית"
+          },
+          {
+            id: "birkat",
+            title: "ברכת המזון",
+            page: "סידור/נוסח אשכנז/ברכת המזון",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/ברכת_המזון"
+          }
+        ]
+      },
+      edot: {
+        label: "נוסח עדות המזרח",
+        note: "",
+        sections: [
+          {
+            id: "shacharit",
+            title: "תפילת שחרית",
+            page: "סידור/נוסח עדות המזרח/חול/שחרית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/שחרית"
+          },
+          {
+            id: "mincha",
+            title: "תפילת מנחה",
+            page: "סידור/נוסח עדות המזרח/חול/מנחה",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/מנחה"
+          },
+          {
+            id: "maariv",
+            title: "תפילת ערבית",
+            page: "סידור/נוסח עדות המזרח/חול/ערבית",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/ערבית"
+          },
+          {
+            id: "birkat",
+            title: "ברכת המזון",
+            page: "סידור/נוסח עדות המזרח/ברכת המזון",
+            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/ברכת_המזון"
+          }
+        ]
+      }
+    };
 
-המעביר חבלי שינה מעיני ותנומה מעפעפי.
-ויהי רצון מלפניך ה' אלוהי ואלוהי אבותי, שתרגילני בתורתך ודבקני במצוותיך,
-ואל תביאני לידי חטא ולא לידי עוון ולא לידי ניסיון ולא לידי ביזיון,
-וכוף את יצרי להשתעבד לך, והרחקני מאדם רע ומחבר רע,
-ודבקני ביצר הטוב ובמעשים טובים, ותן בלבי אהבה ויראה את שמך,
-ועשה למען רחמיך, גומל חסדים טובים.
-ברוך אתה ה' גומל חסדים טובים לעמו ישראל.`
-            },
-            {
-              title: "קריאת שמע",
-              text: `שמע ישראל ה' אלוהינו ה' אחד.
-ברוך שם כבוד מלכותו לעולם ועד.
+    const contentEl = document.getElementById("content");
+    const selectEl = document.getElementById("nusachSelect");
+    const noteEl = document.getElementById("nusachNote");
 
-ואהבת את ה' אלוהיך בכל לבבך ובכל נפשך ובכל מאודך.
-והיו הדברים האלה אשר אנכי מצוך היום על לבבך.
-ושננתם לבניך ודברת בם בשבתך בביתך ובלכתך בדרך ובשכבך ובקומך.
-וקשרתם לאות על ידך והיו לטטפות בין עיניך.
-וכתבתם על מזוזות ביתך ובשעריך.
+    const fetchWikisourceHtml = async (page) => {
+      const url =
+        `${WIKISOURCE_API}?action=parse&page=${encodeURIComponent(page)}` +
+        "&prop=text&format=json&origin=*";
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Failed to fetch content");
+      }
+      const data = await response.json();
+      return data?.parse?.text?.["*"] || "";
+    };
 
-והיה אם שמוע אל מצוותי אשר אנכי מצווה אתכם היום לאהבה את ה' אלוהיכם ולעבדו בכל לבבכם ובכל נפשכם.
-ונתתי מטר ארצכם בעתו יורה ומלקוש, ואספת דגנך ותירושך ויצהרך.
-ונתתי עשב בשדך לבהמתך ואכלת ושבעת.
-השמרו לכם פן יפתה לבבכם וסרתם ועבדתם אלהים אחרים והשתחויתם להם.
-וחרה אף ה' בכם ועצר את השמים ולא יהיה מטר והאדמה לא תיתן את יבולה,
-ואבדתם מהרה מעל הארץ הטובה אשר ה' נותן לכם.
-ושמתם את דברי אלה על לבבכם ועל נפשכם וקשרתם אותם לאות על ידכם והיו לטטפות בין עיניכם.
-ולמדתם אותם את בניכם לדבר בם בשבתך בביתך ובלכתך בדרך ובשכבך ובקומך.
-וכתבתם על מזוזות ביתך ובשעריך.
-למען ירבו ימיכם וימי בניכם על האדמה אשר נשבע ה' לאבותיכם לתת להם, כימי השמים על הארץ.
-
-ויאמר ה' אל משה לאמר.
-דבר אל בני ישראל ואמרת אליהם ועשו להם ציצית על כנפי בגדיהם לדורותם,
-ונתנו על ציצית הכנף פתיל תכלת.
-והיה לכם לציצית וראיתם אותו וזכרתם את כל מצוות ה' ועשיתם אותם,
-ולא תתורו אחרי לבבכם ואחרי עיניכם אשר אתם זנים אחריהם.
-למען תזכרו ועשיתם את כל מצוותי והייתם קדושים לאלהיכם.
-אני ה' אלהיכם אשר הוצאתי אתכם מארץ מצרים להיות לכם לאלהים, אני ה' אלהיכם.`
-            },
-            {
-              title: "עמידה (פתיחה)",
-              text: `אדני שפתי תפתח ופי יגיד תהילתך.
-
-ברוך אתה ה' אלוהינו ואלוהי אבותינו, אלוהי אברהם, אלוהי יצחק ואלוהי יעקב,
-האל הגדול הגיבור והנורא, אל עליון, גומל חסדים טובים וקונה הכל,
-וזוכר חסדי אבות ומביא גואל לבני בניהם למען שמו באהבה.
-מלך עוזר ומושיע ומגן.
-ברוך אתה ה' מגן אברהם.
-
-אתה גיבור לעולם ה', מחיה מתים אתה רב להושיע.
-מוריד הטל.
-מכלכל חיים בחסד, מחיה מתים ברחמים רבים,
-סומך נופלים ורופא חולים ומתיר אסורים ומקיים אמונתו לישני עפר.
-מי כמוך בעל גבורות ומי דומה לך מלך ממית ומחיה ומצמיח ישועה.
-ונאמן אתה להחיות מתים.
-ברוך אתה ה' מחיה המתים.
-
-אתה קדוש ושמך קדוש וקדושים בכל יום יהללוך סלה.
-ברוך אתה ה' האל הקדוש.`
-            }
-          ]
-        },
-        {
-          id: "mincha",
-          title: "תפילת מנחה",
-          blocks: [
-            {
-              title: "אשרי",
-              text: `אשרי יושבי ביתך עוד יהללוך סלה.
-אשרי העם שככה לו, אשרי העם שה' אלוהיו.
-
-תהלה לדוד: ארוממך אלוהי המלך ואברכה שמך לעולם ועד.
-בכל יום אברכך ואהללה שמך לעולם ועד.
-גדול ה' ומהולל מאוד ולגדולתו אין חקר.
-דור לדור ישבח מעשיך וגבורותיך יגידו.
-הדר כבוד הודך ודברי נפלאותיך אשיחה.
-ועזוז נוראותיך יאמרו וגדולתך אספרנה.
-זכר רב טובך יביעו וצדקתך ירננו.
-חנון ורחום ה' ארך אפים וגדל חסד.
-טוב ה' לכל ורחמיו על כל מעשיו.
-יודוך ה' כל מעשיך וחסידיך יברכוכה.
-כבוד מלכותך יאמרו וגבורתך ידברו.
-להודיע לבני האדם גבורותיו וכבוד הדר מלכותו.
-מלכותך מלכות כל עולמים וממשלתך בכל דור ודור.
-סומך ה' לכל הנופלים וזוקף לכל הכפופים.
-עיני כל אליך ישברו ואתה נותן להם את אכלם בעתו.
-פותח את ידך ומשביע לכל חי רצון.
-צדיק ה' בכל דרכיו וחסיד בכל מעשיו.
-קרוב ה' לכל קוראיו לכל אשר יקראוהו באמת.
-רצון יראיו יעשה ואת שועתם ישמע ויושיעם.
-שומר ה' את כל אוהביו ואת כל הרשעים ישמיד.
-תהלת ה' ידבר פי ויברך כל בשר שם קדשו לעולם ועד.`
-            },
-            {
-              title: "עמידה (פתיחה)",
-              text: `אדני שפתי תפתח ופי יגיד תהילתך.
-
-ברוך אתה ה' אלוהינו ואלוהי אבותינו, אלוהי אברהם, אלוהי יצחק ואלוהי יעקב,
-האל הגדול הגיבור והנורא, אל עליון, גומל חסדים טובים וקונה הכל,
-וזוכר חסדי אבות ומביא גואל לבני בניהם למען שמו באהבה.
-מלך עוזר ומושיע ומגן.
-ברוך אתה ה' מגן אברהם.
-
-אתה גיבור לעולם ה', מחיה מתים אתה רב להושיע.
-מוריד הטל.
-מכלכל חיים בחסד, מחיה מתים ברחמים רבים,
-סומך נופלים ורופא חולים ומתיר אסורים ומקיים אמונתו לישני עפר.
-מי כמוך בעל גבורות ומי דומה לך מלך ממית ומחיה ומצמיח ישועה.
-ונאמן אתה להחיות מתים.
-ברוך אתה ה' מחיה המתים.
-
-אתה קדוש ושמך קדוש וקדושים בכל יום יהללוך סלה.
-ברוך אתה ה' האל הקדוש.`
-            }
-          ]
-        },
-        {
-          id: "maariv",
-          title: "תפילת ערבית",
-          blocks: [
-            {
-              title: "קריאת שמע",
-              text: `שמע ישראל ה' אלוהינו ה' אחד.
-ברוך שם כבוד מלכותו לעולם ועד.
-
-ואהבת את ה' אלוהיך בכל לבבך ובכל נפשך ובכל מאודך.
-והיו הדברים האלה אשר אנכי מצוך היום על לבבך.
-ושננתם לבניך ודברת בם בשבתך בביתך ובלכתך בדרך ובשכבך ובקומך.
-וקשרתם לאות על ידך והיו לטטפות בין עיניך.
-וכתבתם על מזוזות ביתך ובשעריך.
-
-והיה אם שמוע אל מצוותי אשר אנכי מצווה אתכם היום לאהבה את ה' אלוהיכם ולעבדו בכל לבבכם ובכל נפשכם.
-ונתתי מטר ארצכם בעתו יורה ומלקוש, ואספת דגנך ותירושך ויצהרך.
-ונתתי עשב בשדך לבהמתך ואכלת ושבעת.
-השמרו לכם פן יפתה לבבכם וסרתם ועבדתם אלהים אחרים והשתחויתם להם.
-וחרה אף ה' בכם ועצר את השמים ולא יהיה מטר והאדמה לא תיתן את יבולה,
-ואבדתם מהרה מעל הארץ הטובה אשר ה' נותן לכם.
-ושמתם את דברי אלה על לבבכם ועל נפשכם וקשרתם אותם לאות על ידכם והיו לטטפות בין עיניכם.
-ולמדתם אותם את בניכם לדבר בם בשבתך בביתך ובלכתך בדרך ובשכבך ובקומך.
-וכתבתם על מזוזות ביתך ובשעריך.
-למען ירבו ימיכם וימי בניכם על האדמה אשר נשבע ה' לאבותיכם לתת להם, כימי השמים על הארץ.
-
-ויאמר ה' אל משה לאמר.
-דבר אל בני ישראל ואמרת אליהם ועשו להם ציצית על כנפי בגדיהם לדורותם,
-ונתנו על ציצית הכנף פתיל תכלת.
-והיה לכם לציצית וראיתם אותו וזכרתם את כל מצוות ה' ועשיתם אותם,
-ולא תתורו אחרי לבבכם ואחרי עיניכם אשר אתם זנים אחריהם.
-למען תזכרו ועשיתם את כל מצוותי והייתם קדושים לאלהיכם.
-אני ה' אלהיכם אשר הוצאתי אתכם מארץ מצרים להיות לכם לאלהים, אני ה' אלהיכם.`
-            },
-            {
-              title: "השכיבנו",
-              text: `השכיבנו ה' אלוהינו לשלום והעמידנו מלכנו לחיים טובים ולשלום,
-ופרוש עלינו סוכת שלומך, ותקננו בעצה טובה מלפניך,
-והושיענו למען שמך, והגן בעדנו והסר מעלינו אויב דבר ורעב ויגון,
-והסר שטן מלפנינו ומאחרינו, ובצל כנפיך תסתירנו,
-כי אל שומרנו ומצילנו אתה, כי אל מלך חנון ורחום אתה.
-ברוך אתה ה' שומר עמו ישראל לעד.`
-            },
-            {
-              title: "עמידה (פתיחה)",
-              text: `אדני שפתי תפתח ופי יגיד תהילתך.
-
-ברוך אתה ה' אלוהינו ואלוהי אבותינו, אלוהי אברהם, אלוהי יצחק ואלוהי יעקב,
-האל הגדול הגיבור והנורא, אל עליון, גומל חסדים טובים וקונה הכל,
-וזוכר חסדי אבות ומביא גואל לבני בניהם למען שמו באהבה.
-מלך עוזר ומושיע ומגן.
-ברוך אתה ה' מגן אברהם.
-
-אתה גיבור לעולם ה', מחיה מתים אתה רב להושיע.
-מוריד הטל.
-מכלכל חיים בחסד, מחיה מתים ברחמים רבים,
-סומך נופלים ורופא חולים ומתיר אסורים ומקיים אמונתו לישני עפר.
-מי כמוך בעל גבורות ומי דומה לך מלך ממית ומחיה ומצמיח ישועה.
-ונאמן אתה להחיות מתים.
-ברוך אתה ה' מחיה המתים.
-
-אתה קדוש ושמך קדוש וקדושים בכל יום יהללוך סלה.
-ברוך אתה ה' האל הקדוש.`
-            }
-          ]
-        },
-        {
-          id: "birkat",
-          title: "ברכת המזון",
-          blocks: [
-            {
-              title: "הזן",
-              text: `ברוך אתה ה' אלוהינו מלך העולם, הזן את העולם כולו בטובו בחן בחסד וברחמים.
-הוא נותן לחם לכל בשר כי לעולם חסדו.
-ובטובו הגדול תמיד לא חסר לנו ואל יחסר לנו מזון לעולם ועד,
-בעבור שמו הגדול כי הוא אל זן ומפרנס לכל ומיטיב לכל ומכין מזון לכל בריותיו אשר ברא.
-ברוך אתה ה' הזן את הכל.`
-            },
-            {
-              title: "על הארץ ועל המזון",
-              text: `נודה לך ה' אלוהינו על שהנחלת לאבותינו ארץ חמדה טובה ורחבה,
-ועל שהוצאתנו ה' אלוהינו מארץ מצרים ופדיתנו מבית עבדים,
-ועל בריתך שחתמת בבשרנו, ועל תורתך שלמדתנו, ועל חוקיך שהודעתנו,
-ועל חיים חן וחסד שחננתנו, ועל אכילת מזון שאתה זן ומפרנס אותנו תמיד בכל יום ובכל עת ובכל שעה.
-ועל הכל ה' אלוהינו אנחנו מודים לך ומברכים אותך,
-יתברך שמך בפי כל חי תמיד לעולם ועד.
-ברוך אתה ה' על הארץ ועל המזון.`
-            },
-            {
-              title: "רחם",
-              text: `רחם ה' אלוהינו על ישראל עמך ועל ירושלים עירך ועל ציון משכן כבודך,
-ועל מלכות בית דוד משיחך, ועל הבית הגדול והקדוש שנקרא שמך עליו.
-אלוהינו אבינו רענו זוננו פרנסנו וכלכלנו והרחיבנו והושיענו מהרה מכל צרותינו.
-נא אל תצריכנו ה' אלוהינו לא לידי מתנת בשר ודם ולא לידי הלוואתם,
-כי אם לידך המלאה הפתוחה הקדושה והרחבה, שלא נבוש ולא נכלם לעולם ועד.
-ובנה ירושלים עיר הקדש במהרה בימינו.
-ברוך אתה ה' בונה ירושלים.`
-            },
-            {
-              title: "הטוב והמטיב",
-              text: `ברוך אתה ה' אלוהינו מלך העולם, האל אבינו מלכנו אדירנו בוראנו גואלנו קדוש יעקב רועה ישראל,
-המלך הטוב והמטיב לכל, הוא הטיב הוא מטיב הוא ייטיב לנו.
-הוא גמלנו הוא גומלנו הוא יגמלנו לעד לחן ולחסד ולרחמים ולרווח ולהצלה ולכל טוב,
-ומכל טוב לעולם אל יחסרנו.
-
-הרחמן הוא ימלוך עלינו לעולם ועד.
-הרחמן הוא יתברך בשמים ובארץ.
-הרחמן הוא יפרנסנו בכבוד.
-הרחמן הוא ישלח לנו ברכה מרובה בבית הזה ועל שולחן זה שאכלנו עליו.
-הרחמן הוא יזכנו לימות המשיח ולחיי העולם הבא.`
-            }
-          ]
-        }
+    const sanitizeWikisource = (root) => {
+      const selectors = [
+        "#toc",
+        ".mw-editsection",
+        ".mw-editsection-bracket",
+        ".mw-parser-output .mw-cite-backlink",
+        ".mw-parser-output .reference",
+        "sup.reference",
+        ".navbox",
+        ".metadata",
+        ".mw-references-wrap",
+        "ol.references",
+        ".plainlinks",
+        ".noprint"
       ];
+      selectors.forEach((selector) => {
+        root.querySelectorAll(selector).forEach((el) => el.remove());
+      });
+      const firstHeading = root.querySelector("h1, h2");
+      if (firstHeading) {
+        firstHeading.remove();
+      }
+    };
 
-      const SIDUR = {
-        sefarad: {
-          label: "נוסח ספרד",
-          note: "",
-          sections: BASE_SECTIONS
-        },
-        ashkenaz: {
-          label: "נוסח אשכנז",
-          note: "",
-          sections: BASE_SECTIONS
-        },
-        edot: {
-          label: "נוסח עדות המזרח",
-          note: "",
-          sections: BASE_SECTIONS
+    const loadSectionContent = async (container) => {
+      const page = container.dataset.page;
+      const sourceUrl = container.dataset.source;
+      if (!page) return;
+      container.classList.add("loading");
+      container.innerHTML = `<p class="muted">טוען טקסט מלא...</p>`;
+      try {
+        const html = await fetchWikisourceHtml(page);
+        if (!html) {
+          throw new Error("No content");
         }
-      };
+        const temp = document.createElement("div");
+        temp.innerHTML = html;
+        const output = temp.querySelector(".mw-parser-output") || temp;
+        sanitizeWikisource(output);
+        container.innerHTML = "";
+        container.appendChild(output);
+      } catch (error) {
+        const link = sourceUrl
+          ? ` <a href="${sourceUrl}" target="_blank" rel="noopener">למקור</a>`
+          : "";
+        container.innerHTML =
+          `<p class="muted">לא ניתן לטעון את הטקסט כרגע.${link}</p>`;
+      } finally {
+        container.classList.remove("loading");
+      }
+    };
 
-      const contentEl = document.getElementById("content");
-      const selectEl = document.getElementById("nusachSelect");
-      const noteEl = document.getElementById("nusachNote");
+    const loadAllSections = () => {
+      contentEl.querySelectorAll(".source-content").forEach((container) => {
+        loadSectionContent(container);
+      });
+    };
 
-      const render = (key) => {
-        const data = SIDUR[key];
-        if (!data) return;
-        noteEl.textContent = data.note || "";
-        noteEl.style.display = data.note ? "inline" : "none";
-        contentEl.innerHTML = data.sections
-          .map((section) => {
-            const blocks = section.blocks
-              .map(
-                (block) => `
-                  <div class="block">
-                    <h3>${block.title}</h3>
-                    <div class="text">${block.text}</div>
-                  </div>
-                `
-              )
-              .join("");
-            return `
+    const render = (key) => {
+      const data = SIDUR[key];
+      if (!data) return;
+      noteEl.textContent = data.note || "";
+      noteEl.style.display = data.note ? "inline" : "none";
+      contentEl.innerHTML = data.sections
+        .map((section) => {
+          return `
               <section class="section" id="${section.id}">
-                <h2>${section.title}</h2>
-                ${blocks}
+                <div class="section-header">
+                  <h2>${section.title}</h2>
+                  <a class="source-link" href="${section.sourceUrl}" target="_blank" rel="noopener">
+                    מקור מלא
+                  </a>
+                </div>
+                <div class="source-content" data-page="${section.page}" data-source="${section.sourceUrl}">
+                  <p class="muted">טוען טקסט מלא...</p>
+                </div>
               </section>
             `;
-          })
-          .join("");
-      };
+        })
+        .join("");
+      loadAllSections();
+    };
 
-      const saved = localStorage.getItem("nusach") || "sefarad";
-      selectEl.value = saved;
-      render(saved);
+    const saved = localStorage.getItem("nusach") || "sefarad";
+    selectEl.value = saved;
+    render(saved);
 
-      selectEl.addEventListener("change", (event) => {
-        const value = event.target.value;
-        localStorage.setItem("nusach", value);
-        render(value);
-      });
-    </script>
-  </body>
+    selectEl.addEventListener("change", (event) => {
+      const value = event.target.value;
+      localStorage.setItem("nusach", value);
+      render(value);
+    });
+  </script>
+</body>
+
 </html>
