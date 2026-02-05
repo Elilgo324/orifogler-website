@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSPartner</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #2563eb;
+        --accent-strong: #1d4ed8;
+        --accent-soft: #e0e7ff;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #eef2ff 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #60a5fa 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 26px;
+        display: grid;
+        gap: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        opacity: 0.92;
+        font-size: 15px;
+        max-width: 620px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 960px) {
+        .grid {
+          grid-template-columns: 1fr 1.1fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      textarea,
+      select,
+      input {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      textarea {
+        min-height: 180px;
+        resize: vertical;
+        font-family: "SF Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+      }
+
+      textarea:focus,
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-row label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .secondary {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .ghost {
+        background: #f1f5f9;
+        color: var(--muted);
+      }
+
+      .map {
+        width: 100%;
+        min-height: 420px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .route-summary {
+        display: grid;
+        gap: 10px;
+        font-size: 14px;
+      }
+
+      .route-summary strong {
+        font-weight: 600;
+      }
+
+      .message {
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .message.error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+      }
+
+      .message.success {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .route-list {
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 13px;
+        color: var(--muted);
+        display: grid;
+        gap: 6px;
+      }
+
+      .route-list div {
+        color: var(--text);
+      }
+
+      .helper {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <h1>TSP Route Planner</h1>
+        <p>
+          Paste addresses, optionally lock the first and/or last stop, then generate an optimized
+          route and view it directly on Google Maps.
+        </p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>Addresses</h2>
+            <span class="badge" id="address-count">0 stops</span>
+          </div>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="address-input">One address per line</label>
+              <textarea
+                id="address-input"
+                placeholder="1600 Amphitheatre Parkway, Mountain View, CA&#10;1 Infinite Loop, Cupertino, CA&#10;500 Terry A Francois Blvd, San Francisco, CA"
+              ></textarea>
+              <div class="helper">
+                The Google Directions API supports up to 25 total stops (including start/end).
+              </div>
+            </div>
+            <div class="field-row">
+              <label for="start-select">Start address (optional)</label>
+              <select id="start-select">
+                <option value="-1">Auto (first in list)</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="end-select">End address (optional)</label>
+              <select id="end-select">
+                <option value="-1">Auto (last in list)</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" type="button" id="route-btn">Show route</button>
+            <button class="secondary" type="button" id="clear-btn">Clear</button>
+            <button class="ghost" type="button" id="sample-btn">Load sample</button>
+          </div>
+          <div id="message-area"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <h2>Route overview</h2>
+            <span class="badge" id="route-status">Waiting</span>
+          </div>
+          <div class="route-summary">
+            <div><strong>Total distance:</strong> <span id="total-distance">-</span></div>
+            <div><strong>Total duration:</strong> <span id="total-duration">-</span></div>
+          </div>
+          <div class="route-list" id="route-list">Route order will appear here.</div>
+          <div class="actions">
+            <button class="secondary" type="button" id="open-maps-btn" disabled>
+              Open in Google Maps
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Map</h2>
+          <span class="badge">Google Maps</span>
+        </div>
+        <div id="map" class="map"></div>
+        <div class="helper">
+          Add your Google Maps API key in the script tag near the bottom of this file.
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let map;
+      let directionsService;
+      let directionsRenderer;
+
+      const addressInput = document.getElementById("address-input");
+      const addressCount = document.getElementById("address-count");
+      const startSelect = document.getElementById("start-select");
+      const endSelect = document.getElementById("end-select");
+      const routeBtn = document.getElementById("route-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const sampleBtn = document.getElementById("sample-btn");
+      const messageArea = document.getElementById("message-area");
+      const routeStatus = document.getElementById("route-status");
+      const totalDistance = document.getElementById("total-distance");
+      const totalDuration = document.getElementById("total-duration");
+      const routeList = document.getElementById("route-list");
+      const openMapsBtn = document.getElementById("open-maps-btn");
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 37.7749, lng: -122.4194 },
+          zoom: 10,
+          mapTypeControl: false,
+        });
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
+          map,
+          suppressMarkers: false,
+        });
+      }
+
+      function setMessage(text, type = "success") {
+        if (!text) {
+          messageArea.innerHTML = "";
+          return;
+        }
+        messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+      }
+
+      function updateAddressOptions() {
+        const addresses = getAddresses();
+        addressCount.textContent = `${addresses.length} ${
+          addresses.length === 1 ? "stop" : "stops"
+        }`;
+
+        const buildOptions = (select, label) => {
+          const current = select.value;
+          select.innerHTML = `<option value="-1">${label}</option>`;
+          addresses.forEach((address, index) => {
+            const option = document.createElement("option");
+            option.value = String(index);
+            option.textContent = `${index + 1}. ${address}`;
+            select.appendChild(option);
+          });
+          select.value = current;
+          if (!Array.from(select.options).some((opt) => opt.value === select.value)) {
+            select.value = "-1";
+          }
+        };
+
+        buildOptions(startSelect, "Auto (first in list)");
+        buildOptions(endSelect, "Auto (last in list)");
+      }
+
+      function getAddresses() {
+        return addressInput.value
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+      }
+
+      function computeRouteOrder(origin, destination, waypoints, order) {
+        const ordered = [origin];
+        order.forEach((idx) => ordered.push(waypoints[idx].location));
+        ordered.push(destination);
+        return ordered;
+      }
+
+      function updateRouteSummary(legs, orderedAddresses) {
+        const total = legs.reduce(
+          (acc, leg) => {
+            acc.distance += leg.distance.value;
+            acc.duration += leg.duration.value;
+            return acc;
+          },
+          { distance: 0, duration: 0 }
+        );
+
+        totalDistance.textContent = `${(total.distance / 1000).toFixed(1)} km`;
+        const minutes = Math.round(total.duration / 60);
+        totalDuration.textContent = `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+
+        routeList.innerHTML = orderedAddresses
+          .map((address, index) => `<div>${index + 1}. ${address}</div>`)
+          .join("");
+      }
+
+      function buildMapsLink(origin, destination, waypoints) {
+        const params = new URLSearchParams({
+          api: "1",
+          origin,
+          destination,
+          travelmode: "driving",
+        });
+        if (waypoints.length > 0) {
+          const encoded = waypoints.map((wp) => wp.location).join("|");
+          params.set("waypoints", `optimize:true|${encoded}`);
+        }
+        return `https://www.google.com/maps/dir/?${params.toString()}`;
+      }
+
+      async function renderRoute() {
+        const addresses = getAddresses();
+        setMessage("");
+
+        if (addresses.length < 2) {
+          setMessage("Add at least two addresses to build a route.", "error");
+          return;
+        }
+
+        if (addresses.length > 25) {
+          setMessage("Too many stops. Please use 25 or fewer addresses.", "error");
+          return;
+        }
+
+        const startIndex = Number(startSelect.value);
+        const endIndex = Number(endSelect.value);
+        const originIndex = startIndex >= 0 ? startIndex : 0;
+        const destinationIndex = endIndex >= 0 ? endIndex : addresses.length - 1;
+
+        if (originIndex === destinationIndex) {
+          setMessage("Start and end cannot be the same address.", "error");
+          return;
+        }
+
+        const origin = addresses[originIndex];
+        const destination = addresses[destinationIndex];
+        const waypointAddresses = addresses.filter(
+          (_, index) => index !== originIndex && index !== destinationIndex
+        );
+        const waypoints = waypointAddresses.map((location) => ({
+          location,
+          stopover: true,
+        }));
+
+        routeStatus.textContent = "Optimizing...";
+        openMapsBtn.disabled = true;
+
+        directionsService.route(
+          {
+            origin,
+            destination,
+            waypoints,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (result, status) => {
+            if (status !== "OK") {
+              setMessage(`Directions error: ${status}`, "error");
+              routeStatus.textContent = "Error";
+              return;
+            }
+            directionsRenderer.setDirections(result);
+            const route = result.routes[0];
+            const order = route.waypoint_order || [];
+            const orderedAddresses = computeRouteOrder(origin, destination, waypoints, order);
+            updateRouteSummary(route.legs, orderedAddresses);
+            routeStatus.textContent = "Ready";
+            openMapsBtn.disabled = false;
+            openMapsBtn.dataset.url = buildMapsLink(origin, destination, waypoints);
+            setMessage("Route optimized successfully.", "success");
+          }
+        );
+      }
+
+      function clearAll() {
+        addressInput.value = "";
+        updateAddressOptions();
+        routeList.textContent = "Route order will appear here.";
+        totalDistance.textContent = "-";
+        totalDuration.textContent = "-";
+        routeStatus.textContent = "Waiting";
+        openMapsBtn.disabled = true;
+        directionsRenderer && directionsRenderer.setDirections({ routes: [] });
+        setMessage("");
+      }
+
+      function loadSample() {
+        addressInput.value = [
+          "1600 Amphitheatre Parkway, Mountain View, CA",
+          "1 Infinite Loop, Cupertino, CA",
+          "500 Terry A Francois Blvd, San Francisco, CA",
+          "7000 Marina Blvd, Brisbane, CA",
+        ].join("\n");
+        updateAddressOptions();
+      }
+
+      addressInput.addEventListener("input", updateAddressOptions);
+      routeBtn.addEventListener("click", renderRoute);
+      clearBtn.addEventListener("click", clearAll);
+      sampleBtn.addEventListener("click", loadSample);
+      openMapsBtn.addEventListener("click", () => {
+        const url = openMapsBtn.dataset.url;
+        if (url) {
+          window.open(url, "_blank");
+        }
+      });
+
+      updateAddressOptions();
+    </script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+    ></script>
+  </body>
+</html>
