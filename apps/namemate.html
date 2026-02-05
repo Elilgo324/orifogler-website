@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NameMate</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M16 42c6-12 26-12 32 0' stroke='white' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='24' r='5' fill='white'/%3E%3Ccircle cx='40' cy='24' r='5' fill='white'/%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #2563eb;
+        --accent-strong: #1d4ed8;
+        --accent-soft: #e0e7ff;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #eef2ff 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #60a5fa 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 28px;
+        display: grid;
+        gap: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      }
+
+      .brand-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .hero p {
+        opacity: 0.92;
+        font-size: 15px;
+        max-width: 620px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 960px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .inline-fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+      }
+
+      .secondary {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent-strong);
+      }
+
+      .message {
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .message.error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+      }
+
+      .message.success {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .suggestions {
+        display: grid;
+        gap: 10px;
+      }
+
+      .suggestion-item {
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        background: #fbfcff;
+      }
+
+      .suggestion-item strong {
+        font-size: 14px;
+      }
+
+      .copy-btn {
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .helper {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .api-row {
+        display: grid;
+        gap: 10px;
+      }
+
+      .api-row input {
+        font-family: "SF Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <h1>
+          <span class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="6" fill="white" />
+              <circle cx="40" cy="24" r="6" fill="white" />
+              <path
+                d="M16 42c6-12 26-12 32 0"
+                stroke="white"
+                stroke-width="5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          NameMate
+        </h1>
+        <p>
+          Enter a variable or class name, add a short hint, and get professional alternatives from
+          a hosted LLM with free-tier limits.
+        </p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>Input</h2>
+            <span class="badge" id="count-badge">0 suggestions</span>
+          </div>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="name-input">Current name</label>
+              <input id="name-input" type="text" placeholder="e.g. userMgr" />
+            </div>
+            <div class="field-row">
+              <label for="hint-input">Meaning hint (optional)</label>
+              <input id="hint-input" type="text" placeholder="e.g. handles user sessions" />
+            </div>
+            <div class="inline-fields">
+              <div class="field-row">
+                <label for="kind-select">Kind</label>
+                <select id="kind-select">
+                  <option value="variable" selected>Variable</option>
+                  <option value="class">Class</option>
+                  <option value="function">Function</option>
+                  <option value="constant">Constant</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <label for="style-select">Case style</label>
+                <select id="style-select">
+                  <option value="auto" selected>Auto (recommended)</option>
+                  <option value="camel">camelCase</option>
+                  <option value="pascal">PascalCase</option>
+                  <option value="snake">snake_case</option>
+                  <option value="kebab">kebab-case</option>
+                  <option value="upper">UPPER_SNAKE</option>
+                </select>
+              </div>
+            </div>
+            <div class="api-row">
+              <div class="field-row">
+                <label for="provider-select">Provider</label>
+                <select id="provider-select">
+                  <option value="hf" selected>Hugging Face Router (free tier)</option>
+                  <option value="openai">OpenAI-compatible</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <label for="api-key">LLM API key</label>
+                <input id="api-key" type="password" placeholder="Paste your API key" />
+              </div>
+              <div class="inline-fields">
+                <div class="field-row">
+                  <label for="api-endpoint">API endpoint</label>
+                  <input
+                    id="api-endpoint"
+                    type="text"
+                    value="https://router.huggingface.co/v1/chat/completions"
+                  />
+                </div>
+                <div class="field-row">
+                  <label for="model-input">Model</label>
+                  <input id="model-input" type="text" value="HuggingFaceTB/SmolLM3-3B:hf-inference" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" type="button" id="generate-btn">Generate</button>
+            <button class="secondary" type="button" id="clear-btn">Clear</button>
+          </div>
+          <div id="message-area"></div>
+          <div class="helper">
+            Default uses Hugging Face's free-tier Router (OpenAI-compatible). Your key stays in this
+            browser.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <h2>Suggestions</h2>
+            <span class="badge" id="list-badge">Ready</span>
+          </div>
+          <div class="suggestions" id="suggestions">
+            <div class="helper">Enter a name and click Generate.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const nameInput = document.getElementById("name-input");
+      const hintInput = document.getElementById("hint-input");
+      const kindSelect = document.getElementById("kind-select");
+      const styleSelect = document.getElementById("style-select");
+      const providerSelect = document.getElementById("provider-select");
+      const apiKeyInput = document.getElementById("api-key");
+      const apiEndpointInput = document.getElementById("api-endpoint");
+      const modelInput = document.getElementById("model-input");
+      const generateBtn = document.getElementById("generate-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const messageArea = document.getElementById("message-area");
+      const suggestionsEl = document.getElementById("suggestions");
+      const countBadge = document.getElementById("count-badge");
+      const listBadge = document.getElementById("list-badge");
+
+      function setMessage(text, type = "success") {
+        if (!text) {
+          messageArea.innerHTML = "";
+          return;
+        }
+        messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+      }
+
+      function resolveStyle(kind, style) {
+        if (style !== "auto") return style;
+        if (kind === "class") return "pascal";
+        if (kind === "constant") return "upper";
+        return "camel";
+      }
+
+      function buildPrompt({ name, hint, kind, style, avoidWords = [] }) {
+        const hintLine = hint ? `Meaning hint: ${hint}` : "Meaning hint: (none)";
+        const avoidLine =
+          avoidWords.length > 0
+            ? `Avoid these words and close variants: ${avoidWords.join(", ")}`
+            : "Avoid list: (none)";
+        return [
+          "You are a senior software engineer and naming expert.",
+          "Generate 5 professional, concise, and readable alternative names.",
+          "All 5 must be meaningfully different and use distinct synonym families.",
+          "Do not simply reorder the same words.",
+          "Do not reuse the same core noun/verb across suggestions.",
+          "Prioritize semantic richness while preserving meaning.",
+          "Follow the requested kind and case style precisely.",
+          "Avoid abbreviations unless the original includes them.",
+          "Return only a JSON array of 5 unique strings, no other text.",
+          "",
+          `Current name: ${name}`,
+          hintLine,
+          `Kind: ${kind}`,
+          `Case style: ${style}`,
+          avoidLine,
+        ].join("\n");
+      }
+
+      function setProviderDefaults() {
+        if (providerSelect.value === "hf") {
+          apiEndpointInput.value = "https://router.huggingface.co/v1/chat/completions";
+          modelInput.value = "HuggingFaceTB/SmolLM3-3B:hf-inference";
+        } else {
+          apiEndpointInput.value = "https://api.openai.com/v1/chat/completions";
+          modelInput.value = "gpt-4o-mini";
+        }
+      }
+
+      function extractJsonArray(text) {
+        if (!text) {
+          throw new Error("Empty response from model.");
+        }
+        try {
+          const parsed = JSON.parse(text);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (error) {
+          // ignore
+        }
+        const match = text.match(/\[[\s\S]*\]/);
+        if (!match) {
+          throw new Error("Model did not return a JSON array.");
+        }
+        const parsed = JSON.parse(match[0]);
+        if (!Array.isArray(parsed)) {
+          throw new Error("Model response is not a JSON array.");
+        }
+        return parsed;
+      }
+
+      function tokenizeName(value) {
+        if (!value) return [];
+        const spaced = value
+          .replace(/[_\\-\\.]+/g, " ")
+          .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+          .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2");
+        return spaced
+          .split(/\\s+/)
+          .map((token) => token.trim().toLowerCase())
+          .filter(Boolean);
+      }
+
+      function jaccard(a, b) {
+        const setA = new Set(a);
+        const setB = new Set(b);
+        if (setA.size === 0 || setB.size === 0) return 0;
+        let intersection = 0;
+        setA.forEach((value) => {
+          if (setB.has(value)) intersection += 1;
+        });
+        return intersection / Math.max(setA.size, setB.size);
+      }
+
+      function filterDiverseSuggestions(list, maxCount) {
+        const accepted = [];
+        const tokenSets = [];
+        list.forEach((name) => {
+          if (accepted.length >= maxCount) return;
+          const tokens = tokenizeName(String(name));
+          const similar = tokenSets.some((set) => jaccard(set, tokens) > 0.5);
+          if (!similar) {
+            accepted.push(String(name));
+            tokenSets.push(tokens);
+          }
+        });
+        return accepted;
+      }
+
+      async function callOpenAiCompatible({ endpoint, apiKey, model, prompt }) {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model,
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You produce precise naming suggestions formatted exactly as requested.",
+              },
+              { role: "user", content: prompt },
+            ],
+            temperature: 0.7,
+          }),
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `Request failed with ${response.status}`);
+        }
+
+        const data = await response.json();
+        const content =
+          data.choices && data.choices[0] && data.choices[0].message
+            ? data.choices[0].message.content
+            : "";
+        return extractJsonArray(content);
+      }
+
+      async function generateSuggestions() {
+        const name = nameInput.value.trim();
+        const hint = hintInput.value.trim();
+        if (!name) {
+          setMessage("Please enter a name to suggest alternatives.", "error");
+          return;
+        }
+
+        const kind = kindSelect.value;
+        const style = resolveStyle(kind, styleSelect.value);
+        const apiKey = apiKeyInput.value.trim();
+        const endpoint = apiEndpointInput.value.trim();
+        const model = modelInput.value.trim();
+        if (!apiKey || !endpoint || !model) {
+          setMessage("Please provide API key, endpoint, and model.", "error");
+          return;
+        }
+
+        const basePrompt = buildPrompt({ name, hint, kind, style });
+        generateBtn.disabled = true;
+        listBadge.textContent = "Generating...";
+        setMessage("Contacting LLM...", "success");
+
+        try {
+          const firstPass = await callOpenAiCompatible({
+            endpoint,
+            apiKey,
+            model,
+            prompt: basePrompt,
+          });
+
+          if (!Array.isArray(firstPass) || firstPass.length === 0) {
+            throw new Error("Model returned an empty list.");
+          }
+
+          let diverse = filterDiverseSuggestions(firstPass, 5);
+          if (diverse.length < 5) {
+            const avoidWords = [
+              ...new Set([
+                ...tokenizeName(name),
+                ...tokenizeName(hint),
+                ...firstPass.flatMap((item) => tokenizeName(String(item))),
+              ]),
+            ].filter(Boolean);
+
+            const secondPass = await callOpenAiCompatible({
+              endpoint,
+              apiKey,
+              model,
+              prompt: buildPrompt({ name, hint, kind, style, avoidWords }),
+            });
+            const more = filterDiverseSuggestions(secondPass, 5);
+            diverse = [...diverse, ...more].slice(0, 5);
+          }
+
+          if (diverse.length === 0) {
+            throw new Error("Model did not return diverse suggestions.");
+          }
+
+          suggestionsEl.innerHTML = "";
+          diverse.forEach((suggestion) => {
+            const item = document.createElement("div");
+            item.className = "suggestion-item";
+            item.innerHTML = `
+              <strong>${suggestion}</strong>
+              <button class="copy-btn" type="button">Copy</button>
+            `;
+            item.querySelector("button").addEventListener("click", async () => {
+              try {
+                await navigator.clipboard.writeText(suggestion);
+                setMessage("Copied to clipboard.", "success");
+              } catch (error) {
+                setMessage("Clipboard not available. Copy manually.", "error");
+              }
+            });
+            suggestionsEl.appendChild(item);
+          });
+
+          countBadge.textContent = `${diverse.length} suggestions`;
+          listBadge.textContent = "Generated";
+          setMessage("Suggestions ready.", "success");
+        } catch (error) {
+          setMessage(`LLM error: ${error.message}`, "error");
+          listBadge.textContent = "Error";
+        } finally {
+          generateBtn.disabled = false;
+        }
+      }
+
+      function clearAll() {
+        nameInput.value = "";
+        hintInput.value = "";
+        apiKeyInput.value = "";
+        suggestionsEl.innerHTML = '<div class="helper">Enter a name and click Generate.</div>';
+        countBadge.textContent = "0 suggestions";
+        listBadge.textContent = "Ready";
+        setMessage("");
+      }
+
+      providerSelect.addEventListener("change", setProviderDefaults);
+      generateBtn.addEventListener("click", generateSuggestions);
+      clearBtn.addEventListener("click", clearAll);
+      nameInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          generateSuggestions();
+        }
+      });
+
+      setProviderDefaults();
+    </script>
+  </body>
+</html>
