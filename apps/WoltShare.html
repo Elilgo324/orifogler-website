@@ -1,1 +1,1926 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wolt Share</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #5b6475;
+        --border: #e2e8f0;
+        --accent: #6d5efc;
+        --accent-strong: #3b2df8;
+        --accent-soft: #ece9ff;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --radius: 18px;
+      }
 
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #eff1ff 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #9b8cff 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 26px;
+        display: grid;
+        gap: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        opacity: 0.9;
+        font-size: 15px;
+        max-width: 520px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: 10px 12px;
+        display: grid;
+        gap: 4px;
+      }
+
+      .stat span {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        opacity: 0.8;
+      }
+
+      .stat strong {
+        font-size: 18px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 900px) {
+        .grid {
+          grid-template-columns: 1.15fr 0.85fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .card p {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .people-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .person-row {
+        display: grid;
+        gap: 10px;
+        align-items: center;
+        grid-template-columns: 1fr 120px 60px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #f1f5f9;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .secondary {
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .icon-button {
+        border: none;
+        background: #f1f5f9;
+        color: var(--muted);
+        border-radius: 12px;
+        height: 40px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-row label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .method-switch {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .method-switch label {
+        position: relative;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        cursor: pointer;
+        display: grid;
+        gap: 6px;
+        background: #ffffff;
+      }
+
+      .method-switch input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .method-switch span {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .method-switch small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .method-switch label.active {
+        border-color: var(--accent);
+        box-shadow: 0 10px 24px rgba(109, 94, 252, 0.2);
+        background: #f7f5ff;
+      }
+
+      .slider-group {
+        display: grid;
+        gap: 8px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .results-table th,
+      .results-table td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .results-table th:last-child,
+      .results-table td:last-child {
+        text-align: right;
+      }
+
+      .empty-state {
+        padding: 14px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        color: var(--muted);
+        font-size: 13px;
+        background: #fbfcfe;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <h1>Wolt Share</h1>
+        <p>
+          Add each order, drop in delivery and service fees, then pick the fairest split.
+          All totals are shown as whole numbers.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span>Items total</span>
+            <strong id="summary-items">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Fees</span>
+            <strong id="summary-fees">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Grand total</span>
+            <strong id="summary-total">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Avg per person</span>
+            <strong id="summary-average">USD 0</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>People & orders</h2>
+            <span class="badge" id="people-count">0 people</span>
+          </div>
+          <p>Enter each person and their order total.</p>
+          <div class="people-list" id="people-list"></div>
+          <div class="button-row">
+            <button class="primary" type="button" id="add-person">Add person</button>
+            <button class="secondary" type="button" id="clear-all">Clear all</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Fees</h2>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="currency">Currency</label>
+              <select id="currency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="ILS">ILS</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="delivery-fee">Delivery fee</label>
+              <input id="delivery-fee" type="number" min="0" step="1" placeholder="0" />
+            </div>
+            <div class="field-row">
+              <label for="service-fee">Service fee</label>
+              <input id="service-fee" type="number" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="pill" id="summary-people">0 people</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Choose a split</h2>
+          <span class="badge" id="method-badge">Proportional</span>
+        </div>
+        <div class="method-switch" id="method-switch">
+          <label data-method="proportional" class="active">
+            <input type="radio" name="split-method" value="proportional" checked />
+            <span>Proportional</span>
+            <small>Fees based on order size</small>
+          </label>
+          <label data-method="equal">
+            <input type="radio" name="split-method" value="equal" />
+            <span>Equal</span>
+            <small>Everyone pays same fees</small>
+          </label>
+          <label data-method="hybrid">
+            <input type="radio" name="split-method" value="hybrid" />
+            <span>Hybrid</span>
+            <small>Mix of equal + proportional</small>
+          </label>
+        </div>
+
+        <div class="field-group" id="hybrid-controls">
+          <div class="field-row">
+            <label for="blend-slider">Hybrid balance</label>
+            <div class="slider-group">
+              <input id="blend-slider" type="range" min="0" max="100" step="5" value="50" />
+              <small class="pill" id="blend-label">50% proportional</small>
+            </div>
+          </div>
+        </div>
+
+        <div id="results-table"></div>
+      </section>
+    </main>
+
+    <script>
+      const peopleList = document.getElementById("people-list");
+      const addPersonButton = document.getElementById("add-person");
+      const clearAllButton = document.getElementById("clear-all");
+      const currencySelect = document.getElementById("currency");
+      const deliveryFeeInput = document.getElementById("delivery-fee");
+      const serviceFeeInput = document.getElementById("service-fee");
+      const blendSlider = document.getElementById("blend-slider");
+      const blendLabel = document.getElementById("blend-label");
+      const hybridControls = document.getElementById("hybrid-controls");
+      const methodBadge = document.getElementById("method-badge");
+
+      const summaryPeoplePill = document.getElementById("summary-people");
+      const peopleCountBadge = document.getElementById("people-count");
+      const summaryItems = document.getElementById("summary-items");
+      const summaryFees = document.getElementById("summary-fees");
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryAverage = document.getElementById("summary-average");
+
+      const resultsTable = document.getElementById("results-table");
+      const methodSwitch = document.getElementById("method-switch");
+
+      const DEFAULT_ROWS = 3;
+
+      function formatMoney(value) {
+        const code = currencySelect.value;
+        const whole = Math.round(value);
+        return `${code} ${whole}`;
+      }
+
+      function toAmount(value) {
+        const number = parseFloat(value);
+        if (!Number.isFinite(number) || number < 0) {
+          return 0;
+        }
+        return Math.round(number);
+      }
+
+      function createPersonRow(nameValue = "", amountValue = "") {
+        const row = document.createElement("div");
+        row.className = "person-row";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Name";
+        nameInput.className = "person-name";
+        nameInput.value = nameValue;
+
+        const amountInput = document.createElement("input");
+        amountInput.type = "number";
+        amountInput.min = "0";
+        amountInput.step = "1";
+        amountInput.placeholder = "0";
+        amountInput.className = "person-amount";
+        amountInput.value = amountValue;
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "icon-button";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+          row.remove();
+          update();
+        });
+
+        [nameInput, amountInput].forEach((input) => {
+          input.addEventListener("input", update);
+        });
+
+        row.append(nameInput, amountInput, removeButton);
+        peopleList.appendChild(row);
+      }
+
+      function getPeople() {
+        const rows = Array.from(document.querySelectorAll(".person-row"));
+        return rows.map((row, index) => {
+          const nameInput = row.querySelector(".person-name");
+          const amountInput = row.querySelector(".person-amount");
+          const name = nameInput.value.trim() || `Person ${index + 1}`;
+          const amount = toAmount(amountInput.value);
+          return { name, amount };
+        });
+      }
+
+      function distributeRounding(rawTotals, total) {
+        const totalUnits = Math.round(total);
+        const baseUnits = rawTotals.map((value) => Math.floor(value));
+        let remainder = totalUnits - baseUnits.reduce((sum, value) => sum + value, 0);
+        const fractions = rawTotals.map((value, index) => ({
+          index,
+          fraction: value - Math.floor(value),
+        }));
+        fractions.sort((a, b) => b.fraction - a.fraction);
+
+        let i = 0;
+        while (remainder > 0 && fractions.length > 0) {
+          baseUnits[fractions[i].index] += 1;
+          remainder -= 1;
+          i = (i + 1) % fractions.length;
+        }
+
+        return baseUnits;
+      }
+
+      function computeMethod(people, totalFees, blend) {
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const count = people.length;
+
+        if (count === 0) {
+          return [];
+        }
+
+        const feeShares = people.map((person) => {
+          if (totalOrders === 0) {
+            return 1 / count;
+          }
+          return blend * (person.amount / totalOrders) + (1 - blend) * (1 / count);
+        });
+
+        const rawTotals = people.map(
+          (person, index) => person.amount + totalFees * feeShares[index]
+        );
+        const roundedTotals = distributeRounding(rawTotals, totalOrders + totalFees);
+
+        return people.map((person, index) => {
+          const total = roundedTotals[index];
+          const fee = total - person.amount;
+          return {
+            name: person.name,
+            order: person.amount,
+            fee,
+            total,
+          };
+        });
+      }
+
+      function renderTable(container, rows) {
+        if (rows.length === 0) {
+          container.innerHTML =
+            '<div class="empty-state">Add people to see the split.</div>';
+          return;
+        }
+
+        const table = document.createElement("table");
+        table.className = "results-table";
+
+        const header = document.createElement("thead");
+        header.innerHTML = `
+          <tr>
+            <th>Person</th>
+            <th>Order</th>
+            <th>Fee</th>
+            <th>Total</th>
+          </tr>
+        `;
+        table.appendChild(header);
+
+        const body = document.createElement("tbody");
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.name}</td>
+            <td>${formatMoney(row.order)}</td>
+            <td>${formatMoney(row.fee)}</td>
+            <td>${formatMoney(row.total)}</td>
+          `;
+          body.appendChild(tr);
+        });
+
+        table.appendChild(body);
+        container.innerHTML = "";
+        container.appendChild(table);
+      }
+
+      function updateMethodUI() {
+        const active = methodSwitch.querySelector("input:checked");
+        const method = active ? active.value : "proportional";
+        methodBadge.textContent =
+          method === "equal" ? "Equal" : method === "hybrid" ? "Hybrid" : "Proportional";
+        hybridControls.style.display = method === "hybrid" ? "grid" : "none";
+        Array.from(methodSwitch.children).forEach((label) => {
+          label.classList.toggle("active", label.dataset.method === method);
+        });
+        return method;
+      }
+
+      function update() {
+        const people = getPeople();
+        const deliveryFee = toAmount(deliveryFeeInput.value);
+        const serviceFee = toAmount(serviceFeeInput.value);
+        const totalFees = deliveryFee + serviceFee;
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const total = totalOrders + totalFees;
+        const count = people.length;
+        const average = count > 0 ? Math.round(total / count) : 0;
+
+        peopleCountBadge.textContent = `${count} ${count === 1 ? "person" : "people"}`;
+        summaryPeoplePill.textContent = `${count} ${count === 1 ? "person" : "people"}`;
+        summaryItems.textContent = formatMoney(totalOrders);
+        summaryFees.textContent = formatMoney(totalFees);
+        summaryTotal.textContent = formatMoney(total);
+        summaryAverage.textContent = formatMoney(average);
+
+        const method = updateMethodUI();
+        const blendValue = parseFloat(blendSlider.value) / 100;
+        blendLabel.textContent = `${Math.round(blendValue * 100)}% proportional`;
+
+        const blend =
+          method === "equal" ? 0 : method === "hybrid" ? blendValue : 1;
+        const rows = computeMethod(people, totalFees, blend);
+        renderTable(resultsTable, rows);
+      }
+
+      addPersonButton.addEventListener("click", () => {
+        createPersonRow();
+        update();
+      });
+
+      clearAllButton.addEventListener("click", () => {
+        peopleList.innerHTML = "";
+        for (let i = 0; i < DEFAULT_ROWS; i += 1) {
+          createPersonRow();
+        }
+        update();
+      });
+
+      [currencySelect, deliveryFeeInput, serviceFeeInput, blendSlider].forEach(
+        (input) => {
+          input.addEventListener("input", update);
+        }
+      );
+
+      methodSwitch.addEventListener("change", update);
+
+      clearAllButton.click();
+    </script>
+  </body>
+</html>
+<!--
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wolt Splitter</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #5b6475;
+        --border: #e2e8f0;
+        --accent: #6d5efc;
+        --accent-strong: #3b2df8;
+        --accent-soft: #ece9ff;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #eff1ff 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #9b8cff 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 26px;
+        display: grid;
+        gap: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        opacity: 0.9;
+        font-size: 15px;
+        max-width: 520px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 14px;
+        padding: 10px 12px;
+        display: grid;
+        gap: 4px;
+      }
+
+      .stat span {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        opacity: 0.8;
+      }
+
+      .stat strong {
+        font-size: 18px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 900px) {
+        .grid {
+          grid-template-columns: 1.15fr 0.85fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .card p {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .people-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .person-row {
+        display: grid;
+        gap: 10px;
+        align-items: center;
+        grid-template-columns: 1fr 120px 60px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #f1f5f9;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .secondary {
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .icon-button {
+        border: none;
+        background: #f1f5f9;
+        color: var(--muted);
+        border-radius: 12px;
+        height: 40px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-row label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .method-switch {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .method-switch label {
+        position: relative;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        cursor: pointer;
+        display: grid;
+        gap: 6px;
+        background: #ffffff;
+      }
+
+      .method-switch input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .method-switch span {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .method-switch small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .method-switch label.active {
+        border-color: var(--accent);
+        box-shadow: 0 10px 24px rgba(109, 94, 252, 0.2);
+        background: #f7f5ff;
+      }
+
+      .slider-group {
+        display: grid;
+        gap: 8px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .results-table th,
+      .results-table td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .results-table th:last-child,
+      .results-table td:last-child {
+        text-align: right;
+      }
+
+      .empty-state {
+        padding: 14px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        color: var(--muted);
+        font-size: 13px;
+        background: #fbfcfe;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <h1>Wolt split made easy</h1>
+        <p>
+          Add each order, drop in delivery and service fees, then pick the fairest split.
+          All totals are shown as whole numbers.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span>Items total</span>
+            <strong id="summary-items">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Fees</span>
+            <strong id="summary-fees">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Grand total</span>
+            <strong id="summary-total">USD 0</strong>
+          </div>
+          <div class="stat">
+            <span>Avg per person</span>
+            <strong id="summary-average">USD 0</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>People & orders</h2>
+            <span class="badge" id="people-count">0 people</span>
+          </div>
+          <p>Enter each person and their order total.</p>
+          <div class="people-list" id="people-list"></div>
+          <div class="button-row">
+            <button class="primary" type="button" id="add-person">Add person</button>
+            <button class="secondary" type="button" id="clear-all">Clear all</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Fees</h2>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="currency">Currency</label>
+              <select id="currency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="ILS">ILS</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="delivery-fee">Delivery fee</label>
+              <input id="delivery-fee" type="number" min="0" step="1" placeholder="0" />
+            </div>
+            <div class="field-row">
+              <label for="service-fee">Service fee</label>
+              <input id="service-fee" type="number" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="pill" id="summary-people">0 people</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>Choose a split</h2>
+          <span class="badge" id="method-badge">Proportional</span>
+        </div>
+        <div class="method-switch" id="method-switch">
+          <label data-method="proportional" class="active">
+            <input type="radio" name="split-method" value="proportional" checked />
+            <span>Proportional</span>
+            <small>Fees based on order size</small>
+          </label>
+          <label data-method="equal">
+            <input type="radio" name="split-method" value="equal" />
+            <span>Equal</span>
+            <small>Everyone pays same fees</small>
+          </label>
+          <label data-method="hybrid">
+            <input type="radio" name="split-method" value="hybrid" />
+            <span>Hybrid</span>
+            <small>Mix of equal + proportional</small>
+          </label>
+        </div>
+
+        <div class="field-group" id="hybrid-controls">
+          <div class="field-row">
+            <label for="blend-slider">Hybrid balance</label>
+            <div class="slider-group">
+              <input id="blend-slider" type="range" min="0" max="100" step="5" value="50" />
+              <small class="pill" id="blend-label">50% proportional</small>
+            </div>
+          </div>
+        </div>
+
+        <div id="results-table"></div>
+      </section>
+    </main>
+
+    <script>
+      const peopleList = document.getElementById("people-list");
+      const addPersonButton = document.getElementById("add-person");
+      const clearAllButton = document.getElementById("clear-all");
+      const currencySelect = document.getElementById("currency");
+      const deliveryFeeInput = document.getElementById("delivery-fee");
+      const serviceFeeInput = document.getElementById("service-fee");
+      const blendSlider = document.getElementById("blend-slider");
+      const blendLabel = document.getElementById("blend-label");
+      const hybridControls = document.getElementById("hybrid-controls");
+      const methodBadge = document.getElementById("method-badge");
+
+      const summaryPeoplePill = document.getElementById("summary-people");
+      const peopleCountBadge = document.getElementById("people-count");
+      const summaryItems = document.getElementById("summary-items");
+      const summaryFees = document.getElementById("summary-fees");
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryAverage = document.getElementById("summary-average");
+
+      const resultsTable = document.getElementById("results-table");
+      const methodSwitch = document.getElementById("method-switch");
+
+      const DEFAULT_ROWS = 3;
+
+      function formatMoney(value) {
+        const code = currencySelect.value;
+        const whole = Math.round(value);
+        return `${code} ${whole}`;
+      }
+
+      function toAmount(value) {
+        const number = parseFloat(value);
+        if (!Number.isFinite(number) || number < 0) {
+          return 0;
+        }
+        return Math.round(number);
+      }
+
+      function createPersonRow(nameValue = "", amountValue = "") {
+        const row = document.createElement("div");
+        row.className = "person-row";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Name";
+        nameInput.className = "person-name";
+        nameInput.value = nameValue;
+
+        const amountInput = document.createElement("input");
+        amountInput.type = "number";
+        amountInput.min = "0";
+        amountInput.step = "1";
+        amountInput.placeholder = "0";
+        amountInput.className = "person-amount";
+        amountInput.value = amountValue;
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "icon-button";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+          row.remove();
+          update();
+        });
+
+        [nameInput, amountInput].forEach((input) => {
+          input.addEventListener("input", update);
+        });
+
+        row.append(nameInput, amountInput, removeButton);
+        peopleList.appendChild(row);
+      }
+
+      function getPeople() {
+        const rows = Array.from(document.querySelectorAll(".person-row"));
+        return rows.map((row, index) => {
+          const nameInput = row.querySelector(".person-name");
+          const amountInput = row.querySelector(".person-amount");
+          const name = nameInput.value.trim() || `Person ${index + 1}`;
+          const amount = toAmount(amountInput.value);
+          return { name, amount };
+        });
+      }
+
+      function distributeRounding(rawTotals, total) {
+        const totalUnits = Math.round(total);
+        const baseUnits = rawTotals.map((value) => Math.floor(value));
+        let remainder = totalUnits - baseUnits.reduce((sum, value) => sum + value, 0);
+        const fractions = rawTotals.map((value, index) => ({
+          index,
+          fraction: value - Math.floor(value),
+        }));
+        fractions.sort((a, b) => b.fraction - a.fraction);
+
+        let i = 0;
+        while (remainder > 0 && fractions.length > 0) {
+          baseUnits[fractions[i].index] += 1;
+          remainder -= 1;
+          i = (i + 1) % fractions.length;
+        }
+
+        return baseUnits;
+      }
+
+      function computeMethod(people, totalFees, blend) {
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const count = people.length;
+
+        if (count === 0) {
+          return [];
+        }
+
+        const feeShares = people.map((person) => {
+          if (totalOrders === 0) {
+            return 1 / count;
+          }
+          return blend * (person.amount / totalOrders) + (1 - blend) * (1 / count);
+        });
+
+        const rawTotals = people.map(
+          (person, index) => person.amount + totalFees * feeShares[index]
+        );
+        const roundedTotals = distributeRounding(rawTotals, totalOrders + totalFees);
+
+        return people.map((person, index) => {
+          const total = roundedTotals[index];
+          const fee = total - person.amount;
+          return {
+            name: person.name,
+            order: person.amount,
+            fee,
+            total,
+          };
+        });
+      }
+
+      function renderTable(container, rows) {
+        if (rows.length === 0) {
+          container.innerHTML =
+            '<div class="empty-state">Add people to see the split.</div>';
+          return;
+        }
+
+        const table = document.createElement("table");
+        table.className = "results-table";
+
+        const header = document.createElement("thead");
+        header.innerHTML = `
+          <tr>
+            <th>Person</th>
+            <th>Order</th>
+            <th>Fee</th>
+            <th>Total</th>
+          </tr>
+        `;
+        table.appendChild(header);
+
+        const body = document.createElement("tbody");
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.name}</td>
+            <td>${formatMoney(row.order)}</td>
+            <td>${formatMoney(row.fee)}</td>
+            <td>${formatMoney(row.total)}</td>
+          `;
+          body.appendChild(tr);
+        });
+
+        table.appendChild(body);
+        container.innerHTML = "";
+        container.appendChild(table);
+      }
+
+      function updateMethodUI() {
+        const active = methodSwitch.querySelector("input:checked");
+        const method = active ? active.value : "proportional";
+        methodBadge.textContent =
+          method === "equal" ? "Equal" : method === "hybrid" ? "Hybrid" : "Proportional";
+        hybridControls.style.display = method === "hybrid" ? "grid" : "none";
+        Array.from(methodSwitch.children).forEach((label) => {
+          label.classList.toggle("active", label.dataset.method === method);
+        });
+        return method;
+      }
+
+      function update() {
+        const people = getPeople();
+        const deliveryFee = toAmount(deliveryFeeInput.value);
+        const serviceFee = toAmount(serviceFeeInput.value);
+        const totalFees = deliveryFee + serviceFee;
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const total = totalOrders + totalFees;
+        const count = people.length;
+        const average = count > 0 ? Math.round(total / count) : 0;
+
+        peopleCountBadge.textContent = `${count} ${count === 1 ? "person" : "people"}`;
+        summaryPeoplePill.textContent = `${count} ${count === 1 ? "person" : "people"}`;
+        summaryItems.textContent = formatMoney(totalOrders);
+        summaryFees.textContent = formatMoney(totalFees);
+        summaryTotal.textContent = formatMoney(total);
+        summaryAverage.textContent = formatMoney(average);
+
+        const method = updateMethodUI();
+        const blendValue = parseFloat(blendSlider.value) / 100;
+        blendLabel.textContent = `${Math.round(blendValue * 100)}% proportional`;
+
+        const blend =
+          method === "equal" ? 0 : method === "hybrid" ? blendValue : 1;
+        const rows = computeMethod(people, totalFees, blend);
+        renderTable(resultsTable, rows);
+      }
+
+      addPersonButton.addEventListener("click", () => {
+        createPersonRow();
+        update();
+      });
+
+      clearAllButton.addEventListener("click", () => {
+        peopleList.innerHTML = "";
+        for (let i = 0; i < DEFAULT_ROWS; i += 1) {
+          createPersonRow();
+        }
+        update();
+      });
+
+      [currencySelect, deliveryFeeInput, serviceFeeInput, blendSlider].forEach(
+        (input) => {
+          input.addEventListener("input", update);
+        }
+      );
+
+      methodSwitch.addEventListener("change", update);
+
+      clearAllButton.click();
+    </script>
+  </body>
+</html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wolt Order Splitter</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #121826;
+        --muted: #5b6475;
+        --border: #e3e7ef;
+        --accent: #2563eb;
+        --accent-soft: #e0eaff;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: grid;
+        gap: 24px;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 4px;
+      }
+
+      header h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      header p {
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 900px) {
+        .grid {
+          grid-template-columns: 1.4fr 0.9fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .card h2 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .card p {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .people-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .person-row {
+        display: grid;
+        gap: 10px;
+        align-items: center;
+        grid-template-columns: 1fr 140px 40px;
+      }
+
+      .person-row input {
+        width: 100%;
+      }
+
+      input,
+      select {
+        border: 1px solid var(--border);
+        background: #fbfcfe;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+        transition: border-color 0.2s ease;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .icon-button {
+        border: none;
+        background: #f1f5f9;
+        color: var(--muted);
+        border-radius: 10px;
+        height: 38px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      .icon-button:hover {
+        background: #e2e8f0;
+        color: var(--text);
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+      }
+
+      .ghost {
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-row label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .summary-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .summary-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+      }
+
+      .summary-item span {
+        color: var(--muted);
+      }
+
+      .slider-group {
+        display: grid;
+        gap: 10px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .results {
+        display: grid;
+        gap: 18px;
+      }
+
+      .method-header {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .results-table th,
+      .results-table td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .results-table th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .results-table td:last-child,
+      .results-table th:last-child {
+        text-align: right;
+      }
+
+      .empty-state {
+        padding: 14px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        color: var(--muted);
+        font-size: 13px;
+        background: #fbfcfe;
+      }
+
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+        padding-top: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Wolt order split, done right</h1>
+        <p>
+          Enter each person order, add delivery and service fees, then compare
+          fair split options instantly.
+        </p>
+      </header>
+
+      <div class="grid">
+        <section class="card">
+          <div class="section-title">
+            <h2>Order items</h2>
+            <span class="badge" id="people-count">0 people</span>
+          </div>
+          <p>Add each participant and how much their order costs.</p>
+          <div class="people-list" id="people-list"></div>
+          <div class="button-row">
+            <button class="primary" type="button" id="add-person">Add person</button>
+            <button class="ghost" type="button" id="clear-all">Clear all</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Fees and preferences</h2>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="currency">Currency</label>
+              <select id="currency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="ILS">ILS</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="delivery-fee">Delivery fee</label>
+              <input id="delivery-fee" type="number" min="0" step="0.01" placeholder="0.00" />
+            </div>
+            <div class="field-row">
+              <label for="service-fee">Service fee</label>
+              <input id="service-fee" type="number" min="0" step="0.01" placeholder="0.00" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <div class="section-title">
+              <h2>Hybrid fee split</h2>
+              <span class="badge" id="blend-label">50% proportional</span>
+            </div>
+            <p>Blend equal fees with proportional fees for a compromise.</p>
+            <div class="slider-group">
+              <input id="blend-slider" type="range" min="0" max="100" step="5" value="50" />
+              <div class="slider-labels">
+                <span>Equal fees</span>
+                <span>Proportional fees</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>Summary</h2>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span>People</span>
+            <strong id="summary-people">0</strong>
+          </div>
+          <div class="summary-item">
+            <span>Items total</span>
+            <strong id="summary-items">USD 0.00</strong>
+          </div>
+          <div class="summary-item">
+            <span>Fees total</span>
+            <strong id="summary-fees">USD 0.00</strong>
+          </div>
+          <div class="summary-item">
+            <span>Grand total</span>
+            <strong id="summary-total">USD 0.00</strong>
+          </div>
+          <div class="summary-item">
+            <span>Average per person</span>
+            <strong id="summary-average">USD 0.00</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="results">
+        <div class="card">
+          <div class="method-header">
+            <h2>Method A: proportional fees</h2>
+            <p>Fees are split based on each person order size.</p>
+          </div>
+          <div id="results-proportional"></div>
+        </div>
+        <div class="card">
+          <div class="method-header">
+            <h2>Method B: equal fees</h2>
+            <p>Everyone pays the same fee amount regardless of order size.</p>
+          </div>
+          <div id="results-equal"></div>
+        </div>
+        <div class="card">
+          <div class="method-header">
+            <h2>Method C: hybrid blend</h2>
+            <p>Fees are split using the blend slider above.</p>
+          </div>
+          <div id="results-hybrid"></div>
+        </div>
+      </section>
+
+      <footer>Rounded to 2 decimals. Totals always match the grand total.</footer>
+    </main>
+
+    <script>
+      const peopleList = document.getElementById("people-list");
+      const addPersonButton = document.getElementById("add-person");
+      const clearAllButton = document.getElementById("clear-all");
+      const currencySelect = document.getElementById("currency");
+      const deliveryFeeInput = document.getElementById("delivery-fee");
+      const serviceFeeInput = document.getElementById("service-fee");
+      const blendSlider = document.getElementById("blend-slider");
+      const blendLabel = document.getElementById("blend-label");
+      const peopleCountBadge = document.getElementById("people-count");
+
+      const summaryPeople = document.getElementById("summary-people");
+      const summaryItems = document.getElementById("summary-items");
+      const summaryFees = document.getElementById("summary-fees");
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryAverage = document.getElementById("summary-average");
+
+      const resultsProportional = document.getElementById("results-proportional");
+      const resultsEqual = document.getElementById("results-equal");
+      const resultsHybrid = document.getElementById("results-hybrid");
+
+      const DEFAULT_ROWS = 3;
+
+      function formatMoney(value) {
+        const code = currencySelect.value;
+        return `${code} ${value.toFixed(2)}`;
+      }
+
+      function toAmount(value) {
+        const number = parseFloat(value);
+        if (!Number.isFinite(number) || number < 0) {
+          return 0;
+        }
+        return Math.round(number * 100) / 100;
+      }
+
+      function createPersonRow(nameValue = "", amountValue = "") {
+        const row = document.createElement("div");
+        row.className = "person-row";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Name";
+        nameInput.className = "person-name";
+        nameInput.value = nameValue;
+
+        const amountInput = document.createElement("input");
+        amountInput.type = "number";
+        amountInput.min = "0";
+        amountInput.step = "0.01";
+        amountInput.placeholder = "0.00";
+        amountInput.className = "person-amount";
+        amountInput.value = amountValue;
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "icon-button";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", () => {
+          row.remove();
+          update();
+        });
+
+        [nameInput, amountInput].forEach((input) => {
+          input.addEventListener("input", update);
+        });
+
+        row.append(nameInput, amountInput, removeButton);
+        peopleList.appendChild(row);
+      }
+
+      function getPeople() {
+        const rows = Array.from(document.querySelectorAll(".person-row"));
+        return rows.map((row, index) => {
+          const nameInput = row.querySelector(".person-name");
+          const amountInput = row.querySelector(".person-amount");
+          const name = nameInput.value.trim() || `Person ${index + 1}`;
+          const amount = toAmount(amountInput.value);
+          return { name, amount };
+        });
+      }
+
+      function distributeRounding(rawTotals, total) {
+        const totalCents = Math.round(total * 100);
+        const baseCents = rawTotals.map((value) => Math.floor(value * 100));
+        let remainder = totalCents - baseCents.reduce((sum, value) => sum + value, 0);
+        const fractions = rawTotals.map((value, index) => ({
+          index,
+          fraction: value * 100 - Math.floor(value * 100),
+        }));
+        fractions.sort((a, b) => b.fraction - a.fraction);
+
+        let i = 0;
+        while (remainder > 0 && fractions.length > 0) {
+          baseCents[fractions[i].index] += 1;
+          remainder -= 1;
+          i = (i + 1) % fractions.length;
+        }
+
+        return baseCents.map((value) => value / 100);
+      }
+
+      function computeMethod(people, totalFees, blend) {
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const count = people.length;
+
+        const feeShares = people.map((person) => {
+          if (count === 0) {
+            return 0;
+          }
+          if (totalOrders === 0) {
+            return 1 / count;
+          }
+          return blend * (person.amount / totalOrders) + (1 - blend) * (1 / count);
+        });
+
+        const rawTotals = people.map(
+          (person, index) => person.amount + totalFees * feeShares[index]
+        );
+        const roundedTotals = distributeRounding(rawTotals, totalOrders + totalFees);
+
+        return people.map((person, index) => {
+          const total = roundedTotals[index];
+          const fee = Math.round((total - person.amount) * 100) / 100;
+          return {
+            name: person.name,
+            order: person.amount,
+            fee,
+            total,
+          };
+        });
+      }
+
+      function renderTable(container, rows) {
+        if (rows.length === 0) {
+          container.innerHTML =
+            '<div class="empty-state">Add people to see the split.</div>';
+          return;
+        }
+
+        const table = document.createElement("table");
+        table.className = "results-table";
+
+        const header = document.createElement("thead");
+        header.innerHTML = `
+          <tr>
+            <th>Person</th>
+            <th>Order</th>
+            <th>Fee share</th>
+            <th>Total</th>
+          </tr>
+        `;
+        table.appendChild(header);
+
+        const body = document.createElement("tbody");
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.name}</td>
+            <td>${formatMoney(row.order)}</td>
+            <td>${formatMoney(row.fee)}</td>
+            <td>${formatMoney(row.total)}</td>
+          `;
+          body.appendChild(tr);
+        });
+
+        table.appendChild(body);
+        container.innerHTML = "";
+        container.appendChild(table);
+      }
+
+      function update() {
+        const people = getPeople();
+        const deliveryFee = toAmount(deliveryFeeInput.value);
+        const serviceFee = toAmount(serviceFeeInput.value);
+        const totalFees = deliveryFee + serviceFee;
+        const totalOrders = people.reduce((sum, person) => sum + person.amount, 0);
+        const total = totalOrders + totalFees;
+        const count = people.length;
+        const average = count > 0 ? total / count : 0;
+
+        peopleCountBadge.textContent = `${count} ${count === 1 ? "person" : "people"}`;
+        summaryPeople.textContent = count;
+        summaryItems.textContent = formatMoney(totalOrders);
+        summaryFees.textContent = formatMoney(totalFees);
+        summaryTotal.textContent = formatMoney(total);
+        summaryAverage.textContent = formatMoney(average);
+
+        const proportional = computeMethod(people, totalFees, 1);
+        const equal = computeMethod(people, totalFees, 0);
+        const blendValue = parseFloat(blendSlider.value) / 100;
+        blendLabel.textContent = `${Math.round(blendValue * 100)}% proportional`;
+        const hybrid = computeMethod(people, totalFees, blendValue);
+
+        renderTable(resultsProportional, proportional);
+        renderTable(resultsEqual, equal);
+        renderTable(resultsHybrid, hybrid);
+      }
+
+      addPersonButton.addEventListener("click", () => {
+        createPersonRow();
+        update();
+      });
+
+      clearAllButton.addEventListener("click", () => {
+        peopleList.innerHTML = "";
+        for (let i = 0; i < DEFAULT_ROWS; i += 1) {
+          createPersonRow();
+        }
+        update();
+      });
+
+      [currencySelect, deliveryFeeInput, serviceFeeInput, blendSlider].forEach(
+        (input) => {
+          input.addEventListener("input", update);
+        }
+      );
+
+      clearAllButton.click();
+    </script>
+  </body>
+</html>
