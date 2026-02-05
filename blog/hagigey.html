@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>הגיגי אמרי — פוסט אחרון</title>
+    <title>הגיגי אמרי — שלושת הפוסטים האחרונים</title>
     <meta
       name="description"
-      content="תצוגה דינמית של הפוסט האחרון מהבלוג הגיגי אמרי."
+      content="תצוגה דינמית של שלושת הפוסטים האחרונים מהבלוג הגיגי אמרי."
     />
     <style>
       :root {
@@ -51,19 +51,6 @@
         padding: 56px 6vw 72px;
       }
 
-      .ad-strip {
-        display: grid;
-        gap: 18px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 320px;
-        gap: 32px;
-        align-items: start;
-      }
-
       .hero {
         display: grid;
         gap: 10px;
@@ -90,6 +77,11 @@
         box-shadow: var(--shadow);
         display: grid;
         gap: 22px;
+      }
+
+      .posts {
+        display: grid;
+        gap: 32px;
       }
 
       .post-meta {
@@ -152,53 +144,24 @@
         transform: translateY(-1px);
       }
 
-      .sidebar {
-        display: grid;
-        gap: 24px;
-      }
-
-      .ad-card {
-        background: var(--paper-100);
-        border-radius: 24px;
-        padding: 20px;
+      .site-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 24px 28px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.7);
         box-shadow: var(--shadow);
-        display: grid;
-        gap: 14px;
-      }
-
-      .ad-label {
-        font-size: 0.85rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--ink-500);
-      }
-
-      .ad-slot {
-        min-height: 220px;
-        border-radius: 18px;
-        background: var(--paper-300);
-        display: grid;
-        place-items: center;
-        padding: 16px;
-        color: var(--ink-500);
-        text-align: center;
         font-size: 0.95rem;
       }
 
-      .ad-slot-inline {
-        min-height: 160px;
-      }
-
-      .ad-slot-banner {
-        min-height: 140px;
-      }
-
-      .ad-slot-wide {
-        min-height: 160px;
-      }
-
-      .ad-slot-tall {
-        min-height: 360px;
+      .site-footer a {
+        color: var(--ink-700);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 4px;
       }
 
       .loading .post-body {
@@ -270,16 +233,6 @@
           justify-content: center;
         }
       }
-
-      @media (max-width: 960px) {
-        .ad-strip {
-          grid-template-columns: 1fr;
-        }
-
-        .layout {
-          grid-template-columns: 1fr;
-        }
-      }
     </style>
   </head>
   <body>
@@ -289,156 +242,54 @@
         <p id="blog-subtitle"></p>
       </header>
 
-      <section class="ad-strip" aria-label="פרסומות ממומנות">
-        <div
-          class="ad-slot ad-slot-banner"
-          data-ad-slot="banner-1"
-          data-ad-tags="יהדות,קהילה,משפחה"
-        >
-          שטח פרסום עליון
-        </div>
-        <div
-          class="ad-slot ad-slot-banner"
-          data-ad-slot="banner-2"
-          data-ad-tags="כשרות,חינוך,שבת"
-        >
-          שטח פרסום עליון
-        </div>
-      </section>
+      <main class="posts loading" id="posts" aria-busy="true">
+        <article class="card">
+          <div class="skeleton-block">
+            <div class="skeleton skeleton-meta"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="skeleton-block">
+            <div class="skeleton skeleton-meta"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="skeleton-block">
+            <div class="skeleton skeleton-meta"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        </article>
+      </main>
 
-      <div class="layout">
-        <main>
-          <article class="card loading" id="post" aria-busy="true">
-            <div class="skeleton-block" id="skeleton">
-              <div class="skeleton skeleton-meta"></div>
-              <div class="skeleton skeleton-title"></div>
-              <div class="skeleton skeleton-line"></div>
-              <div class="skeleton skeleton-line short"></div>
-            </div>
-
-            <div class="post-body" id="post-body" hidden>
-              <div class="post-meta" id="post-meta"></div>
-              <h2 class="post-title" id="post-title"></h2>
-              <div
-                class="ad-slot ad-slot-inline"
-                data-ad-slot="inline-0"
-                data-ad-tags="יהדות,קהילה,לימוד"
-                aria-label="פרסומת"
-              >
-                שטח פרסום בתוך הפוסט
-              </div>
-              <div class="post-content" id="post-content"></div>
-              <div
-                class="ad-slot ad-slot-inline"
-                data-ad-slot="inline-1"
-                data-ad-tags="יהדות,כשרות,משפחה,קהילה"
-                aria-label="פרסומת"
-              >
-                שטח פרסום בתוך הפוסט
-              </div>
-              <div
-                class="ad-slot ad-slot-inline"
-                data-ad-slot="inline-2"
-                data-ad-tags="שבת,חגים,קהילה"
-                aria-label="פרסומת"
-              >
-                שטח פרסום בתוך הפוסט
-              </div>
-              <div class="post-footer" id="post-footer"></div>
-            </div>
-          </article>
-        </main>
-
-        <aside class="sidebar" aria-label="פרסומות">
-          <section class="ad-card">
-            <div class="ad-label">תוכן ממומן</div>
-            <div
-              class="ad-slot"
-              data-ad-slot="sidebar-1"
-              data-ad-tags="יהדות,חינוך,קהילה,משפחה"
-            >
-              שטח פרסום לקהל דתי
-            </div>
-          </section>
-
-          <section class="ad-card">
-            <div class="ad-label">תוכן ממומן</div>
-            <div
-              class="ad-slot"
-              data-ad-slot="sidebar-2"
-              data-ad-tags="כשרות,שבת,לימוד,מועדים"
-            >
-              שטח פרסום לקהלים שומרי מצוות
-            </div>
-          </section>
-
-          <section class="ad-card">
-            <div class="ad-label">תוכן ממומן</div>
-            <div
-              class="ad-slot ad-slot-tall"
-              data-ad-slot="sidebar-3"
-              data-ad-tags="קהילה,משפחה,תרבות יהודית"
-            >
-              שטח פרסום גבוה
-            </div>
-          </section>
-
-          <section class="ad-card">
-            <div class="ad-label">תוכן ממומן</div>
-            <div
-              class="ad-slot"
-              data-ad-slot="sidebar-4"
-              data-ad-tags="כשרות,מזון,אירוח"
-            >
-              שטח פרסום בסיידבר
-            </div>
-          </section>
-
-          <section class="ad-card">
-            <div class="ad-label">תוכן ממומן</div>
-            <div
-              class="ad-slot"
-              data-ad-slot="sidebar-5"
-              data-ad-tags="שבת,חגים,קהילה"
-            >
-              שטח פרסום בסיידבר
-            </div>
-          </section>
-        </aside>
-      </div>
-
-      <section class="ad-card" aria-label="פרסומת רחבה">
-        <div class="ad-label">תוכן ממומן</div>
-        <div
-          class="ad-slot ad-slot-wide"
-          data-ad-slot="wide-1"
-          data-ad-tags="יהדות,משפחה,קהילה"
-        >
-          שטח פרסום רחב
-        </div>
-      </section>
+      <footer class="site-footer">
+        <span>עמוד מדיניות פרטיות</span>
+        <a href="./privacy-policy.html">Privacy Policy</a>
+      </footer>
     </div>
 
     <script>
-      const post = document.getElementById("post");
-      const postBody = document.getElementById("post-body");
-      const skeleton = document.getElementById("skeleton");
+      const posts = document.getElementById("posts");
       const hero = document.getElementById("hero");
       const blogTitle = document.getElementById("blog-title");
       const blogSubtitle = document.getElementById("blog-subtitle");
-      const postMeta = document.getElementById("post-meta");
-      const postTitle = document.getElementById("post-title");
-      const postContent = document.getElementById("post-content");
-      const postFooter = document.getElementById("post-footer");
 
-      function renderHagigey(data) {
-        const feed = data?.feed;
-        const entry = feed?.entry?.[0];
-
-        if (!feed || !entry) {
-          return;
+      function getLinkHost(linkUrl) {
+        try {
+          return new URL(linkUrl).host;
+        } catch (error) {
+          return linkUrl;
         }
+      }
 
+      function buildPostCard(entry) {
         const title = entry.title?.$t ?? "";
         const content = entry.content?.$t ?? entry.summary?.$t ?? "";
         const published = entry.published?.$t ?? entry.updated?.$t ?? "";
@@ -450,42 +301,68 @@
           (link) => link.rel === "alternate"
         );
         const linkUrl = alternateLink?.href ?? "https://hagigey.blogspot.com/";
-        const linkHost = (() => {
-          try {
-            return new URL(linkUrl).host;
-          } catch (error) {
-            return linkUrl;
-          }
-        })();
+        const linkHost = getLinkHost(linkUrl);
 
-        blogTitle.textContent = feed.title?.$t ?? "";
-        blogSubtitle.textContent = feed.subtitle?.$t ?? "";
-        blogSubtitle.hidden = !blogSubtitle.textContent;
-        hero.hidden = !blogTitle.textContent;
+        const card = document.createElement("article");
+        card.className = "card";
 
-        postMeta.textContent = formattedDate;
-        postTitle.textContent = title;
-        postContent.innerHTML = content;
+        const meta = document.createElement("div");
+        meta.className = "post-meta";
+        meta.textContent = formattedDate;
 
-        postFooter.innerHTML = "";
+        const heading = document.createElement("h2");
+        heading.className = "post-title";
+        heading.textContent = title;
+
+        const body = document.createElement("div");
+        body.className = "post-content";
+        body.innerHTML = content;
+
+        const footer = document.createElement("div");
+        footer.className = "post-footer";
+
         const linkEl = document.createElement("a");
         linkEl.className = "post-link";
         linkEl.href = linkUrl;
         linkEl.target = "_blank";
         linkEl.rel = "noreferrer";
         linkEl.textContent = linkHost;
-        postFooter.appendChild(linkEl);
 
-        document.title = title
-          ? `${title} — ${feed.title?.$t ?? "הגיגי אמרי"}`
+        footer.appendChild(linkEl);
+        card.appendChild(meta);
+        card.appendChild(heading);
+        card.appendChild(body);
+        card.appendChild(footer);
+
+        return card;
+      }
+
+      function renderHagigey(data) {
+        const feed = data?.feed;
+        const entries = feed?.entry ?? [];
+
+        if (!feed || entries.length === 0) {
+          return;
+        }
+
+        blogTitle.textContent = feed.title?.$t ?? "";
+        blogSubtitle.textContent = feed.subtitle?.$t ?? "";
+        blogSubtitle.hidden = !blogSubtitle.textContent;
+        hero.hidden = !blogTitle.textContent;
+
+        posts.innerHTML = "";
+        entries.slice(0, 3).forEach((entry) => {
+          posts.appendChild(buildPostCard(entry));
+        });
+
+        document.title = blogTitle.textContent
+          ? `${blogTitle.textContent} — שלושת הפוסטים האחרונים`
           : document.title;
 
-        skeleton.remove();
-        post.classList.remove("loading");
-        post.setAttribute("aria-busy", "false");
-        postBody.hidden = false;
+        posts.classList.remove("loading");
+        posts.setAttribute("aria-busy", "false");
       }
     </script>
-    <script src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=1&callback=renderHagigey"></script>
+    <script src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=3&callback=renderHagigey"></script>
   </body>
 </html>
