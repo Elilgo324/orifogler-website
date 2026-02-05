@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Coordinator</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #6d28d9;
+        --accent-strong: #5b21b6;
+        --accent-soft: #ede9fe;
+        --accent-glow: rgba(109, 40, 217, 0.25);
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --shadow-soft: 0 10px 24px rgba(15, 23, 42, 0.08);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #ede9fe 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #8b5cf6 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 28px;
+        display: grid;
+        gap: 14px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        top: -80px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent 60%);
+        opacity: 0.6;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        opacity: 0.92;
+        font-size: 15px;
+        max-width: 620px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 600;
+        opacity: 0.85;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .section-title h2 {
+        font-size: 18px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        border: 1px solid rgba(109, 40, 217, 0.08);
+      }
+
+      textarea,
+      select,
+      input {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      textarea {
+        min-height: 220px;
+        resize: vertical;
+        font-family: "SF Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+      }
+
+      textarea:focus,
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-glow);
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-row label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .inline-fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+      }
+
+      .results-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .results-toolbar label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(109, 40, 217, 0.25);
+      }
+
+      .secondary {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent-strong);
+      }
+
+      .ghost {
+        background: #f1f5f9;
+        color: var(--muted);
+      }
+
+      .ghost:hover {
+        color: var(--text);
+      }
+
+      .message {
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .message.error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+      }
+
+      .message.success {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .summary {
+        display: grid;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .group-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        display: grid;
+        gap: 10px;
+        background: #fbfcff;
+        border-left: 4px solid var(--accent-soft);
+      }
+
+      .group-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .group-points {
+        display: grid;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+        max-height: 180px;
+        overflow: auto;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 10px;
+      }
+
+      .group-points div {
+        color: var(--text);
+      }
+
+      .point-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 4px 0;
+      }
+
+      .point-row span {
+        color: var(--text);
+      }
+
+      .point-remove {
+        border: none;
+        background: #fee2e2;
+        color: #b91c1c;
+        border-radius: 999px;
+        padding: 2px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .group-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .helper {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">The Coordinator</div>
+        <h1>The Coordinator</h1>
+        <p>
+          Paste valid JSON, detect every coordinate list that contains <code>lat</code> and
+          <code>lng</code>, and open a Google Maps route for each list.
+        </p>
+        <div class="pill-row">
+          <span class="pill">1 · Paste JSON</span>
+          <span class="pill">2 · Find routes</span>
+          <span class="pill">3 · Open in Maps</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>Input</h2>
+            <span class="badge" id="pair-count">0 pairs</span>
+          </div>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="text-input">JSON to scan</label>
+              <textarea
+                id="text-input"
+                placeholder='Paste valid JSON containing lat/lng keys...'
+              ></textarea>
+              <div class="helper">
+                The parser searches for objects that include both <code>lat</code> and
+                <code>lng</code> keys.
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" type="button" id="scan-btn">Find coordinates</button>
+            <button class="secondary" type="button" id="clear-btn">Clear</button>
+            <button class="ghost" type="button" id="sample-btn">Load sample</button>
+          </div>
+          <div id="message-area"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <h2>Results</h2>
+            <span class="badge" id="group-count">0 groups</span>
+          </div>
+          <div class="results-toolbar">
+            <label for="travel-mode">Travel mode</label>
+            <select id="travel-mode">
+              <option value="driving" selected>Driving</option>
+              <option value="walking">Walking</option>
+              <option value="bicycling">Bicycling</option>
+              <option value="transit">Transit</option>
+            </select>
+          </div>
+          <div class="summary" id="summary">
+            Paste JSON and click “Find coordinates” to extract routes.
+          </div>
+          <div id="groups-container"></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const textInput = document.getElementById("text-input");
+      const travelModeSelect = document.getElementById("travel-mode");
+      const scanBtn = document.getElementById("scan-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const sampleBtn = document.getElementById("sample-btn");
+      const messageArea = document.getElementById("message-area");
+      const pairCountBadge = document.getElementById("pair-count");
+      const groupCountBadge = document.getElementById("group-count");
+      const summary = document.getElementById("summary");
+      const groupsContainer = document.getElementById("groups-container");
+      let currentGroups = [];
+
+      function setMessage(text, type = "success") {
+        if (!text) {
+          messageArea.innerHTML = "";
+          return;
+        }
+        messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+      }
+
+      function isValidCoord(lat, lng) {
+        return (
+          Number.isFinite(lat) &&
+          Number.isFinite(lng) &&
+          lat >= -90 &&
+          lat <= 90 &&
+          lng >= -180 &&
+          lng <= 180
+        );
+      }
+
+      function buildLineIndex(text) {
+        const lines = [0];
+        for (let i = 0; i < text.length; i += 1) {
+          if (text[i] === "\n") {
+            lines.push(i + 1);
+          }
+        }
+        return lines;
+      }
+
+      function getLineNumber(lineStarts, index) {
+        let low = 0;
+        let high = lineStarts.length - 1;
+        let line = 1;
+        while (low <= high) {
+          const mid = Math.floor((low + high) / 2);
+          if (lineStarts[mid] <= index) {
+            line = mid + 1;
+            low = mid + 1;
+          } else {
+            high = mid - 1;
+          }
+        }
+        return line;
+      }
+
+      function getDirectLatLng(value) {
+        if (!value || typeof value !== "object") {
+          return null;
+        }
+        const keys = Object.keys(value);
+        const normalized = {};
+        keys.forEach((key) => {
+          normalized[key.toLowerCase()] = key;
+        });
+
+        const latKey = normalized.lat;
+        const lngKey = normalized.lng;
+        if (latKey && lngKey) {
+          const lat = parseFloat(value[latKey]);
+          const lng = parseFloat(value[lngKey]);
+          if (isValidCoord(lat, lng)) {
+            return { lat, lng };
+          }
+        }
+        return null;
+      }
+
+      function findCoordInObject(value) {
+        if (!value || typeof value !== "object") {
+          return null;
+        }
+        const keys = Object.keys(value);
+        const normalized = {};
+        keys.forEach((key) => {
+          normalized[key.toLowerCase()] = key;
+        });
+
+        const direct = getDirectLatLng(value);
+        if (direct) {
+          return direct;
+        }
+
+        for (const key of keys) {
+          const nested = findCoordInObject(value[key]);
+          if (nested) {
+            return nested;
+          }
+        }
+
+        return null;
+      }
+
+      function extractGroupsFromJson(text) {
+        try {
+          const data = JSON.parse(text);
+          const groups = [];
+
+          const walk = (node, path = "root", inArray = false) => {
+            if (Array.isArray(node)) {
+              const coords = [];
+              node.forEach((item) => {
+                if (Array.isArray(item) && item.length >= 2) {
+                  const lat = parseFloat(item[0]);
+                  const lng = parseFloat(item[1]);
+                  if (isValidCoord(lat, lng)) {
+                    coords.push({
+                      lat,
+                      lng,
+                      line: null,
+                      source: "json-array",
+                    });
+                  }
+                } else if (item && typeof item === "object") {
+                  const found = findCoordInObject(item);
+                  if (found) {
+                    coords.push({
+                      ...found,
+                      line: null,
+                      source: "json-object",
+                    });
+                  }
+                }
+              });
+
+              if (coords.length >= 1) {
+                groups.push({ path, points: coords });
+              }
+
+              node.forEach((item, index) => {
+                walk(item, `${path}[${index}]`, true);
+              });
+            } else if (node && typeof node === "object") {
+              if (!inArray) {
+                const direct = getDirectLatLng(node);
+                if (direct) {
+                  groups.push({
+                    path,
+                    points: [{ ...direct, line: null, source: "json-object" }],
+                  });
+                }
+              }
+              Object.keys(node).forEach((key) => {
+                walk(node[key], `${path}.${key}`, inArray);
+              });
+            }
+          };
+
+          walk(data);
+          return { groups, error: null };
+        } catch (error) {
+          const detail = error && error.message ? ` ${error.message}` : "";
+          return { groups: [], error: `Invalid JSON.${detail}` };
+        }
+      }
+
+      function formatCoord(lat, lng) {
+        return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      }
+
+      function buildMapsUrl(points, startIndex, endIndex) {
+        const travelMode = travelModeSelect.value;
+
+        const startIdx = startIndex >= 0 ? startIndex : 0;
+        const endIdx = endIndex >= 0 ? endIndex : points.length - 1;
+
+        if (points.length < 2) {
+          return { error: "Need at least two coordinates for a route." };
+        }
+
+        if (startIdx === endIdx) {
+          return { error: "Start and end cannot be the same." };
+        }
+
+        const origin = points[startIdx];
+        const destination = points[endIdx];
+        const waypoints = points.filter(
+          (_, index) => index !== startIdx && index !== endIdx
+        );
+
+        if (points.length > 25) {
+          return { error: "Google Maps supports up to 25 total points." };
+        }
+
+        const params = new URLSearchParams({
+          api: "1",
+          origin: `${origin.lat},${origin.lng}`,
+          destination: `${destination.lat},${destination.lng}`,
+          travelmode: travelMode,
+        });
+
+        if (waypoints.length > 0) {
+          const waypointList = waypoints
+            .map((point) => `${point.lat},${point.lng}`)
+            .join("|");
+          params.set("waypoints", `${waypointList}`);
+        }
+
+        return { url: `https://www.google.com/maps/dir/?${params.toString()}` };
+      }
+
+      function renderGroups(groups) {
+        groupsContainer.innerHTML = "";
+        const cleanedGroups = groups.filter((group) => group.points.length > 0);
+        currentGroups = cleanedGroups;
+        const totalPoints = cleanedGroups.reduce(
+          (sum, group) => sum + group.points.length,
+          0
+        );
+        pairCountBadge.textContent = `${totalPoints} pairs`;
+        groupCountBadge.textContent = `${cleanedGroups.length} groups`;
+
+        if (cleanedGroups.length === 0) {
+          summary.textContent = "No coordinate pairs detected.";
+          return;
+        }
+
+        const orderedGroups = [...cleanedGroups].sort(
+          (a, b) => b.points.length - a.points.length
+        );
+
+        summary.textContent = `${orderedGroups.length} group(s) detected. Open any group in Google Maps.`;
+
+        orderedGroups.forEach((group, index) => {
+          const card = document.createElement("div");
+          card.className = "group-card";
+
+          const header = document.createElement("div");
+          header.className = "group-header";
+          const pathLabel = group.path ? ` <span class="helper">(${group.path})</span>` : "";
+          header.innerHTML = `
+            <strong>Group ${index + 1}${pathLabel}</strong>
+            <span class="badge">${group.points.length} points</span>
+          `;
+
+          const selectRow = document.createElement("div");
+          selectRow.className = "inline-fields";
+          const startSelect = document.createElement("select");
+          const endSelect = document.createElement("select");
+          startSelect.innerHTML = `<option value="-1">Auto start (first)</option>`;
+          endSelect.innerHTML = `<option value="-1">Auto end (last)</option>`;
+
+          group.points.forEach((point, idx) => {
+            const label = `${idx + 1}. ${formatCoord(point.lat, point.lng)}`;
+            const optionStart = document.createElement("option");
+            optionStart.value = String(idx);
+            optionStart.textContent = label;
+            startSelect.appendChild(optionStart);
+
+            const optionEnd = document.createElement("option");
+            optionEnd.value = String(idx);
+            optionEnd.textContent = label;
+            endSelect.appendChild(optionEnd);
+          });
+
+          const startWrap = document.createElement("div");
+          startWrap.className = "field-row";
+          startWrap.innerHTML = `<label>Start (optional)</label>`;
+          startWrap.appendChild(startSelect);
+
+          const endWrap = document.createElement("div");
+          endWrap.className = "field-row";
+          endWrap.innerHTML = `<label>End (optional)</label>`;
+          endWrap.appendChild(endSelect);
+
+          selectRow.append(startWrap, endWrap);
+
+          const list = document.createElement("div");
+          list.className = "group-points";
+
+          group.points.forEach((point, idx) => {
+            const row = document.createElement("div");
+            row.className = "point-row";
+
+            const text = document.createElement("span");
+            const lineLabel = point.line ? ` (line ${point.line})` : "";
+            text.textContent = `${idx + 1}. ${formatCoord(point.lat, point.lng)}${lineLabel}`;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.className = "point-remove";
+            removeBtn.textContent = "Remove";
+            removeBtn.addEventListener("click", () => {
+              group.points.splice(idx, 1);
+              renderGroups(currentGroups);
+              setMessage("Point removed from group.", "success");
+            });
+
+            row.append(text, removeBtn);
+            list.appendChild(row);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "group-actions";
+          const openBtn = document.createElement("button");
+          openBtn.className = "primary";
+          openBtn.type = "button";
+          openBtn.textContent = "Open in Google Maps";
+          if (group.points.length < 2) {
+            openBtn.disabled = true;
+            openBtn.textContent = "Need 2+ points";
+          }
+
+          const copyBtn = document.createElement("button");
+          copyBtn.className = "secondary";
+          copyBtn.type = "button";
+          copyBtn.textContent = "Copy coords";
+
+          openBtn.addEventListener("click", () => {
+            const startIdx = Number(startSelect.value);
+            const endIdx = Number(endSelect.value);
+            const { url, error } = buildMapsUrl(group.points, startIdx, endIdx);
+            if (error) {
+              setMessage(error, "error");
+              return;
+            }
+            window.open(url, "_blank");
+          });
+
+          copyBtn.addEventListener("click", async () => {
+            const text = group.points.map((point) => `${point.lat},${point.lng}`).join("\n");
+            try {
+              await navigator.clipboard.writeText(text);
+              setMessage("Coordinates copied to clipboard.", "success");
+            } catch (error) {
+              setMessage("Clipboard not available. Copy manually.", "error");
+            }
+          });
+
+          actions.append(openBtn, copyBtn);
+          card.append(header, selectRow, list, actions);
+          groupsContainer.appendChild(card);
+        });
+      }
+
+      function scanText() {
+        const text = textInput.value;
+        if (!text.trim()) {
+          setMessage("Paste valid JSON to scan for coordinates.", "error");
+          return;
+        }
+        const { groups, error } = extractGroupsFromJson(text);
+        if (error) {
+          setMessage(error, "error");
+          pairCountBadge.textContent = "0 pairs";
+          groupCountBadge.textContent = "0 groups";
+          renderGroups([]);
+          return;
+        }
+
+        if (groups.length === 0) {
+          setMessage(
+            "No lat/lng pairs detected. Ensure the JSON has lat and lng keys.",
+            "error"
+          );
+          pairCountBadge.textContent = "0 pairs";
+          groupCountBadge.textContent = "0 groups";
+          renderGroups([]);
+          return;
+        }
+
+        setMessage("Coordinates extracted successfully.", "success");
+        renderGroups(groups);
+      }
+
+      function clearAll() {
+        textInput.value = "";
+        pairCountBadge.textContent = "0 pairs";
+        groupCountBadge.textContent = "0 groups";
+        summary.textContent = "Paste JSON and click “Find coordinates” to extract routes.";
+        groupsContainer.innerHTML = "";
+        setMessage("");
+      }
+
+      function loadSample() {
+        textInput.value = JSON.stringify(
+          {
+            route_points: [
+              { location: { lat: 42.978342, lng: -82.448206 } },
+              { location: { lat: 42.9812, lng: -82.4521 } },
+              { location: { lat: 42.9901, lng: -82.46005 } },
+            ],
+            metadata: { lat: 42.978342, lng: -82.448206 },
+          },
+          null,
+          2
+        );
+      }
+
+      scanBtn.addEventListener("click", scanText);
+      clearBtn.addEventListener("click", clearAll);
+      sampleBtn.addEventListener("click", loadSample);
+      travelModeSelect.addEventListener("change", () => {
+        setMessage("Travel mode updated. Open a route to use it.", "success");
+      });
+    </script>
+  </body>
+</html>
