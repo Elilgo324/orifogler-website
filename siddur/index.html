@@ -2,565 +2,967 @@
 <html lang="he" dir="rtl">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>סידור הגיגי אמרי</title>
-  <link rel="icon"
-    href="data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'><rect%20width='64'%20height='64'%20rx='14'%20fill='rgb(15,92,77)'/><path%20d='M32%2010l7%2014%2016%202-12%2011%203%2016-14-8-14%208%203-16-12-11%2016-2z'%20fill='rgb(255,255,255)'/></svg>" />
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f6f3ec;
-      --surface: #ffffff;
-      --surface-soft: #fbfaf7;
-      --text: #1b1b1b;
-      --muted: #5b5b5b;
-      --accent: #0f5c4d;
-      --accent-2: #9c7b47;
-      --accent-soft: #e6f1ee;
-      --border: #e3e0d8;
-      --ring: rgba(15, 92, 77, 0.22);
-      --shadow: 0 14px 30px rgba(27, 27, 27, 0.08);
-      --shadow-soft: 0 10px 20px rgba(27, 27, 27, 0.06);
-    }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>סידור תפילה</title>
+    <link rel="icon"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='0.4' y2='1'><stop offset='0' stop-color='%23228B67'/><stop offset='1' stop-color='%23145640'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><path d='M32 14C26 13 17 14.5 12 18L12 48C17 44.5 26 43 32 45C38 43 47 44.5 52 48L52 18C47 14.5 38 13 32 14Z' fill='%23FFFCF5' fill-opacity='0.12' stroke='%23FFFCF5' stroke-width='2.8' stroke-linejoin='round'/><line x1='32' y1='14' x2='32' y2='45' stroke='%23FFFCF5' stroke-width='2.2'/><line x1='17' y1='24' x2='28' y2='22.5' stroke='%23D4A458' stroke-width='2' stroke-linecap='round'/><line x1='17' y1='30' x2='27' y2='29' stroke='%23D4A458' stroke-width='2' stroke-linecap='round' opacity='0.7'/><line x1='18' y1='36' x2='28' y2='35' stroke='%23D4A458' stroke-width='2' stroke-linecap='round' opacity='0.45'/><line x1='36' y1='22.5' x2='47' y2='24' stroke='%23D4A458' stroke-width='2' stroke-linecap='round'/><line x1='37' y1='29' x2='47' y2='30' stroke='%23D4A458' stroke-width='2' stroke-linecap='round' opacity='0.7'/><line x1='36' y1='35' x2='46' y2='36' stroke='%23D4A458' stroke-width='2' stroke-linecap='round' opacity='0.45'/></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #F5F0E6;
+            --bg-subtle: #EDE8DC;
+            --surface: #FFFCF5;
+            --text: #2C2520;
+            --text-soft: #4A4038;
+            --muted: #8C7B6E;
+            --accent: #1A6B52;
+            --accent-soft: rgba(26, 107, 82, 0.08);
+            --gold: #9E7C3E;
+            --gold-soft: rgba(158, 124, 62, 0.12);
+            --border: #E0D8CA;
+            --border-soft: rgba(224, 216, 202, 0.5);
+            --shadow-sm: 0 1px 3px rgba(44, 37, 32, 0.06);
+            --shadow-md: 0 4px 16px rgba(44, 37, 32, 0.07);
+            --font-ui: "Heebo", "Arial", sans-serif;
+            --font-prayer: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+            --prayer-scale: 1;
+            --prayer-size: calc(1.22rem * var(--prayer-scale));
+            --prayer-lh: 2.15;
+            --radius: 14px;
+            --nav-h: 52px;
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        [data-theme="dark"] {
+            --bg: #161210;
+            --bg-subtle: #1E1A16;
+            --surface: #242019;
+            --text: #E5DDD0;
+            --text-soft: #C4B9AA;
+            --muted: #8C7B6E;
+            --accent: #3FBB9A;
+            --accent-soft: rgba(63, 187, 154, 0.1);
+            --gold: #D4A458;
+            --gold-soft: rgba(212, 164, 88, 0.12);
+            --border: #332D26;
+            --border-soft: rgba(51, 45, 38, 0.6);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
 
-    html {
-      scroll-behavior: smooth;
-    }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      margin: 0;
-      font-family: "Heebo", "Assistant", "Arial", sans-serif;
-      background:
-        radial-gradient(1200px 600px at 85% -10%, #e8f2ef 0%, rgba(232, 242, 239, 0) 60%),
-        linear-gradient(180deg, #f7f3ec 0%, #f1eee7 100%);
-      color: var(--text);
-      line-height: 1.9;
-      font-size: 17px;
-      -webkit-font-smoothing: antialiased;
-    }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: calc(var(--nav-h) + 20px);
+        }
 
-    header {
-      background: linear-gradient(120deg, #0f5c4d 0%, #2f816f 100%);
-      color: #fff;
-      padding: 44px 20px 48px;
-      position: relative;
-      overflow: hidden;
-    }
+        body {
+            font-family: var(--font-ui);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100dvh;
+            transition: background 0.35s ease, color 0.35s ease;
+        }
 
-    header::after {
-      content: "";
-      position: absolute;
-      inset: -40% -20% auto auto;
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
-      transform: rotate(-12deg);
-      pointer-events: none;
-    }
+        /* ── Header ──────────────────────────────── */
+        header {
+            background: linear-gradient(135deg, #14543F 0%, #1A6B52 40%, #2D8B6E 100%);
+            color: #fff; padding: 36px 20px 32px; position: relative; overflow: hidden;
+        }
+        [data-theme="dark"] header {
+            background: linear-gradient(135deg, #0E3B2C 0%, #145040 40%, #1A6B52 100%);
+        }
+        header::before {
+            content: ""; position: absolute; top: -60%; left: -20%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.07), transparent 70%);
+            pointer-events: none;
+        }
+        .header-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+        .header-top {
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+        }
+        .site-title {
+            font-family: var(--font-prayer);
+            font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; line-height: 1.3;
+        }
+        .header-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .icon-btn {
+            width: 38px; height: 38px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.12); color: #fff;
+            font-size: 0.85rem; font-family: var(--font-ui); font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, transform 0.15s;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+        .icon-btn:active { transform: scale(0.95); }
+        .nusach-row { margin-top: 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .nusach-row label { font-size: 0.9rem; font-weight: 500; opacity: 0.9; }
+        #nusachSelect {
+            font-family: var(--font-ui); font-size: 0.9rem;
+            padding: 8px 36px 8px 12px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background-color: rgba(255,255,255,0.14); color: #fff;
+            appearance: none; cursor: pointer;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: 10px center;
+            transition: background-color 0.2s;
+        }
+        #nusachSelect:hover { background-color: rgba(255,255,255,0.22); }
+        #nusachSelect:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+        #nusachSelect option { background: var(--surface); color: var(--text); }
 
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+        /* ── Nav (tabs) ──────────────────────────── */
+        nav {
+            position: sticky; top: 0; z-index: 50;
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm); height: var(--nav-h);
+            transition: background 0.35s, border-color 0.35s;
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 0 16px;
+            display: flex; align-items: center; gap: 6px; height: 100%;
+            overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .nav-link {
+            flex-shrink: 0; text-decoration: none; font-family: var(--font-ui);
+            font-size: 0.88rem; font-weight: 600; color: var(--muted);
+            padding: 8px 16px; border-radius: 999px;
+            transition: color 0.2s, background 0.2s; white-space: nowrap;
+            cursor: pointer; user-select: none;
+        }
+        .nav-link:hover { color: var(--accent); background: var(--accent-soft); }
+        .nav-link.active { color: #fff; background: var(--accent); }
 
-    .title {
-      font-size: clamp(2rem, 3vw, 2.6rem);
-      margin: 0 0 8px;
-      font-weight: 700;
-    }
+        /* ── Main ────────────────────────────────── */
+        main { max-width: 760px; margin: 0 auto; padding: 24px 20px 80px; }
 
-    .subtitle {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 1.05rem;
-    }
+        /* Tab pages: only active is visible */
+        .section { display: none; }
+        .section.active { display: block; }
 
-    .controls {
-      margin-top: 26px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 16px;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 14px 16px;
-      border-radius: 16px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    }
+        .section-card {
+            background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            overflow: hidden; box-shadow: var(--shadow-md);
+            transition: background 0.35s, border-color 0.35s;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-    label {
-      font-weight: 600;
-    }
+        .section-head {
+            text-align: center; padding: 28px 24px 20px;
+            border-bottom: 1px solid var(--border-soft); position: relative;
+        }
+        .section-head h2 {
+            font-family: var(--font-prayer); font-size: 1.5rem;
+            font-weight: 700; color: var(--accent); margin-bottom: 2px;
+        }
+        .section-head::after {
+            content: ""; display: block; width: 48px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 12px auto 0; border-radius: 2px;
+        }
 
-    select {
-      font-size: 1rem;
-      padding: 10px 40px 10px 14px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      min-width: 220px;
-      background-color: #fff;
-      background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
-        linear-gradient(135deg, var(--accent) 50%, transparent 50%);
-      background-position: calc(100% - 16px) calc(50% + 2px), calc(100% - 10px) calc(50% + 2px);
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-      appearance: none;
-      box-shadow: 0 6px 16px rgba(15, 92, 77, 0.12);
-    }
+        /* ── Subsection TOC ──────────────────────── */
+        .section-toc {
+            padding: 14px 20px;
+            display: flex; flex-wrap: wrap; gap: 6px;
+            border-bottom: 1px solid var(--border-soft);
+            background: var(--bg-subtle);
+            transition: background 0.35s;
+        }
+        .section-toc:empty { display: none; }
+        .toc-link {
+            text-decoration: none; font-family: var(--font-ui);
+            font-size: 0.76rem; font-weight: 500; color: var(--text-soft);
+            padding: 5px 12px; border-radius: 999px;
+            border: 1px solid var(--border); background: var(--surface);
+            transition: color 0.2s, background 0.2s, border-color 0.2s;
+            white-space: nowrap; cursor: pointer;
+        }
+        .toc-link:hover {
+            color: var(--gold); border-color: var(--gold); background: var(--gold-soft);
+        }
 
-    select:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px var(--ring);
-    }
+        /* ── Tehillim Controls ──────────────────── */
+        .tehillim-controls {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-soft);
+            background: var(--bg-subtle);
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+            transition: background 0.35s;
+        }
+        .chapter-nav {
+            display: flex; align-items: center; gap: 10px;
+            direction: ltr;
+        }
+        .chapter-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 1.5px solid var(--border); background: var(--surface);
+            color: var(--accent); font-size: 1.4rem; line-height: 1;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            font-family: system-ui; box-shadow: var(--shadow-sm);
+        }
+        .chapter-btn:hover { background: var(--accent-soft); border-color: var(--accent); transform: scale(1.08); }
+        .chapter-btn:active { transform: scale(0.92); }
+        .chapter-display {
+            display: flex; align-items: center; direction: rtl;
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-radius: 999px; padding: 2px 4px; gap: 0;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .chapter-display:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .chapter-label {
+            font-family: var(--font-prayer); font-size: 1.05rem; font-weight: 500;
+            color: var(--muted); padding: 6px 4px 6px 12px; user-select: none;
+        }
+        .chapter-input {
+            width: 52px; text-align: center; font-family: var(--font-prayer);
+            font-size: 1.1rem; font-weight: 700; color: var(--accent);
+            background: transparent; border: none; padding: 6px 10px 6px 4px;
+        }
+        .chapter-input:focus { outline: none; }
+        .chapter-input::placeholder { color: var(--muted); opacity: 0.5; font-weight: 400; }
 
-    nav {
-      position: sticky;
-      top: 0;
-      background: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid rgba(227, 224, 216, 0.6);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(6px);
-      z-index: 10;
-    }
+        /* ── Tehillim Divisions ─────────────────── */
+        .tehillim-sections {
+            display: flex; flex-direction: column; gap: 12px; width: 100%;
+        }
+        .division-group {
+            display: flex; flex-direction: column; gap: 6px; align-items: center;
+        }
+        .division-label {
+            font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700;
+            color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase;
+        }
+        .division-pills {
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+        }
+        .division-pill {
+            font-size: 0.73rem !important; padding: 5px 11px !important;
+        }
+        .division-pill .pill-range {
+            font-size: 0.65rem; opacity: 0.7; margin-right: 3px;
+        }
+        .verse-num {
+            font-family: var(--font-ui); font-size: 0.58em; color: var(--muted);
+            vertical-align: super; margin-inline-start: 3px; font-weight: 700; opacity: 0.7;
+        }
 
-    nav .wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 12px 20px;
-    }
+        .section-body { padding: 20px 24px 32px; }
 
-    nav a {
-      text-decoration: none;
-      color: var(--accent);
-      font-weight: 600;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+        /* ── Prayer Content ──────────────────────── */
+        .prayer-content {
+            font-family: var(--font-prayer);
+            font-size: var(--prayer-size);
+            line-height: var(--prayer-lh);
+            color: var(--text);
+        }
+        .group-divider {
+            text-align: center; margin: 2em 0 1.2em; position: relative;
+        }
+        .group-divider:first-child { margin-top: 0.5em; }
+        .group-divider::before {
+            content: ""; position: absolute; top: 50%; left: 0; right: 0;
+            height: 1px; background: var(--border);
+        }
+        .group-divider span {
+            position: relative; background: var(--surface);
+            padding: 0 18px; font-family: var(--font-prayer);
+            font-size: 1.05em; font-weight: 700; color: var(--gold);
+        }
+        .leaf { margin-bottom: 1em; }
+        .leaf-label {
+            font-family: var(--font-ui); font-size: 0.72em;
+            color: var(--muted); font-weight: 600; margin-bottom: 0.3em;
+            letter-spacing: 0.02em; opacity: 0.85;
+        }
+        .single-leaf .leaf-label { display: none; }
+        .leaf-body p {
+            margin: 0.5em 0; text-align: justify; text-align-last: right;
+        }
+        .leaf-body p:first-child { margin-top: 0; }
+        .leaf-body b { font-weight: 700; }
+        .leaf-body small {
+            font-family: var(--font-ui); font-size: 0.72em;
+            color: var(--muted); line-height: 1.6; display: inline;
+        }
+        .leaf-body i { font-style: italic; color: var(--text-soft); }
+        .leaf-body big { font-size: 1.08em; font-weight: 500; }
+        .leaf-body sup { font-size: 0.65em; }
+        .leaf-body br + br { display: none; }
+        .leaf-body table { width: 100%; border-collapse: collapse; margin: 0.8em 0; }
+        .leaf-body td { padding: 4px 8px; vertical-align: top; }
 
-    nav a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(15, 92, 77, 0.15);
-    }
+        /* ── Skeleton ────────────────────────────── */
+        .skeleton { padding: 8px 0; }
+        .skel-line {
+            height: 1.1em; border-radius: 6px; margin: 0.9em 0;
+            background: linear-gradient(90deg, var(--border) 0%, var(--bg) 50%, var(--border) 100%);
+            background-size: 300% 100%; animation: shimmer 2s ease-in-out infinite;
+        }
+        .skel-line:nth-child(odd) { width: 100%; }
+        .skel-line:nth-child(even) { width: 85%; }
+        .skel-line:nth-child(3n) { width: 72%; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    main {
-      padding: 18px 0 70px;
-      margin-top: -12px;
-    }
+        /* ── Error ───────────────────────────────── */
+        .error-state {
+            text-align: center; padding: 32px 16px; color: var(--muted); font-size: 0.95rem;
+        }
+        .error-state p { margin-bottom: 14px; }
+        .retry-btn {
+            font-family: var(--font-ui); font-size: 0.88rem; font-weight: 600;
+            color: var(--accent); background: var(--accent-soft);
+            border: 1px solid transparent; padding: 8px 20px; border-radius: 999px;
+            cursor: pointer; transition: background 0.2s, transform 0.15s;
+        }
+        .retry-btn:hover { background: rgba(26,107,82,0.14); transform: translateY(-1px); }
 
-    .section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
+        /* ── Scroll Top ──────────────────────────── */
+        #scrollTop {
+            position: fixed; bottom: 24px; left: 24px;
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 1px solid var(--border); background: var(--surface);
+            color: var(--accent); font-size: 1.2rem; cursor: pointer;
+            box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transform: translateY(10px);
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.2s;
+            z-index: 40;
+        }
+        #scrollTop.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        #scrollTop:hover { background: var(--accent-soft); transform: translateY(-2px); }
 
-    .section::before {
-      content: "";
-      position: absolute;
-      inset: 18px auto 18px 18px;
-      width: 3px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, var(--accent), rgba(15, 92, 77, 0.15));
-    }
+        /* ── Footer ──────────────────────────────── */
+        footer {
+            text-align: center; padding: 20px 20px 40px;
+            color: var(--muted); font-size: 0.82rem; line-height: 1.7;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
 
-    .section h2 {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 1.35rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .source-link {
-      text-decoration: none;
-      color: var(--accent);
-      background: var(--accent-soft);
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .source-link:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(15, 92, 77, 0.14);
-    }
-
-    .block {
-      border: 1px solid rgba(227, 224, 216, 0.7);
-      background: var(--surface-soft);
-      border-radius: 16px;
-      padding: 16px 18px;
-      margin-top: 14px;
-      box-shadow: 0 8px 16px rgba(27, 27, 27, 0.04);
-    }
-
-    .block:first-of-type {
-      margin-top: 0;
-    }
-
-    .block h3 {
-      margin: 0 0 8px;
-      font-size: 1.05rem;
-      color: var(--accent-2);
-    }
-
-    .text {
-      white-space: pre-line;
-      color: var(--text);
-    }
-
-    .source-content {
-      margin-top: 12px;
-    }
-
-    .source-content .mw-parser-output {
-      font-size: 1rem;
-    }
-
-    .source-content p {
-      margin: 8px 0;
-    }
-
-    .source-content h2,
-    .source-content h3 {
-      color: var(--accent-2);
-      font-size: 1.1rem;
-      margin: 16px 0 8px;
-    }
-
-    .source-content ul,
-    .source-content ol {
-      padding-right: 1.2rem;
-    }
-
-    .source-content a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: rgba(15, 92, 77, 0.35);
-    }
-
-    .source-content table {
-      max-width: 100%;
-      border-collapse: collapse;
-    }
-
-    .source-content.loading {
-      opacity: 0.7;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .controls .muted {
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 500;
-    }
-
-    footer {
-      padding: 24px 20px 46px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: rgba(15, 92, 77, 0.35);
-    }
-
-    @media (max-width: 720px) {
-      header {
-        padding: 36px 18px 38px;
-      }
-
-      .controls {
-        width: 100%;
-      }
-
-      select {
-        width: 100%;
-      }
-
-      .section {
-        padding: 22px;
-      }
-
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      nav a {
-        transition: none;
-      }
-    }
-  </style>
+        /* ── Responsive ──────────────────────────── */
+        @media (max-width: 640px) {
+            header { padding: 28px 16px 24px; }
+            .site-title { font-size: 1.45rem; }
+            .section-head { padding: 22px 18px 16px; }
+            .section-toc { padding: 10px 14px; gap: 5px; }
+            .toc-link { font-size: 0.72rem; padding: 4px 10px; }
+            .section-body { padding: 16px 18px 28px; }
+            main { padding: 16px 12px 60px; }
+            .tehillim-controls { padding: 14px 12px; gap: 12px; }
+            .chapter-btn { width: 36px; height: 36px; font-size: 1.2rem; }
+            .chapter-label { font-size: 0.95rem; padding: 5px 3px 5px 10px; }
+            .chapter-input { width: 46px; font-size: 1rem; padding: 5px 8px 5px 3px; }
+            .division-pill { font-size: 0.68rem !important; padding: 4px 9px !important; }
+            .division-label { font-size: 0.68rem; }
+        }
+        @media (max-width: 380px) {
+            .icon-btn { width: 34px; height: 34px; font-size: 0.8rem; }
+            .section-body { padding: 14px 14px 24px; }
+            .section-head { padding: 18px 14px 14px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+            @keyframes fadeIn { from { opacity: 1; } }
+        }
+        @media print {
+            nav, header, #scrollTop, .header-controls, .section-toc, .tehillim-controls { display: none !important; }
+            body { background: #fff; }
+            .section { display: block !important; }
+            .section-card { box-shadow: none; border: none; break-inside: avoid; }
+            .prayer-content { font-size: 12pt; line-height: 1.8; }
+        }
+    </style>
 </head>
 
 <body>
-  <header>
-    <div class="wrap">
-      <h1 class="title">סידור הגיגי אמרי</h1>
-      <p class="subtitle">שחרית · מנחה · ערבית · ברכת המזון</p>
-      <div class="controls">
-        <label for="nusachSelect">בחר נוסח</label>
-        <select id="nusachSelect" aria-label="בחירת נוסח תפילה">
-          <option value="sefarad">נוסח ספרד</option>
-          <option value="ashkenaz">נוסח אשכנז</option>
-          <option value="edot">נוסח עדות המזרח</option>
-        </select>
-        <span class="muted" id="nusachNote"></span>
-      </div>
-    </div>
-  </header>
+    <header>
+        <div class="header-inner">
+            <div class="header-top">
+                <h1 class="site-title">סידור תפילה</h1>
+                <div class="header-controls">
+                    <button class="icon-btn" id="fontDown" title="הקטן גופן" aria-label="הקטן גופן">א-</button>
+                    <button class="icon-btn" id="fontUp" title="הגדל גופן" aria-label="הגדל גופן">א+</button>
+                    <button class="icon-btn" id="themeToggle" title="מצב לילה" aria-label="החלף ערכת נושא">
+                        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="nusach-row">
+                <label for="nusachSelect">נוסח:</label>
+                <select id="nusachSelect" aria-label="בחירת נוסח תפילה">
+                    <option value="ashkenaz">אשכנז</option>
+                    <option value="sefard">ספרד</option>
+                    <option value="edot">עדות המזרח</option>
+                </select>
+            </div>
+        </div>
+    </header>
 
-  <nav>
-    <div class="wrap">
-      <a href="#shacharit">שחרית</a>
-      <a href="#mincha">מנחה</a>
-      <a href="#maariv">ערבית</a>
-      <a href="#birkat">ברכת המזון</a>
-    </div>
-  </nav>
+    <nav id="stickyNav">
+        <div class="nav-inner">
+            <a class="nav-link" data-section="shacharit">שחרית</a>
+            <a class="nav-link" data-section="mincha">מנחה</a>
+            <a class="nav-link" data-section="maariv">ערבית</a>
+            <a class="nav-link" data-section="birkat">ברכת המזון</a>
+            <a class="nav-link" data-section="hamichya">על המחיה</a>
+            <a class="nav-link" data-section="tehillim">תהילים</a>
+        </div>
+    </nav>
 
-  <main class="wrap" id="content"></main>
+    <main id="content"></main>
 
-  <footer>
-    סידור דיגיטלי לקריאה נעימה.
-    כל הזכויות שמורות.
-    מקור הטקסטים: <a href="https://he.wikisource.org" target="_blank" rel="noopener">ויקיטקסט</a> (CC BY-SA 4.0).
-  </footer>
+    <button id="scrollTop" aria-label="גלול למעלה">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6" />
+        </svg>
+    </button>
 
-  <script>
-    const WIKISOURCE_API = "https://he.wikisource.org/w/api.php";
+    <footer>
+        מקור הטקסטים: <a href="https://www.sefaria.org" target="_blank" rel="noopener">Sefaria</a>
+    </footer>
 
-    const SIDUR = {
-      sefarad: {
-        label: "נוסח ספרד",
-        note: "",
-        sections: [
-          {
-            id: "shacharit",
-            title: "תפילת שחרית",
-            page: "סידור/נוסח ספרד/חול/שחרית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/שחרית"
-          },
-          {
-            id: "mincha",
-            title: "תפילת מנחה",
-            page: "סידור/נוסח ספרד/חול/מנחה",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/מנחה"
-          },
-          {
-            id: "maariv",
-            title: "תפילת ערבית",
-            page: "סידור/נוסח ספרד/חול/ערבית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/חול/ערבית"
-          },
-          {
-            id: "birkat",
-            title: "ברכת המזון",
-            page: "סידור/נוסח ספרד/ברכת המזון",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_ספרד/ברכת_המזון"
-          }
-        ]
-      },
-      ashkenaz: {
-        label: "נוסח אשכנז",
-        note: "",
-        sections: [
-          {
-            id: "shacharit",
-            title: "תפילת שחרית",
-            page: "סידור/נוסח אשכנז/חול/שחרית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/שחרית"
-          },
-          {
-            id: "mincha",
-            title: "תפילת מנחה",
-            page: "סידור/נוסח אשכנז/חול/מנחה",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/מנחה"
-          },
-          {
-            id: "maariv",
-            title: "תפילת ערבית",
-            page: "סידור/נוסח אשכנז/חול/ערבית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/חול/ערבית"
-          },
-          {
-            id: "birkat",
-            title: "ברכת המזון",
-            page: "סידור/נוסח אשכנז/ברכת המזון",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_אשכנז/ברכת_המזון"
-          }
-        ]
-      },
-      edot: {
-        label: "נוסח עדות המזרח",
-        note: "",
-        sections: [
-          {
-            id: "shacharit",
-            title: "תפילת שחרית",
-            page: "סידור/נוסח עדות המזרח/חול/שחרית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/שחרית"
-          },
-          {
-            id: "mincha",
-            title: "תפילת מנחה",
-            page: "סידור/נוסח עדות המזרח/חול/מנחה",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/מנחה"
-          },
-          {
-            id: "maariv",
-            title: "תפילת ערבית",
-            page: "סידור/נוסח עדות המזרח/חול/ערבית",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/חול/ערבית"
-          },
-          {
-            id: "birkat",
-            title: "ברכת המזון",
-            page: "סידור/נוסח עדות המזרח/ברכת המזון",
-            sourceUrl: "https://he.wikisource.org/wiki/סידור/נוסח_עדות_המזרח/ברכת_המזון"
-          }
-        ]
-      }
-    };
+    <script>
+        /* ═══════════════════════════════════════════
+           Configuration
+           ═══════════════════════════════════════════ */
+        const SEFARIA = "https://www.sefaria.org/api";
 
-    const contentEl = document.getElementById("content");
-    const selectEl = document.getElementById("nusachSelect");
-    const noteEl = document.getElementById("nusachNote");
+        const NUSACH = {
+            ashkenaz: {
+                book: "Siddur Ashkenaz",
+                indexRef: "Siddur_Ashkenaz",
+                sections: {
+                    shacharit: { path: ["Weekday", "Shacharit"], title: "תפילת שחרית" },
+                    mincha:    { path: ["Weekday", "Minchah"],   title: "תפילת מנחה" },
+                    maariv:    { path: ["Weekday", "Maariv"],    title: "תפילת ערבית" },
+                    birkat:    { path: ["Berachot", "Birkat HaMazon"], title: "ברכת המזון" },
+                    hamichya:  { path: ["Berachot", "Birkat Hanehenin", "Eating", "Brachot Achronot", "Al Hamichyah"], title: "ברכת על המחיה" }
+                }
+            },
+            sefard: {
+                book: "Siddur Sefard",
+                indexRef: "Siddur_Sefard",
+                sections: {
+                    shacharit: { path: ["Weekday Shacharit"], title: "תפילת שחרית" },
+                    mincha:    { path: ["Weekday Mincha"],    title: "תפילת מנחה" },
+                    maariv:    { path: ["Weekday Maariv"],    title: "תפילת ערבית" },
+                    birkat:    { path: ["Birchat HaMazon", "Birchat HaMazon"], title: "ברכת המזון" },
+                    hamichya:  { path: ["Blessings", "Me'ein Shalosh"], title: "ברכת על המחיה" }
+                }
+            },
+            edot: {
+                book: "Siddur Edot HaMizrach",
+                indexRef: "Siddur_Edot_HaMizrach",
+                sections: {
+                    shacharit: { path: ["Weekday Shacharit"], title: "תפילת שחרית" },
+                    mincha:    { path: ["Weekday Mincha"],    title: "תפילת מנחה" },
+                    maariv:    { path: ["Weekday Arvit"],     title: "תפילת ערבית" },
+                    birkat:    { path: ["Post Meal Blessing"], title: "ברכת המזון" },
+                    hamichya:  { path: ["Al Hamihya"],        title: "ברכת על המחיה" }
+                }
+            }
+        };
 
-    const fetchWikisourceHtml = async (page) => {
-      const url =
-        `${WIKISOURCE_API}?action=parse&page=${encodeURIComponent(page)}` +
-        "&prop=text&format=json&origin=*";
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Failed to fetch content");
-      }
-      const data = await response.json();
-      return data?.parse?.text?.["*"] || "";
-    };
+        const SECTION_IDS = ["shacharit", "mincha", "maariv", "birkat", "hamichya", "tehillim"];
 
-    const sanitizeWikisource = (root) => {
-      const selectors = [
-        "#toc",
-        ".mw-editsection",
-        ".mw-editsection-bracket",
-        ".mw-parser-output .mw-cite-backlink",
-        ".mw-parser-output .reference",
-        "sup.reference",
-        ".navbox",
-        ".metadata",
-        ".mw-references-wrap",
-        "ol.references",
-        ".plainlinks",
-        ".noprint"
-      ];
-      selectors.forEach((selector) => {
-        root.querySelectorAll(selector).forEach((el) => el.remove());
-      });
-      const firstHeading = root.querySelector("h1, h2");
-      if (firstHeading) {
-        firstHeading.remove();
-      }
-    };
+        /* ═══════════════════════════════════════════
+           State
+           ═══════════════════════════════════════════ */
+        const FONT_STEPS = [0.82, 0.9, 1, 1.12, 1.25, 1.4];
+        let fontIndex = parseInt(localStorage.getItem("siddur-font") ?? "2", 10);
+        let darkMode = localStorage.getItem("siddur-theme") === "dark" ||
+            (!localStorage.getItem("siddur-theme") && matchMedia("(prefers-color-scheme:dark)").matches);
+        let currentSection = localStorage.getItem("siddur-section") || "shacharit";
+        let currentNusach = localStorage.getItem("siddur-nusach") || "ashkenaz";
+        let currentTehillimChapter = parseInt(localStorage.getItem("siddur-tehillim-ch") || "1", 10);
+        const indexCache = {};
+        const textCache = {};
 
-    const loadSectionContent = async (container) => {
-      const page = container.dataset.page;
-      const sourceUrl = container.dataset.source;
-      if (!page) return;
-      container.classList.add("loading");
-      container.innerHTML = `<p class="muted">טוען טקסט מלא...</p>`;
-      try {
-        const html = await fetchWikisourceHtml(page);
-        if (!html) {
-          throw new Error("No content");
+        /* ═══════════════════════════════════════════
+           DOM
+           ═══════════════════════════════════════════ */
+        const $ = (s, p = document) => p.querySelector(s);
+        const $$ = (s, p = document) => [...p.querySelectorAll(s)];
+        const contentEl = $("#content");
+        const selectEl = $("#nusachSelect");
+
+        /* ═══════════════════════════════════════════
+           Theme & Font
+           ═══════════════════════════════════════════ */
+        function applyTheme() {
+            document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+            const icon = $("#themeIcon");
+            icon.innerHTML = darkMode
+                ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+                : '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
         }
-        const temp = document.createElement("div");
-        temp.innerHTML = html;
-        const output = temp.querySelector(".mw-parser-output") || temp;
-        sanitizeWikisource(output);
-        container.innerHTML = "";
-        container.appendChild(output);
-      } catch (error) {
-        const link = sourceUrl
-          ? ` <a href="${sourceUrl}" target="_blank" rel="noopener">למקור</a>`
-          : "";
-        container.innerHTML =
-          `<p class="muted">לא ניתן לטעון את הטקסט כרגע.${link}</p>`;
-      } finally {
-        container.classList.remove("loading");
-      }
-    };
+        $("#themeToggle").addEventListener("click", () => {
+            darkMode = !darkMode;
+            localStorage.setItem("siddur-theme", darkMode ? "dark" : "light");
+            applyTheme();
+        });
 
-    const loadAllSections = () => {
-      contentEl.querySelectorAll(".source-content").forEach((container) => {
-        loadSectionContent(container);
-      });
-    };
+        function applyFont() {
+            fontIndex = Math.max(0, Math.min(fontIndex, FONT_STEPS.length - 1));
+            document.documentElement.style.setProperty("--prayer-scale", FONT_STEPS[fontIndex]);
+            localStorage.setItem("siddur-font", fontIndex);
+        }
+        $("#fontDown").addEventListener("click", () => { fontIndex--; applyFont(); });
+        $("#fontUp").addEventListener("click", () => { fontIndex++; applyFont(); });
 
-    const render = (key) => {
-      const data = SIDUR[key];
-      if (!data) return;
-      noteEl.textContent = data.note || "";
-      noteEl.style.display = data.note ? "inline" : "none";
-      contentEl.innerHTML = data.sections
-        .map((section) => {
-          return `
-              <section class="section" id="${section.id}">
-                <div class="section-header">
-                  <h2>${section.title}</h2>
-                  <a class="source-link" href="${section.sourceUrl}" target="_blank" rel="noopener">
-                    מקור מלא
-                  </a>
-                </div>
-                <div class="source-content" data-page="${section.page}" data-source="${section.sourceUrl}">
-                  <p class="muted">טוען טקסט מלא...</p>
-                </div>
-              </section>
-            `;
-        })
-        .join("");
-      loadAllSections();
-    };
+        /* ═══════════════════════════════════════════
+           Sefaria Index
+           ═══════════════════════════════════════════ */
+        async function fetchIndex(nusachKey) {
+            if (indexCache[nusachKey]) return indexCache[nusachKey];
+            const cfg = NUSACH[nusachKey];
+            const res = await fetch(`${SEFARIA}/v2/index/${cfg.indexRef}`);
+            if (!res.ok) throw new Error(`Index fetch failed: ${res.status}`);
+            const data = await res.json();
+            indexCache[nusachKey] = data;
+            return data;
+        }
 
-    const saved = localStorage.getItem("nusach") || "sefarad";
-    selectEl.value = saved;
-    render(saved);
+        function findNode(nodes, path) {
+            let current = nodes, node = null;
+            for (const seg of path) {
+                node = current.find(n => n.title === seg);
+                if (!node) return null;
+                current = node.nodes || [];
+            }
+            return node;
+        }
 
-    selectEl.addEventListener("change", (event) => {
-      const value = event.target.value;
-      localStorage.setItem("nusach", value);
-      render(value);
-    });
-  </script>
+        function getGroupedLeaves(sectionNode, bookTitle, sectionPath) {
+            if (!sectionNode) return [];
+            if (!sectionNode.nodes) {
+                const ref = [bookTitle, ...sectionPath].join(", ");
+                return [{ groupHe: "", leaves: [{ ref, heTitle: sectionNode.heTitle }] }];
+            }
+            const groups = [];
+            for (const child of sectionNode.nodes) {
+                const leaves = [];
+                (function collect(node, trail) {
+                    if (!node.nodes) {
+                        leaves.push({ ref: [bookTitle, ...sectionPath, ...trail, node.title].join(", "), heTitle: node.heTitle });
+                        return;
+                    }
+                    for (const sub of node.nodes) collect(sub, [...trail, node.title]);
+                })(child, []);
+                groups.push({ groupHe: child.heTitle, leaves });
+            }
+            return groups;
+        }
+
+        /* ═══════════════════════════════════════════
+           Sefaria Text Fetch
+           ═══════════════════════════════════════════ */
+        async function fetchLeafText(ref) {
+            if (textCache[ref]) return textCache[ref];
+            const url = `${SEFARIA}/texts/${ref.replace(/ /g, "_")}?lang=he&context=0`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Text fetch failed: ${res.status}`);
+            const data = await res.json();
+            const he = data.he;
+            if (!he) throw new Error("No Hebrew text");
+            const paragraphs = Array.isArray(he) ? he : [he];
+            textCache[ref] = paragraphs;
+            return paragraphs;
+        }
+
+        function parallelRun(tasks, limit = 10) {
+            let i = 0;
+            function next() {
+                if (i >= tasks.length) return Promise.resolve();
+                const idx = i++;
+                return tasks[idx]().then(next, next);
+            }
+            const runners = [];
+            for (let j = 0; j < Math.min(limit, tasks.length); j++) runners.push(next());
+            return Promise.allSettled(runners);
+        }
+
+        function skeletonHTML(lines = 6) {
+            let s = '<div class="skeleton">';
+            for (let i = 0; i < lines; i++) s += '<div class="skel-line"></div>';
+            return s + "</div>";
+        }
+
+        /* ═══════════════════════════════════════════
+           Tehillim (Psalms)
+           ═══════════════════════════════════════════ */
+        const HEB_VALS = {
+            'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,
+            'י':10,'כ':20,'ך':20,'ל':30,'מ':40,'ם':40,'נ':50,'ן':50,
+            'ס':60,'ע':70,'פ':80,'ף':80,'צ':90,'ץ':90,
+            'ק':100,'ר':200,'ש':300,'ת':400
+        };
+
+        function hebrewToNumber(str) {
+            str = str.replace(/[״׳"']/g, "").trim();
+            if (!str) return NaN;
+            let sum = 0;
+            for (const ch of str) {
+                const v = HEB_VALS[ch];
+                if (!v) return NaN;
+                sum += v;
+            }
+            return sum;
+        }
+
+        function numberToHebrew(n) {
+            if (n <= 0 || n > 999) return String(n);
+            const H = ['','ק','ר','ש','ת','תק','תר','תש','תת','תתק'];
+            const T = ['','י','כ','ל','מ','נ','ס','ע','פ','צ'];
+            const U = ['','א','ב','ג','ד','ה','ו','ז','ח','ט'];
+            const h = Math.floor(n / 100), t = Math.floor((n % 100) / 10), u = n % 10;
+            if (t === 1 && u === 5) return H[h] + 'טו';
+            if (t === 1 && u === 6) return H[h] + 'טז';
+            return H[h] + T[t] + U[u];
+        }
+
+        function parseChapterInput(raw) {
+            raw = String(raw).trim();
+            const n = parseInt(raw, 10);
+            if (!isNaN(n) && n >= 1 && n <= 150) return n;
+            const h = hebrewToNumber(raw);
+            if (!isNaN(h) && h >= 1 && h <= 150) return h;
+            return NaN;
+        }
+
+        const TEHILLIM_BOOKS = [
+            { label: "ספר ראשון", from: 1, to: 41 },
+            { label: "ספר שני",   from: 42, to: 72 },
+            { label: "ספר שלישי", from: 73, to: 89 },
+            { label: "ספר רביעי", from: 90, to: 106 },
+            { label: "ספר חמישי", from: 107, to: 150 }
+        ];
+
+        const TEHILLIM_DAYS = [
+            { label: "יום ראשון",  from: 1,   to: 29 },
+            { label: "יום שני",    from: 30,  to: 50 },
+            { label: "יום שלישי",  from: 51,  to: 72 },
+            { label: "יום רביעי",  from: 73,  to: 89 },
+            { label: "יום חמישי",  from: 90,  to: 106 },
+            { label: "יום שישי",   from: 107, to: 119 },
+            { label: "שבת",        from: 120, to: 150 }
+        ];
+
+        function divisionPillsHTML(divisions) {
+            return divisions.map(d =>
+                `<button class="toc-link division-pill" data-chapter="${d.from}">${d.label} <span class="pill-range">(${numberToHebrew(d.from)}–${numberToHebrew(d.to)})</span></button>`
+            ).join("");
+        }
+
+        function tehillimShellHTML() {
+            
+            return `
+                <div class="section" id="tehillim">
+                    <div class="section-card">
+                        <div class="section-head"><h2>ספר תהילים</h2></div>
+                        <div class="tehillim-controls">
+                            <div class="chapter-nav">
+                                <button class="chapter-btn" id="chapterNext" title="פרק הבא">‹</button>
+                                <div class="chapter-display">
+                                    <span class="chapter-label">פרק</span>
+                                    <input type="text" id="chapterInput" class="chapter-input" value="${numberToHebrew(currentTehillimChapter)}" placeholder="א–קנ">
+                                </div>
+                                <button class="chapter-btn" id="chapterPrev" title="פרק קודם">›</button>
+                            </div>
+                            <div class="tehillim-sections">
+                                <div class="division-group">
+                                    <div class="division-label">חמישה ספרים</div>
+                                    <div class="division-pills">${divisionPillsHTML(TEHILLIM_BOOKS)}</div>
+                                </div>
+                                <div class="division-group">
+                                    <div class="division-label">ימי השבוע</div>
+                                    <div class="division-pills">${divisionPillsHTML(TEHILLIM_DAYS)}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-body tehillim-body">
+                            ${skeletonHTML(8)}
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function setupTehillim(sectionEl) {
+            const input = $("#chapterInput", sectionEl);
+            const prevBtn = $("#chapterPrev", sectionEl);
+            const nextBtn = $("#chapterNext", sectionEl);
+
+            function go(ch) {
+                if (isNaN(ch)) return;
+                ch = Math.max(1, Math.min(150, ch));
+                input.value = numberToHebrew(ch);
+                loadTehillimChapter(ch, sectionEl);
+            }
+
+            function goFromInput() { go(parseChapterInput(input.value)); }
+
+            input.addEventListener("change", goFromInput);
+            input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); goFromInput(); } });
+            prevBtn.addEventListener("click", () => go((currentTehillimChapter - 1) || 150));
+            nextBtn.addEventListener("click", () => go(currentTehillimChapter >= 150 ? 1 : currentTehillimChapter + 1));
+
+            sectionEl.querySelectorAll("[data-chapter]").forEach(btn =>
+                btn.addEventListener("click", () => go(parseInt(btn.dataset.chapter, 10)))
+            );
+
+            loadTehillimChapter(currentTehillimChapter, sectionEl);
+        }
+
+        async function loadTehillimChapter(chapter, sectionEl) {
+            currentTehillimChapter = chapter;
+            localStorage.setItem("siddur-tehillim-ch", chapter);
+
+            const bodyEl = $(".tehillim-body", sectionEl);
+            if (!bodyEl) return;
+            bodyEl.innerHTML = skeletonHTML(8);
+
+            const input = $("#chapterInput", sectionEl);
+            if (input) input.value = numberToHebrew(chapter);
+
+            const heChapter = numberToHebrew(chapter);
+            try {
+                const paragraphs = await fetchLeafText(`Psalms.${chapter}`);
+                const content = paragraphs.filter(x => x && x.trim());
+                bodyEl.innerHTML = `
+                    <div class="prayer-content">
+                        <div class="group-divider"><span>פרק ${heChapter}</span></div>
+                        <div class="leaf single-leaf"><div class="leaf-body">
+                            ${content.map((v, i) => `<p><span class="verse-num">${numberToHebrew(i + 1)}</span> ${v}</p>`).join("")}
+                        </div></div>
+                    </div>`;
+            } catch {
+                bodyEl.innerHTML = `
+                    <div class="error-state">
+                        <p>לא ניתן לטעון את פרק ${heChapter}</p>
+                        <button class="retry-btn" onclick="loadTehillimChapter(${chapter}, document.getElementById('tehillim'))">נסה שוב</button>
+                    </div>`;
+            }
+        }
+
+        /* ═══════════════════════════════════════════
+           Render a section's content
+           ═══════════════════════════════════════════ */
+        async function renderSection(nusachKey, sectionId, sectionEl) {
+            const cfg = NUSACH[nusachKey];
+            const sec = cfg.sections[sectionId];
+            const bodyEl = $(".section-body", sectionEl);
+            const tocEl = $(".section-toc", sectionEl);
+
+            bodyEl.innerHTML = skeletonHTML(8);
+
+            try {
+                const indexData = await fetchIndex(nusachKey);
+                const sectionNode = findNode(indexData.schema.nodes, sec.path);
+                if (!sectionNode) throw new Error("Section not found");
+
+                const groups = getGroupedLeaves(sectionNode, cfg.book, sec.path);
+
+                // Build TOC
+                const namedGroups = groups.filter(g => g.groupHe);
+                if (namedGroups.length >= 2 && tocEl) {
+                    tocEl.innerHTML = namedGroups
+                        .map((g, i) => `<a class="toc-link" data-target="${sectionId}-g${i}">${g.groupHe}</a>`)
+                        .join("");
+                }
+
+                // Build content
+                bodyEl.innerHTML = "";
+                const prayerDiv = document.createElement("div");
+                prayerDiv.className = "prayer-content";
+                bodyEl.appendChild(prayerDiv);
+
+                const leafElements = [];
+                let gIdx = 0;
+
+                for (const group of groups) {
+                    const single = group.leaves.length === 1;
+                    if (group.groupHe) {
+                        const div = document.createElement("div");
+                        div.className = "group-divider";
+                        div.id = `${sectionId}-g${gIdx++}`;
+                        div.innerHTML = `<span>${group.groupHe}</span>`;
+                        prayerDiv.appendChild(div);
+                    }
+                    for (const leaf of group.leaves) {
+                        const leafDiv = document.createElement("div");
+                        leafDiv.className = "leaf" + (single ? " single-leaf" : "");
+                        if (!single) {
+                            const lbl = document.createElement("div");
+                            lbl.className = "leaf-label";
+                            lbl.textContent = leaf.heTitle;
+                            leafDiv.appendChild(lbl);
+                        }
+                        const body = document.createElement("div");
+                        body.className = "leaf-body";
+                        body.innerHTML = skeletonHTML(3);
+                        leafDiv.appendChild(body);
+                        prayerDiv.appendChild(leafDiv);
+                        leafElements.push({ leaf, bodyEl: body });
+                    }
+                }
+
+                const tasks = leafElements.map(({ leaf, bodyEl: el }) => () =>
+                    fetchLeafText(leaf.ref).then(p => {
+                        const f = p.filter(x => x && x.trim());
+                        el.innerHTML = f.length ? f.map(x => `<p>${x}</p>`).join("") : "";
+                    }).catch(() => {
+                        el.innerHTML = `<p style="color:var(--muted);font-family:var(--font-ui);font-size:0.85rem">לא ניתן לטעון חלק זה</p>`;
+                    })
+                );
+                await parallelRun(tasks, 10);
+
+            } catch (err) {
+                bodyEl.innerHTML = `
+                    <div class="error-state">
+                        <p>לא ניתן לטעון את הטקסט</p>
+                        <button class="retry-btn" onclick="retrySection('${nusachKey}','${sectionId}')">נסה שוב</button>
+                    </div>`;
+            }
+        }
+
+        window.retrySection = function (nusachKey, sectionId) {
+            const el = document.getElementById(sectionId);
+            if (el) { el.dataset.loaded = ""; activateSection(sectionId); }
+        };
+
+        /* ═══════════════════════════════════════════
+           Tab switching
+           ═══════════════════════════════════════════ */
+        function activateSection(sectionId) {
+            currentSection = sectionId;
+            localStorage.setItem("siddur-section", sectionId);
+
+            // Update nav
+            $$(".nav-link").forEach(a =>
+                a.classList.toggle("active", a.dataset.section === sectionId));
+
+            // Show/hide sections
+            $$(".section", contentEl).forEach(el =>
+                el.classList.toggle("active", el.id === sectionId));
+
+            // Load if not yet loaded
+            const sectionEl = document.getElementById(sectionId);
+            if (sectionEl && !sectionEl.dataset.loaded) {
+                sectionEl.dataset.loaded = "1";
+                if (sectionId === "tehillim") {
+                    setupTehillim(sectionEl);
+                } else {
+                    renderSection(currentNusach, sectionId, sectionEl);
+                }
+            }
+
+            // Scroll to top of page
+            scrollTo({ top: 0 });
+        }
+
+        /* ═══════════════════════════════════════════
+           Build all section shells
+           ═══════════════════════════════════════════ */
+        function render(nusachKey) {
+            currentNusach = nusachKey;
+            const cfg = NUSACH[nusachKey];
+            if (!cfg) return;
+
+            contentEl.innerHTML = SECTION_IDS.map(id => {
+                if (id === "tehillim") return tehillimShellHTML();
+                const sec = cfg.sections[id];
+                return `
+                    <div class="section" id="${id}">
+                        <div class="section-card">
+                            <div class="section-head"><h2>${sec.title}</h2></div>
+                            <div class="section-toc"></div>
+                            <div class="section-body" data-nusach="${nusachKey}" data-section="${id}">
+                                ${skeletonHTML(8)}
+                            </div>
+                        </div>
+                    </div>`;
+            }).join("");
+
+            // Activate the current tab
+            if (!SECTION_IDS.includes(currentSection)) currentSection = "shacharit";
+            activateSection(currentSection);
+        }
+
+        /* ═══════════════════════════════════════════
+           Scroll-to-top button
+           ═══════════════════════════════════════════ */
+        const scrollTopBtn = $("#scrollTop");
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    scrollTopBtn.classList.toggle("visible", scrollY > innerHeight * 0.5);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+        scrollTopBtn.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+
+        /* ═══════════════════════════════════════════
+           Nav clicks (tabs)
+           ═══════════════════════════════════════════ */
+        $$(".nav-link").forEach(a => a.addEventListener("click", e => {
+            e.preventDefault();
+            activateSection(a.dataset.section);
+        }));
+
+        /* Subsection TOC clicks */
+        contentEl.addEventListener("click", e => {
+            const link = e.target.closest(".toc-link");
+            if (link) {
+                e.preventDefault();
+                const t = document.getElementById(link.dataset.target);
+                if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        });
+
+        /* ═══════════════════════════════════════════
+           Nusach switch
+           ═══════════════════════════════════════════ */
+        selectEl.addEventListener("change", e => {
+            const v = e.target.value;
+            localStorage.setItem("siddur-nusach", v);
+            render(v);
+        });
+
+        /* ═══════════════════════════════════════════
+           Init
+           ═══════════════════════════════════════════ */
+        selectEl.value = currentNusach;
+        applyTheme();
+        applyFont();
+        render(currentNusach);
+    </script>
 </body>
 
 </html>
