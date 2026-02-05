@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timestamper</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #0ea5a4;
+        --accent-strong: #0f766e;
+        --accent-soft: #e0f2f1;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top, #e7f9f7 0%, var(--bg) 45%, #f3f6fb 100%);
+        color: var(--text);
+        padding: 32px 18px 64px;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        background: linear-gradient(120deg, var(--accent) 0%, #38bdf8 100%);
+        color: #ffffff;
+        border-radius: 24px;
+        padding: 28px;
+        display: grid;
+        gap: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        opacity: 0.92;
+        font-size: 15px;
+        max-width: 620px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 960px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .badge {
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.2);
+      }
+
+      .field-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      .primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(14, 165, 164, 0.2);
+      }
+
+      .secondary {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent-strong);
+      }
+
+      .message {
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .message.error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+      }
+
+      .message.success {
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+
+      .result-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .result-item {
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        display: grid;
+        gap: 6px;
+        background: #fbfcff;
+      }
+
+      .result-item span {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .result-item strong {
+        font-size: 15px;
+      }
+
+      .city-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      @media (min-width: 700px) {
+        .city-grid {
+          grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        }
+      }
+
+      .city-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        display: grid;
+        gap: 6px;
+        background: #fbfcff;
+      }
+
+      .city-card h3 {
+        font-size: 14px;
+      }
+
+      .city-card p {
+        font-size: 13px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <h1>Timestamper</h1>
+        <p>
+          Convert Unix timestamps to human-readable time, and instantly see the same moment across
+          major cities worldwide.
+        </p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="section-title">
+            <h2>Timestamp input</h2>
+            <span class="badge" id="unit-badge">Auto</span>
+          </div>
+          <div class="field-group">
+            <div class="field-row">
+              <label for="timestamp-input">Timestamp</label>
+              <input id="timestamp-input" type="number" placeholder="e.g. 1700000000" />
+            </div>
+            <div class="field-row">
+              <label for="unit-select">Unit</label>
+              <select id="unit-select">
+                <option value="auto" selected>Auto detect</option>
+                <option value="seconds">Seconds</option>
+                <option value="milliseconds">Milliseconds</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" type="button" id="convert-btn">Convert</button>
+            <button class="secondary" type="button" id="now-btn">Use now</button>
+            <button class="secondary" type="button" id="copy-iso-btn">Copy ISO</button>
+          </div>
+          <div id="message-area"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <h2>Readable time</h2>
+            <span class="badge" id="status-badge">Waiting</span>
+          </div>
+          <div class="result-grid">
+            <div class="result-item">
+              <span>Local time</span>
+              <strong id="local-time">-</strong>
+            </div>
+            <div class="result-item">
+              <span>UTC</span>
+              <strong id="utc-time">-</strong>
+            </div>
+            <div class="result-item">
+              <span>ISO 8601</span>
+              <strong id="iso-time">-</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <h2>World cities</h2>
+          <span class="badge" id="city-count">0 cities</span>
+        </div>
+        <div class="city-grid" id="city-grid"></div>
+      </section>
+    </main>
+
+    <script>
+      const timestampInput = document.getElementById("timestamp-input");
+      const unitSelect = document.getElementById("unit-select");
+      const unitBadge = document.getElementById("unit-badge");
+      const convertBtn = document.getElementById("convert-btn");
+      const nowBtn = document.getElementById("now-btn");
+      const copyIsoBtn = document.getElementById("copy-iso-btn");
+      const messageArea = document.getElementById("message-area");
+      const statusBadge = document.getElementById("status-badge");
+      const localTime = document.getElementById("local-time");
+      const utcTime = document.getElementById("utc-time");
+      const isoTime = document.getElementById("iso-time");
+      const cityGrid = document.getElementById("city-grid");
+      const cityCount = document.getElementById("city-count");
+
+      const cities = [
+        { name: "Los Angeles", tz: "America/Los_Angeles" },
+        { name: "New York", tz: "America/New_York" },
+        { name: "London", tz: "Europe/London" },
+        { name: "Paris", tz: "Europe/Paris" },
+        { name: "Berlin", tz: "Europe/Berlin" },
+        { name: "Tel Aviv", tz: "Asia/Jerusalem" },
+        { name: "Dubai", tz: "Asia/Dubai" },
+        { name: "Bangkok", tz: "Asia/Bangkok" },
+        { name: "Tokyo", tz: "Asia/Tokyo" },
+        { name: "Sydney", tz: "Australia/Sydney" },
+      ];
+
+      function setMessage(text, type = "success") {
+        if (!text) {
+          messageArea.innerHTML = "";
+          return;
+        }
+        messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+      }
+
+      function detectUnit(value) {
+        const absValue = Math.abs(value);
+        if (unitSelect.value === "seconds") {
+          return "seconds";
+        }
+        if (unitSelect.value === "milliseconds") {
+          return "milliseconds";
+        }
+        return absValue >= 1e12 ? "milliseconds" : "seconds";
+      }
+
+      function formatDate(date, timeZone) {
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone,
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZoneName: "short",
+        }).format(date);
+      }
+
+      function formatCity(date, city) {
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone: city.tz,
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          timeZoneName: "shortOffset",
+        }).format(date);
+      }
+
+      function updateCities(date) {
+        cityGrid.innerHTML = "";
+        cities.forEach((city) => {
+          const card = document.createElement("div");
+          card.className = "city-card";
+          card.innerHTML = `
+            <h3>${city.name}</h3>
+            <p>${formatCity(date, city)}</p>
+          `;
+          cityGrid.appendChild(card);
+        });
+        cityCount.textContent = `${cities.length} cities`;
+      }
+
+      function convert() {
+        const value = parseFloat(timestampInput.value);
+        if (!Number.isFinite(value)) {
+          setMessage("Please enter a valid timestamp.", "error");
+          statusBadge.textContent = "Invalid";
+          return;
+        }
+
+        const unit = detectUnit(value);
+        unitBadge.textContent = unit === "seconds" ? "Seconds" : "Milliseconds";
+
+        const ms = unit === "seconds" ? value * 1000 : value;
+        const date = new Date(ms);
+        if (Number.isNaN(date.getTime())) {
+          setMessage("Timestamp is out of range.", "error");
+          statusBadge.textContent = "Invalid";
+          return;
+        }
+
+        localTime.textContent = formatDate(date, Intl.DateTimeFormat().resolvedOptions().timeZone);
+        utcTime.textContent = formatDate(date, "UTC");
+        isoTime.textContent = date.toISOString();
+        updateCities(date);
+
+        statusBadge.textContent = "Converted";
+        setMessage("Timestamp converted successfully.", "success");
+      }
+
+      function useNow() {
+        const now = Date.now();
+        timestampInput.value = String(now);
+        unitSelect.value = "milliseconds";
+        convert();
+      }
+
+      async function copyIso() {
+        if (!isoTime.textContent || isoTime.textContent === "-") {
+          setMessage("Convert a timestamp first.", "error");
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(isoTime.textContent);
+          setMessage("ISO timestamp copied.", "success");
+        } catch (error) {
+          setMessage("Clipboard not available. Copy manually.", "error");
+        }
+      }
+
+      convertBtn.addEventListener("click", convert);
+      nowBtn.addEventListener("click", useNow);
+      copyIsoBtn.addEventListener("click", copyIso);
+      unitSelect.addEventListener("change", convert);
+    </script>
+  </body>
+</html>
