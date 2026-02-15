@@ -1,0 +1,188 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Solvers Shift Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+        .date-selector {
+            margin: 20px 0;
+            padding: 20px;
+        }
+        .date-selector input {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .date-selector button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .date-selector button:hover {
+            background-color: #45a049;
+        }
+        .shift-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 50px;
+            gap: 30px;
+        }
+        .shift-box {
+            padding: 40px;
+            border-radius: 15px;
+            width: 300px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .previous {
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            color: white;
+        }
+        .current {
+            background: linear-gradient(135deg, #00b894, #00a885);
+            color: white;
+            transform: scale(1.2);
+        }
+        .next {
+            background: linear-gradient(135deg, #ffd32a, #ffc800);
+            color: black;
+        }
+        .date {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+        .person {
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+        .current .person {
+            font-size: 2.2em;
+            margin-top: 15px;
+        }
+        .current .date {
+            font-size: 1.6em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Global Solvers Shift Schedule</h1>
+    <div class="date-selector">
+        <input type="date" id="dateSelector">
+        <button onclick="updateDisplayForSelectedDate()">Show Shifts</button>
+    </div>
+    <div class="shift-container" id="shiftDisplay">
+                <div class="shift-box previous">
+                    <div class="date">Previous Week<br>Feb 8 - Feb 13</div>
+                    <div class="person">@ori.fogler</div>
+                </div>
+                <div class="shift-box current">
+                    <div class="date">Current Week<br>Feb 15 - Feb 20</div>
+                    <div class="person">@yagil.Engel</div>
+                </div>
+                <div class="shift-box next">
+                    <div class="date">Next Week<br>Feb 22 - Feb 27</div>
+                    <div class="person">@tom.ferster</div>
+                </div>
+            </div>
+
+    <script>
+        const people = [
+            "@yagil.Engel",
+            "@tom.ferster",
+            "@amitai.netser",
+            "@ori.fogler"
+        ];
+
+        // Set default date to today
+        document.getElementById('dateSelector').valueAsDate = new Date();
+
+        function getWeekNumber(date) {
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        }
+
+        function getShiftPeople(date) {
+            const weekNumber = getWeekNumber(date);
+            const currentIndex = weekNumber % people.length;
+
+            return {
+                previous: people[(currentIndex - 1 + people.length) % people.length],
+                current: people[currentIndex],
+                next: people[(currentIndex + 1) % people.length]
+            };
+        }
+
+        function formatDateRange(selectedDate) {
+            const sunday = new Date(selectedDate);
+            sunday.setDate(selectedDate.getDate() - selectedDate.getDay());
+            const friday = new Date(sunday);
+            friday.setDate(sunday.getDate() + 5);
+
+            return {
+                previous: `${formatDate(new Date(sunday.setDate(sunday.getDate() - 7)))} - ${formatDate(new Date(friday.setDate(friday.getDate() - 7)))}`,
+                current: `${formatDate(new Date(sunday.setDate(sunday.getDate() + 7)))} - ${formatDate(new Date(friday.setDate(friday.getDate() + 7)))}`,
+                next: `${formatDate(new Date(sunday.setDate(sunday.getDate() + 7)))} - ${formatDate(new Date(friday.setDate(friday.getDate() + 7)))}`
+            };
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function updateDisplayForSelectedDate() {
+            const selectedDate = new Date(document.getElementById('dateSelector').value);
+            updateDisplay(selectedDate);
+        }
+
+        function updateDisplay(date = new Date()) {
+            const shifts = getShiftPeople(date);
+            const dates = formatDateRange(date);
+            const html = `
+                <div class="shift-box previous">
+                    <div class="date">Previous Week<br>${dates.previous}</div>
+                    <div class="person">${shifts.previous}</div>
+                </div>
+                <div class="shift-box current">
+                    <div class="date">Current Week<br>${dates.current}</div>
+                    <div class="person">${shifts.current}</div>
+                </div>
+                <div class="shift-box next">
+                    <div class="date">Next Week<br>${dates.next}</div>
+                    <div class="person">${shifts.next}</div>
+                </div>
+            `;
+            document.getElementById('shiftDisplay').innerHTML = html;
+        }
+
+        // Initial display
+        updateDisplay();
+
+        // Update every minute (in case day changes)
+        setInterval(() => updateDisplay(), 60000);
+    </script>
+
+
+</body></html>
