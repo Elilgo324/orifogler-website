@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ספרי תורה והגיגים | אורי פוגלר</title>
+  <meta name="description" content="ספרייה דיגיטלית של ספרי תורה והגיגים מאת אורי פוגלר: 'אבי וישעי' ו'אלי תשוקתי' – מאמרים, הערות וביאורים על פרשיות השבוע, המועדים וענייני השנה." />
+  <link rel="canonical" href="https://orifogler.com/books.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ספרי תורה והגיגים | אורי פוגלר" />
+  <meta property="og:description" content="ספרייה דיגיטלית של שני ספרים: 'אבי וישעי' ו'אלי תשוקתי' – הגיגים על פרשיות השבוע והמועדים." />
+  <meta property="og:url" content="https://orifogler.com/books.html" />
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f5c4d'/><path d='M16 14h12a6 6 0 0 1 4 1.5A6 6 0 0 1 36 14h12v34H36a4 4 0 0 0-4 2 4 4 0 0 0-4-2H16z' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/><path d='M32 15.5v32.5' stroke='white' stroke-width='2'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4efe6;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5b5b5b;
+      --accent: #0f5c4d;
+      --accent-2: #9c7b47;
+      --accent-soft: #e6f1ee;
+      --border: #e2dccf;
+      --shadow: 0 18px 50px rgba(20, 20, 20, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Heebo", "Assistant", "Arial", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 15% -10%, #e8f2ef 0%, rgba(232, 242, 239, 0) 60%),
+        linear-gradient(180deg, #f7f3ec 0%, #f1eee7 100%);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    header.site {
+      background: linear-gradient(120deg, #0f5c4d 0%, #2f816f 100%);
+      color: #fff;
+      padding: 46px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header.site::after {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+
+    header.site h1 {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+
+    header.site p {
+      margin: 0 auto;
+      max-width: 640px;
+      font-size: 1.1rem;
+      opacity: 0.92;
+    }
+
+    nav.topnav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    nav.topnav a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      background: var(--accent-soft);
+      transition: transform 0.2s;
+    }
+
+    nav.topnav a:hover { transform: translateY(-1px); }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: grid;
+      gap: 44px;
+    }
+
+    .book {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .book-cover {
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(150deg, #1a6e5c 0%, #0f5c4d 50%, #083d31 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      color: #f3e8c7;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(15, 92, 77, 0.25);
+      overflow: hidden;
+    }
+
+    .book-cover::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1.5px solid rgba(243, 232, 199, 0.3);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .book-cover .ornament {
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(243, 232, 199, 0.15);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .book-cover h3 {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 2.4rem;
+      margin: 0 0 14px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .book-cover .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.88;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .book-cover .author {
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.85;
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid rgba(243, 232, 199, 0.25);
+    }
+
+    .book-cover .date {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+
+    .book-info h2 {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 2rem;
+      margin: 0 0 6px;
+      color: var(--accent);
+    }
+
+    .book-info .meta {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+    .book-info .description {
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .book-info .description p { margin: 0 0 10px; }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(15, 92, 77, 0.25);
+    }
+    .btn.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(15, 92, 77, 0.35); }
+
+    .btn.secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .btn.secondary:hover { transform: translateY(-2px); }
+
+    .toc {
+      margin-top: 8px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .toc h4 {
+      margin: 0 0 12px;
+      color: var(--accent-2);
+      font-size: 1.1rem;
+    }
+
+    .toc-group {
+      margin-bottom: 16px;
+    }
+
+    .toc-group h5 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .toc-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .toc-list li::after {
+      content: "·";
+      margin-right: 12px;
+      color: var(--accent-2);
+    }
+
+    .toc-list li:last-child::after { content: ""; }
+
+    .dedication {
+      font-style: italic;
+      color: var(--muted);
+      padding: 14px 18px;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 20px 48px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      .book {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .book-cover {
+        max-width: 260px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <h1>ספרי תורה והגיגים</h1>
+    <p>שני ספרים של הערות, ביאורים ומחשבות על פרשיות השבוע, המועדים וענייני השנה. פרי שנים של לימוד עצמי, כתיבה והתבוננות.</p>
+  </header>
+
+  <nav class="topnav" aria-label="ניווט ראשי">
+    <a href="index.html">דף הבית</a>
+    <a href="books.html">ספרים</a>
+    <a href="blog/">בלוג</a>
+    <a href="siddur/">סידור</a>
+    <a href="apps/TSPartner.html">כלים</a>
+    <a href="resume.html">קורות חיים</a>
+  </nav>
+
+  <main>
+    <article class="book" id="avi-veishi">
+      <div class="book-cover">
+        <span class="ornament"></span>
+        <div>
+          <h3>אבי וישעי</h3>
+          <div class="subtitle">תורה והגיגים</div>
+        </div>
+        <div class="author">אורי פוגלר<div class="date">סיוון תשפ״ו · 385 עמודים</div></div>
+      </div>
+      <div class="book-info">
+        <h2>אבי וישעי – תורה והגיגים</h2>
+        <div class="meta">מאת אורי פוגלר · סיוון תשפ״ו (2026) · 385 עמודים</div>
+
+        <div class="dedication">
+          לעילוי נשמת שלמה ואיטה פוגלר ז״ל, אליעזר ומרים בניאל ז״ל, דבורה עצמון ז״ל – נר לרגלנו ואור לנתיבותנו.
+        </div>
+
+        <div class="description">
+          <p>אסופה רחבה של הערות, ביאורים ופלפולים על חמשת חומשי תורה ועל מעגל השנה היהודי. הספר סדור לפי פרשיות השבוע – מבראשית ועד וזאת הברכה – ולאחריהן פרקים על המועדים.</p>
+          <p>הדברים נכתבו מתוך לימוד אישי ועיון בפרשנים, ומביאים בצד הקושיות הקלאסיות גם זוויות מקוריות ומחשבות חדשות. הספר מיועד לכל אדם שמבקש להעמיק בטקסט התורה – לומד ותיק וחוקר מתחיל כאחד.</p>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="reader.html?book=avi_veishi">קרא את הספר אונליין</a>
+          <a class="btn secondary" href="books/avi_veishi.pdf" download>הורד PDF</a>
+        </div>
+
+        <div class="toc">
+          <h4>תוכן העניינים</h4>
+
+          <div class="toc-group">
+            <h5>הקדמה</h5>
+            <ul class="toc-list"><li>קודש הילולים</li></ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>ספר הישר – בראשית</h5>
+            <ul class="toc-list">
+              <li>בראשית</li><li>נח</li><li>לך לך</li><li>וירא</li><li>חיי שרה</li>
+              <li>תולדות</li><li>ויצא</li><li>וישלח</li><li>וישב</li><li>מקץ</li>
+              <li>ויגש</li><li>ויחי</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>ספר הגאולה – שמות</h5>
+            <ul class="toc-list">
+              <li>שמות</li><li>וארא</li><li>בא</li><li>בשלח</li><li>יתרו</li>
+              <li>משפטים</li><li>תרומה</li><li>תצווה</li><li>כי תשא</li><li>ויקהל</li>
+              <li>פקודי</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>תורת כהנים – ויקרא</h5>
+            <ul class="toc-list">
+              <li>ויקרא</li><li>צו</li><li>שמיני</li><li>תזריע</li><li>מצורע</li>
+              <li>אחרי מות</li><li>קדושים</li><li>אמור</li><li>בהר</li><li>בחוקותי</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>חומש הפקודים – במדבר</h5>
+            <ul class="toc-list">
+              <li>במדבר</li><li>נשא</li><li>בהעלותך</li><li>שלח</li><li>קורח</li>
+              <li>חוקת</li><li>בלק</li><li>פנחס</li><li>מטות</li><li>מסעי</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>משנה תורה – דברים</h5>
+            <ul class="toc-list">
+              <li>דברים</li><li>ואתחנן</li><li>עקב</li><li>ראה</li><li>שופטים</li>
+              <li>כי תצא</li><li>כי תבוא</li><li>ניצבים</li><li>וילך</li><li>האזינו</li>
+              <li>וזאת הברכה</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>אלו הימים – מועדים</h5>
+            <ul class="toc-list">
+              <li>ימי הדין</li><li>חג האסיף</li><li>חג האורים</li>
+              <li>יום הפורים</li><li>חג המצות</li><li>חג הקציר</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="book" id="eli-teshukati">
+      <div class="book-cover">
+        <span class="ornament"></span>
+        <div>
+          <h3>אלי תשוקתי</h3>
+          <div class="subtitle">ברית אליעזר,<br/>תורה ומועדים</div>
+        </div>
+        <div class="author">אורי פוגלר<div class="date">תשרי תשפ״א · 293 עמודים</div></div>
+      </div>
+      <div class="book-info">
+        <h2>אלי תשוקתי – ברית אליעזר, תורה ומועדים</h2>
+        <div class="meta">מאת אורי פוגלר · תשרי תשפ״א (2020) · 293 עמודים</div>
+
+        <div class="dedication">
+          לעילוי נשמת שלמה פוגלר ז״ל, אליעזר ומרים בניאל ז״ל, דבורה עצמון ז״ל – נר לרגלנו ואור לנתיבותינו.
+        </div>
+
+        <div class="description">
+          <p>ספר של שער ושני חלקים: השער הפותח דן בעניין ברית המילה – ברית אליעזר – עם בירורים הלכתיים ומחשבתיים על מהות הברית והמילה, מקורות מהרמב"ם, הטור, השולחן ערוך ועוד. לצד הדיון התורני משולבים זיכרונות משפחתיים ותולדות סבא אליעזר ז"ל.</p>
+          <p>לאחר השער, הספר ממשיך עם הערות וביאורים על פרשיות התורה ועל מעגל המועדים – מעיונים בפסוקים, במאמרי חז"ל ובדברי הפרשנים.</p>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="reader.html?book=eli_teshukati">קרא את הספר אונליין</a>
+          <a class="btn secondary" href="books/eli_teshukati.pdf" download>הורד PDF</a>
+        </div>
+
+        <div class="toc">
+          <h4>מבנה הספר</h4>
+
+          <div class="toc-group">
+            <h5>שער ראשון – ברית אליעזר</h5>
+            <ul class="toc-list">
+              <li>ברית, מצווה וברית, גוף ונפש</li>
+              <li>דין מילת גוי לשם מצווה</li>
+              <li>מצוות המילה מול ברית המילה</li>
+              <li>שלבי ברכות המילה</li>
+              <li>השלמה גופנית ורוחנית</li>
+              <li>תולדות סבא אליעזר ז״ל</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>שער שני – על פרשיות התורה</h5>
+            <ul class="toc-list">
+              <li>בראשית</li><li>שמות</li><li>ויקרא</li><li>במדבר</li><li>דברים</li>
+            </ul>
+          </div>
+
+          <div class="toc-group">
+            <h5>שער שלישי – מועדי ישראל</h5>
+            <ul class="toc-list">
+              <li>ימים נוראים</li><li>סוכות</li><li>חנוכה</li>
+              <li>פורים</li><li>פסח</li><li>שבועות</li>
+              <li>ימי בין המצרים</li><li>ענייני השנה</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    הספרים זמינים לקריאה חופשית. כל הזכויות שמורות לאורי פוגלר.
+    &nbsp;·&nbsp; <a href="index.html">דף הבית</a>
+    &nbsp;·&nbsp; <a href="blog/privacy-policy.html">מדיניות פרטיות</a>
+  </footer>
+</body>
+</html>

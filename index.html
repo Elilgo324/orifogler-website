@@ -1,195 +1,528 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ori Fogler - Resume</title>
-    <style>
-      :root {
-        --text: #111111;
-        --muted: #555555;
-        --accent: #0b4f8a;
-        --bg: #ffffff;
-        --line: #e5e7eb;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        color: var(--text);
-        background: var(--bg);
-        line-height: 1.45;
-      }
-      main {
-        max-width: 860px;
-        margin: 40px auto;
-        padding: 0 24px 60px;
-      }
-      header {
-        border-bottom: 2px solid var(--line);
-        padding-bottom: 16px;
-        margin-bottom: 28px;
-      }
-      h1 {
-        font-size: 32px;
-        margin: 0 0 6px;
-      }
-      h2 {
-        font-size: 18px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--accent);
-        margin: 28px 0 12px;
-      }
-      h3 {
-        font-size: 16px;
-        margin: 0 0 4px;
-      }
-      .role {
-        color: var(--muted);
-        font-weight: 600;
-      }
-      .item {
-        margin-bottom: 16px;
-      }
-      .meta {
-        font-size: 14px;
-        color: var(--muted);
-        margin-bottom: 6px;
-      }
-      ul {
-        margin: 6px 0 0 18px;
-        padding: 0;
-      }
-      li {
-        margin: 4px 0;
-      }
-      .small {
-        font-size: 14px;
-        color: var(--muted);
-      }
-      a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <header>
-        <h1>Ori Fogler</h1>
-        <div class="role">Senior Algorithms Researcher</div>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ori Fogler – Algorithms Researcher, Author, Developer</title>
+  <meta name="description" content="Personal site of Ori Fogler. Senior algorithms researcher at Via Transportation and author of two Torah commentary books ('Avi Ve'Yishi', 'Eli Teshukati'). Also hosts a blog, a Hebrew siddur, and a collection of small utility apps." />
+  <link rel="canonical" href="https://orifogler.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ori Fogler – Algorithms Researcher, Author, Developer" />
+  <meta property="og:description" content="Personal site with two original Torah commentary books, a blog, a siddur, and utility apps. Senior algorithms researcher at Via Transportation." />
+  <meta property="og:url" content="https://orifogler.com/" />
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b4f8a'/><text x='32' y='44' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='700' fill='white'>OF</text></svg>" />
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #14151a;
+      --muted: #5b606e;
+      --accent: #0b4f8a;
+      --accent-2: #0f5c4d;
+      --accent-soft: #e8f0f9;
+      --accent-soft-2: #e6f1ee;
+      --bg: #fafaf7;
+      --surface: #ffffff;
+      --border: #e3e0d8;
+      --shadow: 0 14px 40px rgba(26, 27, 31, 0.08);
+      --shadow-sm: 0 6px 16px rgba(26, 27, 31, 0.06);
+    }
 
-      <section>
-        <h2>Experience</h2>
+    * { box-sizing: border-box; }
 
-        <div class="item">
-          <h3>Via Transportation</h3>
-          <div class="meta">2023 - Present | Algorithms Researcher</div>
-          <ul>
-            <li>Optimize real-time route and shift planning at large scale.</li>
-            <li>Own core components of routing model design and offline fleet-optimization pipelines.</li>
-          </ul>
-        </div>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        <div class="item">
-          <h3>Ofek 324 Unit AI Sector</h3>
-          <div class="meta">2020 - 2023 | Algorithms Researcher</div>
-          <ul>
-            <li>Formulated algorithmic solutions for IAF operational problems using graph theory, optimization, and machine learning.</li>
-            <li>Aerial navigation systems ("Waze") - multi-objective path finding and TSP on random graphs.</li>
-            <li>Mentored new team members, led projects, and managed relationships with users.</li>
-            <li>Collaborated with cross-functional teams to deliver high-quality software solutions.</li>
-          </ul>
-        </div>
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-        <div class="item">
-          <h3>Bar-Ilan University</h3>
-          <div class="meta">2022 - 2023 | Researcher, <a href="https://u.cs.biu.ac.il/~agmon/index.html">SMART Robotics Lab</a></div>
-          <ul>
-            <li>Academic research on planning algorithms for robots in challenging environments.</li>
-          </ul>
-        </div>
+    nav.topnav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    nav.topnav .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      flex-wrap: wrap;
+    }
+    nav.topnav .brand {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    nav.topnav ul {
+      list-style: none;
+      display: flex;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+    }
+    nav.topnav a {
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: var(--accent);
+      font-weight: 600;
+      background: var(--accent-soft);
+      font-size: 0.92rem;
+      transition: transform 0.2s;
+    }
+    nav.topnav a:hover { transform: translateY(-1px); text-decoration: none; }
 
-        <div class="item">
-          <h3>Bar-Ilan University</h3>
-          <div class="meta">2019 | Research Assistant, <a href="https://cyber.biu.ac.il/">BIU Cyber Center</a></div>
-        </div>
-      </section>
+    header.hero {
+      background:
+        radial-gradient(1000px 500px at 15% -10%, rgba(11, 79, 138, 0.1) 0%, rgba(11, 79, 138, 0) 60%),
+        radial-gradient(900px 500px at 85% 110%, rgba(15, 92, 77, 0.12) 0%, rgba(15, 92, 77, 0) 60%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      padding: 60px 24px 48px;
+    }
 
-      <section>
-        <h2>Education</h2>
+    .hero-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 44px;
+      align-items: center;
+    }
 
-        <div class="item">
-          <h3>Bar-Ilan University</h3>
-          <div class="meta">2023 | Ph.D. Candidate, Computer Science</div>
-          <ul>
-            <li>Research: Weight Constrained Shortest Path with k-Circular Budget-zones.</li>
-          </ul>
-        </div>
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      margin: 0 0 10px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .hero .role {
+      color: var(--muted);
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .hero p {
+      font-size: 1.06rem;
+      color: var(--text);
+      margin: 0 0 12px;
+      max-width: 56ch;
+    }
+    .hero .cta {
+      margin-top: 22px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(11, 79, 138, 0.25);
+    }
+    .btn.primary:hover { transform: translateY(-2px); text-decoration: none; box-shadow: 0 12px 26px rgba(11, 79, 138, 0.35); }
+    .btn.secondary {
+      background: var(--surface);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+    .btn.secondary:hover { transform: translateY(-2px); text-decoration: none; }
 
-        <div class="item">
-          <h3>Bar-Ilan University</h3>
-          <div class="meta">2021 - 2022 | M.Sc. Computer Science (AI specialization, grade 97)</div>
-          <ul>
-            <li>
-              Thesis: <a href="https://u.cs.biu.ac.il/~agmon/FoglerIROS22.pdf">Multi-Robot Dynamic Swarm Disablement</a>,
-              published at IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2022).
-            </li>
-            <li>
-              Presented at <a href="https://u.cs.biu.ac.il/~agmon/arms2022/program.html">Autonomous Robot and Multi-Robots Systems Workshop</a>
-              (ARMS 2022).
-            </li>
-          </ul>
-          <div class="small">Courses: Deep Learning, Robotics, NLP, Reinforcement Learning, Networks Security and Privacy.</div>
-        </div>
+    .hero-art {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-art .card-stack {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 4 / 3;
+    }
+    .hero-art .book-spine {
+      position: absolute;
+      width: 150px;
+      height: 210px;
+      border-radius: 6px 10px 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #f3e8c7;
+      text-align: center;
+      padding: 20px 14px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+      font-family: "Frank Ruhl Libre", Georgia, serif;
+    }
+    .hero-art .book-spine::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(243, 232, 199, 0.25);
+      border-radius: 3px;
+    }
+    .hero-art .book-spine span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+    }
+    .hero-art .book-1 {
+      background: linear-gradient(150deg, #1a6e5c, #0f5c4d 70%);
+      transform: rotate(-7deg);
+      top: 20px;
+      left: 20px;
+    }
+    .hero-art .book-2 {
+      background: linear-gradient(150deg, #1860a0, #0b4f8a 70%);
+      transform: rotate(6deg);
+      top: 50px;
+      right: 20px;
+    }
 
-        <div class="item">
-          <h3>Bar-Ilan University</h3>
-          <div class="meta">2017 - 2020 | B.Sc. Computer Science (grade 96.5, ranked #1)</div>
-          <ul>
-            <li>
-              Project: <a href="https://www.youtube.com/watch?v=arA5WKuZw2M">HumanizingZeroHex</a> - retrained a strong Deep RL
-              model ("AlphaZero") that plays Hex to match human performance ("The Imitation Game").
-            </li>
-          </ul>
-        </div>
-      </section>
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+    }
 
-      <section>
-        <h2>Skills</h2>
+    section.block {
+      margin: 60px 0;
+    }
 
-        <div class="item">
-          <h3>Programming Languages and Technologies</h3>
-          <div>Python (expert). Familiar with JavaScript, Java, C#, C++, Assembly, SQL, and Go.</div>
-          <div class="small">Tools: Git, Bitbucket, Jira, OpenShift, Splunk.</div>
-        </div>
+    section.block h2 {
+      font-size: 1.7rem;
+      margin: 0 0 8px;
+      letter-spacing: -0.01em;
+    }
+    section.block > p.lead {
+      color: var(--muted);
+      margin: 0 0 28px;
+      font-size: 1.05rem;
+      max-width: 64ch;
+    }
 
-        <div class="item">
-          <h3>Languages</h3>
-          <div>Hebrew (native) and English (fluent).</div>
-        </div>
-      </section>
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
 
-      <section>
-        <h2>Awards</h2>
-        <ul>
-          <li>Completed B.Sc. and M.Sc. summa cum laude, ranked first among B.Sc. graduates.</li>
-          <li>Special certificates for a unique contribution to smart systems in the Air Force.</li>
-          <li>Partnered in an IAF and IDF award-winning project on multi-objective route planning.</li>
-          <li>Winner, IBM Hackathon - app "I'm Fine".</li>
-          <li>
-            BIU - <a href="https://life-sciences.biu.ac.il/node/10015">Ilanot scholarship</a> for 110+ Bagrut and 740+ PET candidates.
-          </li>
-          <li>Dean's list and CS Department scholarship for top 10 students.</li>
-        </ul>
-      </section>
-    </main>
-  </body>
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+    }
+
+    .card .tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.97rem;
+    }
+    .card .meta {
+      margin-top: auto;
+      padding-top: 10px;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .card.featured {
+      background: linear-gradient(150deg, #0f5c4d 0%, #083d31 100%);
+      color: #f3e8c7;
+      border-color: transparent;
+    }
+    .card.featured .tag { color: #e8c992; }
+    .card.featured p { color: rgba(243, 232, 199, 0.85); }
+    .card.featured .meta { color: #e8c992; }
+
+    .card.featured.blue {
+      background: linear-gradient(150deg, #1860a0 0%, #0a3868 100%);
+    }
+
+    .about {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: var(--shadow-sm);
+    }
+    .about h2 { margin-top: 0; }
+    .about p { margin: 0 0 12px; font-size: 1.02rem; }
+    .about ul { padding-right: 20px; padding-left: 20px; color: var(--muted); }
+    .about li { margin: 4px 0; }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .app-link {
+      display: block;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .app-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    .app-link strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+    .app-link span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    footer a { margin: 0 8px; }
+
+    @media (max-width: 820px) {
+      .hero-wrap { grid-template-columns: 1fr; }
+      .hero-art { order: -1; margin-bottom: 20px; }
+      .hero-art .card-stack { max-width: 280px; }
+      .hero-art .book-spine { width: 120px; height: 170px; padding: 16px 10px; }
+      .hero-art .book-spine span { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="Main navigation">
+  <div class="wrap">
+    <div class="brand">Ori Fogler</div>
+    <ul>
+      <li><a href="#books">Books</a></li>
+      <li><a href="blog/">Blog</a></li>
+      <li><a href="siddur/">Siddur</a></li>
+      <li><a href="#apps">Apps</a></li>
+      <li><a href="resume.html">Resume</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-wrap">
+    <div>
+      <h1>Ori Fogler</h1>
+      <div class="role">Algorithms Researcher · Author · Developer</div>
+      <p>
+        I design routing and optimization algorithms at scale – currently at
+        <a href="https://www.ridewithvia.com/">Via Transportation</a>. I hold an M.Sc. in Computer Science
+        (summa cum laude) from Bar-Ilan University and am a Ph.D. candidate there.
+      </p>
+      <p>
+        Outside of work I write and publish Torah commentary. This site is home to two of my books,
+        a running blog, a Hebrew siddur I built for my own use, and a handful of small utility apps.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#books">Read my books</a>
+        <a class="btn secondary" href="resume.html">View resume</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="card-stack">
+        <div class="book-spine book-1"><span>אבי וישעי</span></div>
+        <div class="book-spine book-2"><span>אלי תשוקתי</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="block" id="books">
+    <h2>Books</h2>
+    <p class="lead">
+      Two original Torah commentary books. Both are written in Hebrew and cover the weekly Torah
+      portions and the yearly cycle of Jewish holidays. Read online or download as PDF.
+    </p>
+
+    <div class="cards">
+      <a class="card featured" href="reader.html?book=avi_veishi">
+        <span class="tag">NEW · Sivan 5786</span>
+        <h3>אבי וישעי – תורה והגיגים</h3>
+        <p>A 385-page commentary on the entire Pentateuch, organized by weekly portion, followed by chapters on the annual festivals. Contains original questions, classical sources and personal insights collected over years of study.</p>
+        <span class="meta">Read online →</span>
+      </a>
+
+      <a class="card featured blue" href="reader.html?book=eli_teshukati">
+        <span class="tag">Tishrei 5781</span>
+        <h3>אלי תשוקתי – ברית אליעזר, תורה ומועדים</h3>
+        <p>A 293-page volume opening with an in-depth study of the laws and meaning of brit milah, including family memories of grandfather Eliezer z"l, followed by weekly Torah commentary and essays on the Jewish holidays.</p>
+        <span class="meta">Read online →</span>
+      </a>
+
+      <a class="card" href="books.html">
+        <span class="tag">Library</span>
+        <h3>Browse the library</h3>
+        <p>See both books side by side, with full tables of contents, dedications, and descriptions. Includes download links for PDF copies.</p>
+        <span class="meta">Open library →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Blog &amp; Siddur</h2>
+    <p class="lead">
+      A running Torah blog with short weekly thoughts, and a clean digital siddur I built to have a readable prayer book on my phone.
+    </p>
+
+    <div class="cards">
+      <a class="card" href="blog/">
+        <span class="tag">Blog</span>
+        <h3>הגיגי אמרי</h3>
+        <p>Short weekly Torah thoughts and commentary on the parasha, aggregated automatically from my Blogspot feed.</p>
+        <span class="meta">Read latest posts →</span>
+      </a>
+
+      <a class="card" href="siddur/">
+        <span class="tag">Siddur</span>
+        <h3>Digital Siddur</h3>
+        <p>A clean Hebrew prayer book with selectable nusach (Sepharad, Ashkenaz, Edot HaMizrach), sourced from Hebrew Wikisource.</p>
+        <span class="meta">Open siddur →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block" id="apps">
+    <h2>Utility apps</h2>
+    <p class="lead">
+      A small collection of tools I built to scratch my own itches. All open in the browser, no install needed.
+    </p>
+
+    <div class="apps-grid">
+      <a class="app-link" href="apps/TSPartner.html">
+        <strong>TSPartner</strong>
+        <span>Interactive traveling-salesman playground</span>
+      </a>
+      <a class="app-link" href="apps/WoltShare.html">
+        <strong>WoltShare</strong>
+        <span>Split a Wolt order between friends</span>
+      </a>
+      <a class="app-link" href="apps/coordinator.html">
+        <strong>Coordinator</strong>
+        <span>Coordinate meeting times across people</span>
+      </a>
+      <a class="app-link" href="apps/gshift.html">
+        <strong>gShift</strong>
+        <span>Shift and time-slot helper</span>
+      </a>
+      <a class="app-link" href="apps/jsonformatter.html">
+        <strong>JSON Formatter</strong>
+        <span>Pretty-print and validate JSON</span>
+      </a>
+      <a class="app-link" href="apps/namemate.html">
+        <strong>NameMate</strong>
+        <span>Generate name pairings &amp; matches</span>
+      </a>
+      <a class="app-link" href="apps/shift-scheduler.html">
+        <strong>Shift Scheduler</strong>
+        <span>Build weekly shift schedules</span>
+      </a>
+      <a class="app-link" href="apps/timestamper.html">
+        <strong>Timestamper</strong>
+        <span>Convert between time formats</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="about">
+      <h2>About me</h2>
+      <p>
+        I'm a senior algorithms researcher at <a href="https://www.ridewithvia.com/">Via Transportation</a>,
+        where I work on real-time route and shift planning. Before Via I spent three years as an algorithms
+        researcher in the Israeli Air Force AI sector (Ofek 324), working on aerial navigation systems – a
+        "Waze for aircraft" – with multi-objective path finding and TSP on random graphs.
+      </p>
+      <p>
+        My academic background is in computer science: I completed my B.Sc. at Bar-Ilan University ranked first
+        among graduates, finished my M.Sc. with an AI specialization (grade 97), and I'm now a Ph.D. candidate.
+        My M.Sc. thesis on <a href="https://u.cs.biu.ac.il/~agmon/FoglerIROS22.pdf">multi-robot dynamic swarm disablement</a>
+        was published at IROS 2022.
+      </p>
+      <p>
+        Outside of algorithms work, I write Torah commentary – a hobby I've kept for over a decade. Two books are
+        available on this site: <a href="reader.html?book=avi_veishi"><em>Avi Ve'Yishi</em></a> (2026) and
+        <a href="reader.html?book=eli_teshukati"><em>Eli Teshukati</em></a> (2020).
+      </p>
+      <p style="margin-top:18px">
+        <strong>Get in touch:</strong>
+        <a href="mailto:foglerori@gmail.com">foglerori@gmail.com</a> ·
+        <a href="https://www.linkedin.com/in/foglero/">LinkedIn</a> ·
+        <a href="resume.html">Full resume</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © Ori Fogler ·
+  <a href="books.html">Books</a> ·
+  <a href="blog/">Blog</a> ·
+  <a href="resume.html">Resume</a> ·
+  <a href="blog/privacy-policy.html">Privacy Policy</a>
+</footer>
+
+</body>
 </html>

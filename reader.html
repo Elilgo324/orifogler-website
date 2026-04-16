@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>קורא ספרים | אורי פוגלר</title>
+  <meta name="description" content="קריאה מקוונת של ספרי תורה והגיגים מאת אורי פוגלר." />
+  <link rel="canonical" href="https://orifogler.com/reader.html" />
+  <meta property="og:type" content="book" />
+  <meta property="og:title" content="קורא ספרים | אורי פוגלר" />
+  <meta property="og:description" content="קריאה מקוונת של ספרי תורה והגיגים מאת אורי פוגלר." />
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f5c4d'/><path d='M16 14h12a6 6 0 0 1 4 1.5A6 6 0 0 1 36 14h12v34H36a4 4 0 0 0-4 2 4 4 0 0 0-4-2H16z' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/><path d='M32 15.5v32.5' stroke='white' stroke-width='2'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4efe6;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5b5b5b;
+      --accent: #0f5c4d;
+      --accent-soft: #e6f1ee;
+      --border: #d9d4c8;
+      --shadow: 0 14px 40px rgba(20, 20, 20, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; height: 100%; }
+
+    body {
+      font-family: "Heebo", "Assistant", "Arial", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(120deg, #0f5c4d 0%, #2f816f 100%);
+      color: #fff;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header h1 {
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 1.4rem;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    header .author {
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+
+    header a.back {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: background 0.2s;
+    }
+
+    header a.back:hover { background: rgba(255, 255, 255, 0.25); }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .toolbar button, .toolbar .page-info {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toolbar button:hover:not(:disabled) {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .toolbar .page-info {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .toolbar input[type=number] {
+      width: 72px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .viewer {
+      flex: 1;
+      padding: 24px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: auto;
+    }
+
+    #pdfCanvas {
+      max-width: 100%;
+      height: auto;
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: 6px;
+    }
+
+    .loading {
+      color: var(--muted);
+      padding: 60px 20px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .error {
+      color: #b00;
+      background: #fff3f3;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 540px;
+      margin: 40px auto;
+      text-align: center;
+      border: 1px solid #ffd0d0;
+    }
+
+    footer {
+      padding: 16px 20px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.15rem; }
+      .toolbar { padding: 10px; gap: 6px; }
+      .toolbar button, .toolbar .page-info { padding: 6px 10px; font-size: 0.85rem; }
+      .viewer { padding: 14px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div>
+        <h1 id="bookTitle">טוען…</h1>
+        <div class="author">אורי פוגלר</div>
+      </div>
+    </div>
+    <a class="back" href="books.html">‏&rarr; חזרה לספרייה</a>
+  </header>
+
+  <div class="toolbar">
+    <button id="prevBtn" aria-label="עמוד קודם">קודם</button>
+    <span class="page-info" id="pageInfo">— / —</span>
+    <button id="nextBtn" aria-label="עמוד הבא">הבא</button>
+    <label for="pageJump" style="font-size:0.9rem;color:var(--muted);">דלג לעמוד:</label>
+    <input type="number" id="pageJump" min="1" />
+    <button id="zoomOut" aria-label="הקטן">−</button>
+    <button id="zoomIn" aria-label="הגדל">+</button>
+  </div>
+
+  <main class="viewer" id="viewer">
+    <canvas id="pdfCanvas" aria-label="תוכן הספר"></canvas>
+    <div id="status" class="loading">טוען את הספר…</div>
+  </main>
+
+  <footer>
+    הספרים זמינים לקריאה חופשית. כל הזכויות שמורות לאורי פוגלר, תשפ״ו.
+    · <a href="books.html">ספרייה</a> · <a href="index.html">דף הבית</a>
+  </footer>
+
+  <script type="module">
+    import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.min.mjs";
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.worker.min.mjs";
+
+    const BOOKS = {
+      avi_veishi: {
+        title: "אבי וישעי – תורה והגיגים",
+        file: "books/avi_veishi.pdf",
+      },
+      eli_teshukati: {
+        title: "אלי תשוקתי – ברית אליעזר, תורה ומועדים",
+        file: "books/eli_teshukati.pdf",
+      },
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const bookKey = params.get("book");
+    const book = BOOKS[bookKey] || BOOKS.avi_veishi;
+    const startPage = parseInt(params.get("page") || "1", 10);
+
+    document.getElementById("bookTitle").textContent = book.title;
+    document.title = `${book.title} | אורי פוגלר`;
+
+    const canvas = document.getElementById("pdfCanvas");
+    const ctx = canvas.getContext("2d");
+    const status = document.getElementById("status");
+    const pageInfo = document.getElementById("pageInfo");
+    const pageJump = document.getElementById("pageJump");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const zoomIn = document.getElementById("zoomIn");
+    const zoomOut = document.getElementById("zoomOut");
+
+    let pdfDoc = null;
+    let pageNum = Math.max(1, startPage);
+    let scale = 1.3;
+    let rendering = false;
+    let pendingPage = null;
+
+    function renderPage(num) {
+      if (!pdfDoc) return;
+      rendering = true;
+      pdfDoc.getPage(num).then((page) => {
+        const viewport = page.getViewport({ scale });
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = viewport.width * ratio;
+        canvas.height = viewport.height * ratio;
+        canvas.style.width = viewport.width + "px";
+        canvas.style.height = viewport.height + "px";
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+        const renderTask = page.render({ canvasContext: ctx, viewport });
+        renderTask.promise.then(() => {
+          rendering = false;
+          if (pendingPage !== null) {
+            const p = pendingPage;
+            pendingPage = null;
+            renderPage(p);
+          }
+        });
+
+        pageInfo.textContent = `${num} / ${pdfDoc.numPages}`;
+        pageJump.value = num;
+        prevBtn.disabled = num <= 1;
+        nextBtn.disabled = num >= pdfDoc.numPages;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set("page", String(num));
+        history.replaceState(null, "", url);
+      });
+    }
+
+    function queuePage(num) {
+      if (rendering) pendingPage = num;
+      else renderPage(num);
+    }
+
+    function go(delta) {
+      const next = pageNum + delta;
+      if (next < 1 || next > pdfDoc.numPages) return;
+      pageNum = next;
+      queuePage(pageNum);
+    }
+
+    prevBtn.addEventListener("click", () => go(-1));
+    nextBtn.addEventListener("click", () => go(1));
+    zoomIn.addEventListener("click", () => {
+      scale = Math.min(scale + 0.2, 3);
+      queuePage(pageNum);
+    });
+    zoomOut.addEventListener("click", () => {
+      scale = Math.max(scale - 0.2, 0.6);
+      queuePage(pageNum);
+    });
+    pageJump.addEventListener("change", (e) => {
+      const v = parseInt(e.target.value, 10);
+      if (!isNaN(v) && v >= 1 && v <= pdfDoc.numPages) {
+        pageNum = v;
+        queuePage(pageNum);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.target.tagName === "INPUT") return;
+      if (e.key === "ArrowLeft") go(1);
+      else if (e.key === "ArrowRight") go(-1);
+    });
+
+    pdfjsLib
+      .getDocument(book.file)
+      .promise.then((pdf) => {
+        pdfDoc = pdf;
+        pageJump.max = pdf.numPages;
+        status.remove();
+        if (pageNum > pdf.numPages) pageNum = 1;
+        renderPage(pageNum);
+      })
+      .catch((err) => {
+        status.className = "error";
+        status.textContent =
+          "לא הצלחנו לטעון את הספר. נסה לרענן את הדף. (" + err.message + ")";
+      });
+  </script>
+</body>
+</html>
