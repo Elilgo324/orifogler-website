@@ -109,77 +109,14 @@
 
     .book {
       background: var(--surface);
-      border-radius: 24px;
-      padding: 36px;
+      border-radius: 20px;
+      padding: 32px 36px;
       box-shadow: var(--shadow);
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 36px;
-      align-items: start;
-    }
-
-    .book-cover {
-      aspect-ratio: 3 / 4;
-      background: linear-gradient(150deg, #1a6e5c 0%, #0f5c4d 50%, #083d31 100%);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-      color: #f3e8c7;
-      text-align: center;
       position: relative;
-      box-shadow: 0 10px 30px rgba(15, 92, 77, 0.25);
-      overflow: hidden;
+      border-right: 6px solid var(--accent);
     }
 
-    .book-cover::before {
-      content: "";
-      position: absolute;
-      inset: 12px;
-      border: 1.5px solid rgba(243, 232, 199, 0.3);
-      border-radius: 8px;
-      pointer-events: none;
-    }
-
-    .book-cover .ornament {
-      position: absolute;
-      inset: 22px;
-      border: 1px solid rgba(243, 232, 199, 0.15);
-      border-radius: 4px;
-      pointer-events: none;
-    }
-
-    .book-cover h3 {
-      font-family: "Frank Ruhl Libre", serif;
-      font-size: 2.4rem;
-      margin: 0 0 14px;
-      font-weight: 900;
-      line-height: 1.1;
-      letter-spacing: 0.02em;
-    }
-
-    .book-cover .subtitle {
-      font-size: 0.95rem;
-      opacity: 0.88;
-      line-height: 1.5;
-      margin-bottom: 18px;
-    }
-
-    .book-cover .author {
-      font-size: 0.95rem;
-      font-weight: 500;
-      opacity: 0.85;
-      margin-top: auto;
-      padding-top: 18px;
-      border-top: 1px solid rgba(243, 232, 199, 0.25);
-    }
-
-    .book-cover .date {
-      font-size: 0.85rem;
-      opacity: 0.75;
-      margin-top: 4px;
-    }
+    #eli-teshukati { border-right-color: #9c7b47; }
 
     .book-info h2 {
       font-family: "Frank Ruhl Libre", serif;
@@ -275,16 +212,6 @@
 
     .toc-list li:last-child::after { content: ""; }
 
-    .dedication {
-      font-style: italic;
-      color: var(--muted);
-      padding: 14px 18px;
-      background: var(--accent-soft);
-      border-radius: 12px;
-      margin-bottom: 18px;
-      font-size: 0.95rem;
-    }
-
     footer {
       text-align: center;
       padding: 32px 20px 48px;
@@ -300,21 +227,14 @@
     footer a:hover { text-decoration: underline; }
 
     @media (max-width: 720px) {
-      .book {
-        grid-template-columns: 1fr;
-        padding: 24px;
-      }
-      .book-cover {
-        max-width: 260px;
-        margin: 0 auto;
-      }
+      .book { padding: 24px; }
     }
   </style>
 </head>
 <body>
   <header class="site">
-    <h1>ספרי תורה והגיגים</h1>
-    <p>שני ספרים של הערות, ביאורים ומחשבות על פרשיות השבוע, המועדים וענייני השנה. פרי שנים של לימוד עצמי, כתיבה והתבוננות.</p>
+    <h1>ספרים</h1>
+    <p>הגיגי תורה לפי סדר פרשיות השבוע ומועדי השנה.</p>
   </header>
 
   <nav class="topnav" aria-label="ניווט ראשי">
@@ -328,25 +248,12 @@
 
   <main>
     <article class="book" id="avi-veishi">
-      <div class="book-cover">
-        <span class="ornament"></span>
-        <div>
-          <h3>אבי וישעי</h3>
-          <div class="subtitle">תורה והגיגים</div>
-        </div>
-        <div class="author">אורי פוגלר<div class="date">סיוון תשפ״ו · 385 עמודים</div></div>
-      </div>
       <div class="book-info">
         <h2>אבי וישעי – תורה והגיגים</h2>
         <div class="meta">מאת אורי פוגלר · סיוון תשפ״ו (2026) · 385 עמודים</div>
 
-        <div class="dedication">
-          לעילוי נשמת שלמה ואיטה פוגלר ז״ל, אליעזר ומרים בניאל ז״ל, דבורה עצמון ז״ל – נר לרגלנו ואור לנתיבותנו.
-        </div>
-
         <div class="description">
-          <p>אסופה רחבה של הערות, ביאורים ופלפולים על חמשת חומשי תורה ועל מעגל השנה היהודי. הספר סדור לפי פרשיות השבוע – מבראשית ועד וזאת הברכה – ולאחריהן פרקים על המועדים.</p>
-          <p>הדברים נכתבו מתוך לימוד אישי ועיון בפרשנים, ומביאים בצד הקושיות הקלאסיות גם זוויות מקוריות ומחשבות חדשות. הספר מיועד לכל אדם שמבקש להעמיק בטקסט התורה – לומד ותיק וחוקר מתחיל כאחד.</p>
+          <p>הגיגי תורה לפי סדר פרשיות השבוע ומועדי השנה.</p>
         </div>
 
         <div class="actions">
@@ -417,25 +324,12 @@
     </article>
 
     <article class="book" id="eli-teshukati">
-      <div class="book-cover">
-        <span class="ornament"></span>
-        <div>
-          <h3>אלי תשוקתי</h3>
-          <div class="subtitle">ברית אליעזר,<br/>תורה ומועדים</div>
-        </div>
-        <div class="author">אורי פוגלר<div class="date">תשרי תשפ״א · 293 עמודים</div></div>
-      </div>
       <div class="book-info">
         <h2>אלי תשוקתי – ברית אליעזר, תורה ומועדים</h2>
         <div class="meta">מאת אורי פוגלר · תשרי תשפ״א (2020) · 293 עמודים</div>
 
-        <div class="dedication">
-          לעילוי נשמת שלמה פוגלר ז״ל, אליעזר ומרים בניאל ז״ל, דבורה עצמון ז״ל – נר לרגלנו ואור לנתיבותינו.
-        </div>
-
         <div class="description">
-          <p>ספר של שער ושני חלקים: השער הפותח דן בעניין ברית המילה – ברית אליעזר – עם בירורים הלכתיים ומחשבתיים על מהות הברית והמילה, מקורות מהרמב"ם, הטור, השולחן ערוך ועוד. לצד הדיון התורני משולבים זיכרונות משפחתיים ותולדות סבא אליעזר ז"ל.</p>
-          <p>לאחר השער, הספר ממשיך עם הערות וביאורים על פרשיות התורה ועל מעגל המועדים – מעיונים בפסוקים, במאמרי חז"ל ובדברי הפרשנים.</p>
+          <p>הגיגי תורה לפי סדר פרשיות השבוע ומועדי השנה.</p>
         </div>
 
         <div class="actions">

@@ -103,21 +103,22 @@
 
     .hero h1 {
       font-size: clamp(2.2rem, 5vw, 3.2rem);
-      margin: 0 0 10px;
+      margin: 0 0 14px;
       line-height: 1.1;
       letter-spacing: -0.02em;
     }
     .hero .role {
-      color: var(--muted);
-      font-size: 1.15rem;
-      font-weight: 500;
-      margin-bottom: 18px;
-    }
-    .hero p {
-      font-size: 1.06rem;
       color: var(--text);
-      margin: 0 0 12px;
-      max-width: 56ch;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+    .hero .role-sub {
+      color: var(--muted);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin: 0;
+      max-width: 42ch;
     }
     .hero .cta {
       margin-top: 22px;
@@ -153,51 +154,14 @@
       justify-content: center;
       align-items: center;
     }
-    .hero-art .card-stack {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      aspect-ratio: 4 / 3;
-    }
-    .hero-art .book-spine {
-      position: absolute;
-      width: 150px;
-      height: 210px;
-      border-radius: 6px 10px 10px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #f3e8c7;
-      text-align: center;
-      padding: 20px 14px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
-      font-family: "Frank Ruhl Libre", Georgia, serif;
-    }
-    .hero-art .book-spine::after {
-      content: "";
-      position: absolute;
-      inset: 10px;
-      border: 1px solid rgba(243, 232, 199, 0.25);
-      border-radius: 3px;
-    }
-    .hero-art .book-spine span {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 1.15;
-    }
-    .hero-art .book-1 {
-      background: linear-gradient(150deg, #1a6e5c, #0f5c4d 70%);
-      transform: rotate(-7deg);
-      top: 20px;
-      left: 20px;
-    }
-    .hero-art .book-2 {
-      background: linear-gradient(150deg, #1860a0, #0b4f8a 70%);
-      transform: rotate(6deg);
-      top: 50px;
-      right: 20px;
+    .hero-portrait {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 30% center;
+      border: 5px solid #fff;
+      box-shadow: 0 14px 38px rgba(11, 79, 138, 0.18);
     }
 
     main {
@@ -338,9 +302,7 @@
     @media (max-width: 820px) {
       .hero-wrap { grid-template-columns: 1fr; }
       .hero-art { order: -1; margin-bottom: 20px; }
-      .hero-art .card-stack { max-width: 280px; }
-      .hero-art .book-spine { width: 120px; height: 170px; padding: 16px 10px; }
-      .hero-art .book-spine span { font-size: 1.2rem; }
+      .hero-portrait { width: 180px; height: 180px; border-width: 4px; }
     }
   </style>
 </head>
@@ -363,26 +325,16 @@
   <div class="hero-wrap">
     <div>
       <h1>Ori Fogler</h1>
-      <div class="role">Algorithms Researcher · Author · Developer</div>
-      <p>
-        I design routing and optimization algorithms at scale – currently at
-        <a href="https://www.ridewithvia.com/">Via Transportation</a>. I hold an M.Sc. in Computer Science
-        (summa cum laude) from Bar-Ilan University and am a Ph.D. candidate there.
-      </p>
-      <p>
-        Outside of work I write and publish Torah commentary. This site is home to two of my books,
-        a running blog, a Hebrew siddur I built for my own use, and a handful of small utility apps.
-      </p>
+      <p class="role">Senior algorithms researcher.</p>
+      <p class="role-sub">Studies and writes on Talmudic sugyot and Torah thought.</p>
       <div class="cta">
         <a class="btn primary" href="#books">Read my books</a>
         <a class="btn secondary" href="resume.html">View resume</a>
       </div>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      <div class="card-stack">
-        <div class="book-spine book-1"><span>אבי וישעי</span></div>
-        <div class="book-spine book-2"><span>אלי תשוקתי</span></div>
-      </div>
+    <div class="hero-art">
+      <img class="hero-portrait" src="assets/ori.jpg"
+           alt="Ori Fogler" width="260" height="260" loading="eager" />
     </div>
   </div>
 </header>
@@ -487,26 +439,8 @@
 
   <section class="block">
     <div class="about">
-      <h2>About me</h2>
+      <h2>Get in touch</h2>
       <p>
-        I'm a senior algorithms researcher at <a href="https://www.ridewithvia.com/">Via Transportation</a>,
-        where I work on real-time route and shift planning. Before Via I spent three years as an algorithms
-        researcher in the Israeli Air Force AI sector (Ofek 324), working on aerial navigation systems – a
-        "Waze for aircraft" – with multi-objective path finding and TSP on random graphs.
-      </p>
-      <p>
-        My academic background is in computer science: I completed my B.Sc. at Bar-Ilan University ranked first
-        among graduates, finished my M.Sc. with an AI specialization (grade 97), and I'm now a Ph.D. candidate.
-        My M.Sc. thesis on <a href="https://u.cs.biu.ac.il/~agmon/FoglerIROS22.pdf">multi-robot dynamic swarm disablement</a>
-        was published at IROS 2022.
-      </p>
-      <p>
-        Outside of algorithms work, I write Torah commentary – a hobby I've kept for over a decade. Two books are
-        available on this site: <a href="reader.html?book=avi_veishi"><em>Avi Ve'Yishi</em></a> (2026) and
-        <a href="reader.html?book=eli_teshukati"><em>Eli Teshukati</em></a> (2020).
-      </p>
-      <p style="margin-top:18px">
-        <strong>Get in touch:</strong>
         <a href="mailto:foglerori@gmail.com">foglerori@gmail.com</a> ·
         <a href="https://www.linkedin.com/in/foglero/">LinkedIn</a> ·
         <a href="resume.html">Full resume</a>
