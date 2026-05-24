@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ori Fogler – Resume</title>
-  <meta name="description" content="Ori Fogler – Senior Algorithms Researcher. Experience at Via Transportation, IAF AI Sector, and Bar-Ilan University. Specialist in route planning, optimization, robotics, and machine learning." />
+  <meta name="description"
+    content="Ori Fogler – Senior Algorithms Researcher. Experience at Via Transportation, IAF AI Sector, and Bar-Ilan University. Specialist in route planning, optimization, robotics, and machine learning." />
   <link rel="canonical" href="https://orifogler.com/resume.html" />
   <meta property="og:type" content="profile" />
   <meta property="og:title" content="Ori Fogler – Senior Algorithms Researcher" />
-  <meta property="og:description" content="Algorithms researcher specializing in routing, optimization, and robotics. Experience at Via Transportation, IAF AI Sector, and Bar-Ilan University." />
+  <meta property="og:description"
+    content="Algorithms researcher specializing in routing, optimization, and robotics. Experience at Via Transportation, IAF AI Sector, and Bar-Ilan University." />
   <meta property="og:url" content="https://orifogler.com/resume.html" />
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231a3a6b'/><text x='32' y='44' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='700' fill='white'>OF</text></svg>" />
@@ -22,7 +25,9 @@
       --paper: #ffffff;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -34,8 +39,14 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
 
     nav.topnav {
       display: flex;
@@ -49,6 +60,7 @@
       top: 0;
       z-index: 10;
     }
+
     nav.topnav a {
       padding: 8px 14px;
       border-radius: 999px;
@@ -57,6 +69,7 @@
       background: #eef2f8;
       font-size: 0.92rem;
     }
+
     nav.topnav .nav-pdf {
       padding: 8px 16px;
       border-radius: 999px;
@@ -72,8 +85,15 @@
       align-items: center;
       gap: 6px;
     }
-    nav.topnav .nav-pdf:hover { filter: brightness(1.12); }
-    nav.topnav .nav-pdf svg { width: 14px; height: 14px; }
+
+    nav.topnav .nav-pdf:hover {
+      filter: brightness(1.12);
+    }
+
+    nav.topnav .nav-pdf svg {
+      width: 14px;
+      height: 14px;
+    }
 
     .page {
       max-width: 820px;
@@ -87,12 +107,13 @@
     header.resume {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-start;
       gap: 24px;
       padding-bottom: 16px;
       border-bottom: 2px solid var(--accent);
       margin-bottom: 26px;
     }
+
     header.resume h1 {
       font-size: 30px;
       margin: 0 0 4px;
@@ -100,24 +121,28 @@
       color: var(--accent);
       font-weight: 700;
     }
+
     header.resume .role {
       color: var(--muted);
       font-size: 15px;
       font-weight: 500;
       letter-spacing: 0.02em;
     }
+
     header.resume .contact {
       text-align: right;
       font-size: 13px;
       color: var(--muted);
       line-height: 2;
     }
+
     header.resume .contact a {
       color: var(--text);
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
+
     header.resume .contact svg {
       width: 14px;
       height: 14px;
@@ -125,7 +150,20 @@
       color: var(--accent);
     }
 
-    section { margin: 22px 0; break-inside: avoid; }
+    header.resume .summary {
+      margin: 10px 0 0;
+      max-width: 56ch;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    section {
+      margin: 22px 0;
+      break-inside: avoid;
+    }
+
     section h2 {
       font-size: 12px;
       text-transform: uppercase;
@@ -137,8 +175,14 @@
       padding-bottom: 4px;
     }
 
-    .item { margin-bottom: 14px; break-inside: avoid; }
-    .item:last-child { margin-bottom: 0; }
+    .item {
+      margin-bottom: 14px;
+      break-inside: avoid;
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+    }
 
     .item-head {
       display: flex;
@@ -147,28 +191,37 @@
       gap: 12px;
       margin-bottom: 2px;
     }
+
     .item-head h3 {
       font-size: 15px;
       margin: 0;
       font-weight: 700;
     }
+
     .item-head .dates {
       font-size: 13px;
       color: var(--muted);
       font-weight: 500;
       flex-shrink: 0;
     }
+
     .item .role-line {
       font-size: 14px;
       color: var(--muted);
       font-weight: 500;
       margin-bottom: 4px;
     }
+
     .item ul {
       margin: 4px 0 0 18px;
       padding: 0;
     }
-    .item li { margin: 2px 0; font-size: 14px; }
+
+    .item li {
+      margin: 2px 0;
+      font-size: 14px;
+    }
+
     .item .small {
       font-size: 13px;
       color: var(--muted);
@@ -181,10 +234,12 @@
       gap: 6px 18px;
       font-size: 14px;
     }
+
     .skills-grid dt {
       font-weight: 700;
       color: var(--text);
     }
+
     .skills-grid dd {
       margin: 0;
       color: var(--muted);
@@ -194,7 +249,11 @@
       margin: 0;
       padding-left: 18px;
     }
-    ul.awards li { font-size: 14px; margin: 3px 0; }
+
+    ul.awards li {
+      font-size: 14px;
+      margin: 3px 0;
+    }
 
     footer {
       text-align: center;
@@ -202,22 +261,63 @@
       color: var(--muted);
       font-size: 0.9rem;
     }
-    footer a { color: var(--accent); }
+
+    footer a {
+      color: var(--accent);
+    }
 
     @media (max-width: 680px) {
-      .page { padding: 32px 24px; margin: 16px; }
-      header.resume { flex-direction: column; align-items: flex-start; }
-      header.resume .contact { text-align: left; white-space: normal; }
-      .item-head { flex-direction: column; gap: 2px; }
-      .item-head .dates { font-size: 12px; }
-      .skills-grid { grid-template-columns: 1fr; gap: 2px; }
-      .skills-grid dt { margin-top: 6px; }
+      .page {
+        padding: 32px 24px;
+        margin: 16px;
+      }
+
+      header.resume {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      header.resume .contact {
+        text-align: left;
+        white-space: normal;
+      }
+
+      .item-head {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .item-head .dates {
+        font-size: 12px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .skills-grid dt {
+        margin-top: 6px;
+      }
     }
 
     @media print {
-      @page { size: A4; margin: 1.2cm; }
-      body { background: #fff; font-size: 10.5pt; line-height: 1.4; }
-      nav.topnav, footer { display: none !important; }
+      @page {
+        size: A4;
+        margin: 1.2cm;
+      }
+
+      body {
+        background: #fff;
+        font-size: 10.5pt;
+        line-height: 1.4;
+      }
+
+      nav.topnav,
+      footer {
+        display: none !important;
+      }
+
       .page {
         max-width: none;
         margin: 0;
@@ -226,22 +326,76 @@
         border-radius: 0;
         background: transparent;
       }
-      header.resume { margin-bottom: 16px; padding-bottom: 10px; }
-      header.resume h1 { font-size: 22pt; }
-      header.resume .role { font-size: 11pt; }
-      header.resume .contact { font-size: 9pt; }
-      section { margin: 12px 0; }
-      section h2 { font-size: 9pt; margin-bottom: 6px; }
-      .item { margin-bottom: 8px; }
-      .item-head h3 { font-size: 10.5pt; }
-      .item-head .dates { font-size: 9pt; }
-      .item .role-line { font-size: 9.5pt; }
-      .item li { font-size: 9.5pt; margin: 1px 0; }
-      a { color: #000; text-decoration: none; }
-      section, .item { page-break-inside: avoid; break-inside: avoid; }
+
+      header.resume {
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+      }
+
+      header.resume h1 {
+        font-size: 22pt;
+      }
+
+      header.resume .role {
+        font-size: 11pt;
+      }
+
+      header.resume .contact {
+        font-size: 9pt;
+      }
+
+      section {
+        margin: 8px 0;
+      }
+
+      section h2 {
+        font-size: 9pt;
+        margin-bottom: 6px;
+      }
+
+      .item {
+        margin-bottom: 8px;
+      }
+
+      .item-head h3 {
+        font-size: 10.5pt;
+      }
+
+      .item-head .dates {
+        font-size: 9pt;
+      }
+
+      .item .role-line {
+        font-size: 9.5pt;
+      }
+
+      .item li {
+        font-size: 9pt;
+        margin: 1px 0;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      header.resume .summary {
+        margin: 6px 0 0;
+        font-size: 9.5pt;
+        max-width: 60ch;
+        font-weight: 500;
+        color: #000;
+      }
+
+      section,
+      .item {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
+
 <body>
   <nav class="topnav" aria-label="Main navigation">
     <a href="index.html">Home</a>
@@ -251,7 +405,12 @@
     <a href="apps/TSPartner.html">Apps</a>
     <a href="resume.html">Resume</a>
     <button class="nav-pdf" onclick="window.print()" aria-label="Download as PDF">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="M6 10l6 6 6-6"/><path d="M4 20h16"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 4v12" />
+        <path d="M6 10l6 6 6-6" />
+        <path d="M4 20h16" />
+      </svg>
       Download PDF
     </button>
   </nav>
@@ -261,18 +420,23 @@
       <div>
         <h1>Ori Fogler</h1>
         <div class="role">Senior Algorithms Researcher</div>
+        <p class="summary">Specializing in large-scale resource allocation and real-time decision systems, with a track
+          record of delivering complex problems from formulation to production.</p>
       </div>
       <div class="contact">
         <a href="mailto:me@orifogler.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 7 9-7"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 7 9-7" />
+          </svg>
           me@orifogler.com
-        </a><br/>
-        <a href="https://orifogler.com/">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 010 18"/><path d="M12 3a14 14 0 000 18"/></svg>
-          orifogler.com
-        </a><br/>
+        </a><br />
         <a href="https://www.linkedin.com/in/foglero/">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM2.5 9h5v12h-5zM9 9h4.8v1.7c.8-1.2 2.3-2 4.2-2 3.3 0 5 2 5 5.3V21h-5v-5.5c0-1.4-.5-2.3-2-2.3s-2 .9-2 2.3V21H9z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM2.5 9h5v12h-5zM9 9h4.8v1.7c.8-1.2 2.3-2 4.2-2 3.3 0 5 2 5 5.3V21h-5v-5.5c0-1.4-.5-2.3-2-2.3s-2 .9-2 2.3V21H9z" />
+          </svg>
           linkedin.com/in/foglero
         </a>
       </div>
@@ -288,8 +452,13 @@
         </div>
         <div class="role-line">Senior Algorithms Researcher</div>
         <ul>
-          <li>Design and optimize real-time and offline route and shift-planning algorithms at large scale.</li>
-          <li>Own core components of routing model design and offline fleet-optimization pipelines.</li>
+          <li>Research and develop large-scale offline optimization algorithms for resource allocation, efficiently
+            assigning thousands of rides and vehicles across multiple product variants.</li>
+          <li>Design and implement core routing constraints (e.g., acceptable detours) for high-performance, real-time
+            decision-making, increasing rides served per vehicle while reducing
+            operational cost.</li>
+          <li>Maintain end-to-end ownership of core algorithmic components, partnering with engineering and product
+            teams from design through production rollout.</li>
         </ul>
       </div>
 
@@ -300,20 +469,12 @@
         </div>
         <div class="role-line">Algorithms Researcher</div>
         <ul>
-          <li>Formulated algorithmic solutions for operational problems using graph theory, optimization, and ML.</li>
-          <li>Built "Waze for aircraft" — multi-objective path finding and TSP on random graphs.</li>
-          <li>Led projects end-to-end, mentored new team members, and owned user relationships.</li>
-        </ul>
-      </div>
-
-      <div class="item">
-        <div class="item-head">
-          <h3>Bar-Ilan University – <a href="https://u.cs.biu.ac.il/~agmon/index.html">SMART Robotics Lab</a></h3>
-          <div class="dates">2022 – 2023</div>
-        </div>
-        <div class="role-line">Researcher</div>
-        <ul>
-          <li>Research: Weight-Constrained Shortest Path with k-Circular Budget-zones.</li>
+          <li>Formulated algorithmic solutions for operational challenges, leveraging
+            discrete optimization and machine learning.</li>
+          <li>Developed a "Waze for aircraft" routing engine, implementing multi-objective pathfinding algorithms and
+            solving Traveling Salesperson Problems (TSP) on random graphs.</li>
+          <li>Led end-to-end project lifecycles, mentored junior team members, and managed direct relationships with
+            operational end-users to align technical specifications with real-world needs.</li>
         </ul>
       </div>
 
@@ -329,8 +490,20 @@
         </div>
         <div class="role-line">Summa cum laude · grade 97</div>
         <ul>
-          <li>Thesis: <a href="https://u.cs.biu.ac.il/~agmon/FoglerIROS22.pdf">Multi-Robot Dynamic Swarm Disablement</a> — published at IROS 2022.</li>
-          <li>Presented at <a href="https://u.cs.biu.ac.il/~agmon/arms2022/program.html">ARMS 2022</a> (Autonomous Robot &amp; Multi-Robot Systems Workshop).</li>
+          <li>Thesis: <a href="https://u.cs.biu.ac.il/~agmon/FoglerIROS22.pdf">Multi-Robot Dynamic Swarm Disablement</a>
+            — published at IROS 2022.</li>
+          <li>Presented at <a href="https://u.cs.biu.ac.il/~agmon/arms2022/program.html">ARMS 2022</a> (Autonomous Robot
+            &amp; Multi-Robot Systems Workshop).</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <h3><a href="https://u.cs.biu.ac.il/~agmon/index.html">SMART Robotics Lab</a></h3>
+          <div class="dates">2022 – 2023</div>
+        </div>
+        <ul>
+          <li>Research: Weight-Constrained Shortest Path with k-Circular Budget-zones.</li>
         </ul>
       </div>
 
@@ -341,7 +514,8 @@
         </div>
         <div class="role-line">Summa cum laude · grade 96.5 · ranked #1 among graduates</div>
         <ul>
-          <li>Project: <a href="https://www.youtube.com/watch?v=arA5WKuZw2M">HumanizingZeroHex</a> — Deep RL (AlphaZero) retrained to play Hex like a human.</li>
+          <li>Project: <a href="https://www.youtube.com/watch?v=arA5WKuZw2M">HumanizingZeroHex</a> — Deep RL (AlphaZero)
+            retrained to play Hex like a human.</li>
         </ul>
       </div>
     </section>
@@ -350,30 +524,35 @@
       <h2>Skills</h2>
       <dl class="skills-grid">
         <dt>Languages</dt>
-        <dd>Python (primary). Also use Rust, Go, Java, SQL, and other common languages.</dd>
+        <dd>Python (primary) and SQL. Contributed to Rust and other common languages.</dd>
         <dt>Tools</dt>
-        <dd>Cursor · AI-assisted coding workflows · Git · Jenkins · Coralogix · Snowflake · Kubernetes</dd>
+        <dd>AI-assisted coding (Cursor, Codex, Claude Code) · Git · Jenkins · Coralogix · Snowflake</dd>
         <dt>Domains</dt>
-        <dd>Optimization &amp; Routing · Artificial Intelligence · Data Science</dd>
+        <dd>Resource Allocation &amp; Routing · Artificial Intelligence · Data Science</dd>
         <dt>Spoken</dt>
         <dd>Hebrew (native) · English (fluent)</dd>
       </dl>
     </section>
 
     <section>
-      <h2>Awards &amp; Recognition</h2>
+      <h2>Achievements &amp; Recognition</h2>
       <ul class="awards">
-        <li>B.Sc. and M.Sc. completed summa cum laude; ranked #1 among B.Sc. graduates.</li>
-        <li>Special certificates for unique contribution to smart systems in the Air Force.</li>
-        <li>Partnered in an IAF- and IDF-award-winning project on multi-objective route planning.</li>
-        <li>Won IBM Hackathon with the app "I'm Fine".</li>
-        <li><a href="https://life-sciences.biu.ac.il/node/10015">Ilanot scholarship</a> (110+ Bagrut, 740+ PET) · Dean's list · CS dept. top-10 scholarship.</li>
+        <li>Graduated B.Sc. and M.Sc. summa cum laude; ranked #1 among B.Sc. graduates.</li>
+        <li>Author of two books and a weekly article on Parashat Hashavua (<a
+            href="https://orifogler.com/blog/">orifogler.com/blog</a>).</li>
+        <li>Recognized with special certificates for unique contribution to smart systems in the Air Force.</li>
+        <li>Contributor to an IAF- and IDF-award-winning project on multi-objective route planning.</li>
+        <li>Winner of the IBM Hackathon with the app <em>I'm Fine</em>.</li>
+        <li><a href="https://life-sciences.biu.ac.il/node/10015">Ilanot scholarship</a> (110+ Bagrut, 740+ PET) · Dean's
+          list · CS department top-10 scholarship.</li>
       </ul>
     </section>
   </main>
 
   <footer>
-    © Ori Fogler · <a href="index.html">Home</a> · <a href="books.html">Books</a> · <a href="blog/privacy-policy.html">Privacy Policy</a>
+    © Ori Fogler · <a href="index.html">Home</a> · <a href="books.html">Books</a> · <a
+      href="blog/privacy-policy.html">Privacy Policy</a>
   </footer>
 </body>
+
 </html>
