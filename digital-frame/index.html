@@ -18,6 +18,7 @@
                 <img class="slide slide-a" id="slide-a" alt="" />
                 <img class="slide slide-b" id="slide-b" alt="" />
                 <div class="drop-overlay" id="drop-overlay" hidden>Drop photos here</div>
+                <div class="processing-state" id="processing-state" hidden>Converting photos…</div>
                 <div class="empty-state" id="empty-state">
                   <p>Drop photos here</p>
                   <p class="hint">Images stay on this device only — nothing is uploaded.</p>
@@ -37,7 +38,14 @@
         </div>
       </div>
     </main>
-    <input type="file" id="file-input" accept="image/*" multiple hidden />
+    <input
+      type="file"
+      id="file-input"
+      accept="image/*,.heic,.heif"
+      multiple
+      hidden
+    />
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="./js/config.js"></script>
     <script src="./js/slideshow.js"></script>
     <script src="./js/photos.js"></script>
