@@ -17,10 +17,16 @@
               <div class="photo-stage" id="photo-stage">
                 <img class="slide slide-a" id="slide-a" alt="" />
                 <img class="slide slide-b" id="slide-b" alt="" />
-                <div class="empty-state" id="empty-state" hidden>
-                  <p>No photos yet.</p>
-                  <p class="hint">Add album links to <code>js/config.js</code>, run <code>resolve_albums.py</code>, then push to GitHub.</p>
+                <div class="drop-overlay" id="drop-overlay" hidden>Drop photos here</div>
+                <div class="empty-state" id="empty-state">
+                  <p>Drop photos here</p>
+                  <p class="hint">Images stay on this device only — nothing is uploaded.</p>
+                  <button type="button" class="btn" id="choose-photos">Choose photos</button>
                 </div>
+              </div>
+              <div class="toolbar" id="toolbar" hidden>
+                <button type="button" class="btn btn-small" id="add-photos" title="Add photos">+</button>
+                <button type="button" class="btn btn-small btn-muted" id="clear-photos" title="Clear all photos">Clear</button>
               </div>
               <div class="clock" id="clock" aria-live="polite">
                 <div class="clock-time" id="clock-time">--:--</div>
@@ -31,8 +37,10 @@
         </div>
       </div>
     </main>
+    <input type="file" id="file-input" accept="image/*" multiple hidden />
     <script src="./js/config.js"></script>
-    <script src="./js/clock.js"></script>
     <script src="./js/slideshow.js"></script>
+    <script src="./js/photos.js"></script>
+    <script src="./js/clock.js"></script>
   </body>
 </html>
