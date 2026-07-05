@@ -112,6 +112,13 @@ body {
   }
 }
 
+.empty-state[hidden],
+.toolbar[hidden],
+.processing-state[hidden],
+.drop-overlay[hidden] {
+  display: none !important;
+}
+
 .empty-state {
   position: absolute;
   inset: 0;
@@ -122,6 +129,18 @@ body {
   text-align: center;
   color: rgba(255, 255, 255, 0.88);
   background: linear-gradient(160deg, #2a2520, #151311);
+  z-index: 5;
+}
+
+.empty-state .status-msg {
+  max-width: 28rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #ffb4a2;
+}
+
+.empty-state .status-msg[hidden] {
+  display: none;
 }
 
 .empty-state .hint {
@@ -148,6 +167,18 @@ body {
   border: 3px dashed rgba(250, 248, 244, 0.55);
   pointer-events: none;
   z-index: 2;
+}
+
+.processing-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  background: rgba(20, 16, 12, 0.78);
+  color: #faf8f4;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  z-index: 4;
 }
 
 .photo-stage.drag-over {

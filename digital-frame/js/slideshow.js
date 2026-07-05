@@ -18,6 +18,7 @@ window.Slideshow = (function createSlideshowModule() {
   let activeSlide = slideA;
   let idleSlide = slideB;
   let timerId = null;
+  let failedUrls = new Set();
 
   function shuffleOrder() {
     order = photos.map((_, index) => index);
@@ -74,23 +75,39 @@ window.Slideshow = (function createSlideshowModule() {
     timerId = null;
   }
 
-  async function showPhoto(index) {
+  async function showPhoto(index, attempt = 0) {
     if (photos.length === 0) {
       stop();
       setUiState(false);
       return;
     }
 
+    if (attempt >= photos.length) {
+      console.warn('All photos failed to load');
+      stop();
+      setUiState(false);
+      slideA.removeAttribute('src');
+      slideB.removeAttribute('src');
+      slideA.classList.remove('visible', 'ken-burns');
+      slideB.classList.remove('visible', 'ken-burns');
+      window.dispatchEvent(new CustomEvent('slideshow-empty'));
+      return;
+    }
+
     const url = photoUrl(index);
+    if (failedUrls.has(url)) {
+      position = nextIndex(index);
+      await showPhoto(position, attempt + 1);
+      return;
+    }
+
     try {
       await preload(url);
     } catch (error) {
       console.warn(error.message);
-      const fallback = nextIndex(index);
-      if (fallback !== index || order.length > 1) {
-        position = fallback;
-        await showPhoto(position);
-      }
+      failedUrls.add(url);
+      position = nextIndex(index);
+      await showPhoto(position, attempt + 1);
       return;
     }
 
@@ -100,16 +117,19 @@ window.Slideshow = (function createSlideshowModule() {
     position = nextIndex(index);
 
     const upcoming = photoUrl(position);
-    preload(upcoming).catch(() => {});
+    if (!failedUrls.has(upcoming)) {
+      preload(upcoming).catch(() => {});
+    }
 
     stop();
     timerId = setTimeout(() => {
-      showPhoto(position);
+      showPhoto(position, 0);
     }, slideDurationMs);
   }
 
   function start(photoUrls) {
     stop();
+    failedUrls = new Set();
     photos = photoUrls.slice();
     if (photos.length === 0) {
       slideA.removeAttribute('src');

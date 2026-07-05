@@ -21,7 +21,8 @@
                 <div class="processing-state" id="processing-state" hidden>Converting photos…</div>
                 <div class="empty-state" id="empty-state">
                   <p>Drop photos here</p>
-                  <p class="hint">Images stay on this device only — nothing is uploaded.</p>
+                  <p class="hint" id="empty-hint">Images stay on this device only — nothing is uploaded.</p>
+                  <p class="status-msg" id="status-msg" hidden></p>
                   <button type="button" class="btn" id="choose-photos">Choose photos</button>
                 </div>
               </div>
@@ -45,7 +46,6 @@
       multiple
       hidden
     />
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="./js/config.js"></script>
     <script src="./js/slideshow.js"></script>
     <script src="./js/photos.js"></script>
