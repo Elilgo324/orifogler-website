@@ -1,21 +1,11 @@
 window.FrameMode = (function createFrameMode() {
-  const STORAGE_KEY = 'digital-frame-user-mode';
   const timeZone = CONFIG.timeZone || 'Asia/Jerusalem';
   const nightStartHour = CONFIG.nightStartHour ?? 0;
   const dayStartHour = CONFIG.dayStartHour ?? 7;
 
   const toggleButton = document.getElementById('mode-toggle');
   let scheduleTimerId = null;
-
-  function getUserMode() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored === 'night' ? 'night' : 'day';
-  }
-
-  function setUserMode(mode) {
-    localStorage.setItem(STORAGE_KEY, mode === 'night' ? 'night' : 'day');
-    apply();
-  }
+  let manualOverride = null;
 
   function getJerusalemHour(date = new Date()) {
     const hourText = new Intl.DateTimeFormat('en-GB', {
@@ -31,11 +21,27 @@ window.FrameMode = (function createFrameMode() {
     return hour >= nightStartHour && hour < dayStartHour;
   }
 
+  function hasManualOverride() {
+    return manualOverride !== null;
+  }
+
   function isNight() {
-    if (getUserMode() === 'night') {
+    if (manualOverride === 'night') {
       return true;
     }
+    if (manualOverride === 'day') {
+      return false;
+    }
     return isScheduledNight();
+  }
+
+  function getUserMode() {
+    return isNight() ? 'night' : 'day';
+  }
+
+  function setUserMode(mode) {
+    manualOverride = mode === 'night' ? 'night' : 'day';
+    apply();
   }
 
   function updateToggleLabel(showingNight) {
@@ -69,7 +75,7 @@ window.FrameMode = (function createFrameMode() {
   function scheduleNextTransition() {
     clearScheduleTimer();
 
-    if (getUserMode() !== 'day') {
+    if (manualOverride !== null) {
       return;
     }
 
@@ -95,11 +101,8 @@ window.FrameMode = (function createFrameMode() {
 
   toggleButton.addEventListener('click', (event) => {
     event.stopPropagation();
-    if (isNight()) {
-      setUserMode('day');
-      return;
-    }
-    setUserMode('night');
+    manualOverride = isNight() ? 'day' : 'night';
+    apply();
   });
 
   apply();
@@ -109,6 +112,7 @@ window.FrameMode = (function createFrameMode() {
     isNight,
     setUserMode,
     getUserMode,
+    hasManualOverride,
     isScheduledNight,
     getJerusalemHour,
   };
