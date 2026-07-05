@@ -6,6 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Digital Frame</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./css/frame.css" />
   </head>
   <body>
@@ -23,11 +29,22 @@
                   <p>Drop photos here</p>
                   <p class="hint" id="empty-hint">Images stay on this device only — nothing is uploaded.</p>
                   <p class="status-msg" id="status-msg" hidden></p>
-                  <button type="button" class="btn" id="choose-photos">Choose photos</button>
+                  <label for="file-input" class="btn" id="choose-photos">Choose photos</label>
                 </div>
               </div>
+              <div class="screen-controls">
+                <button type="button" class="btn btn-small btn-muted" id="mode-toggle" title="Switch to night mode">
+                  Night mode
+                </button>
+                <button type="button" class="btn btn-small btn-muted" id="enter-fullscreen" title="Full screen">
+                  Full screen
+                </button>
+                <button type="button" class="btn btn-small btn-muted" id="exit-fullscreen" title="Exit full screen" hidden>
+                  Exit
+                </button>
+              </div>
               <div class="toolbar" id="toolbar" hidden>
-                <button type="button" class="btn btn-small" id="add-photos" title="Add photos">+</button>
+                <label for="file-input" class="btn btn-small" id="add-photos" title="Add photos">+</label>
                 <button type="button" class="btn btn-small btn-muted" id="clear-photos" title="Clear all photos">Clear</button>
               </div>
               <div class="clock" id="clock" aria-live="polite">
@@ -42,13 +59,15 @@
     <input
       type="file"
       id="file-input"
+      class="file-input-offscreen"
       accept="image/*,.heic,.heif"
       multiple
-      hidden
     />
     <script src="./js/config.js"></script>
     <script src="./js/slideshow.js"></script>
+    <script src="./js/mode.js"></script>
     <script src="./js/photos.js"></script>
+    <script src="./js/fullscreen.js"></script>
     <script src="./js/clock.js"></script>
   </body>
 </html>
