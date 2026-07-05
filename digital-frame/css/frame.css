@@ -1,0 +1,196 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --wall: #1a1714;
+  --mat: #f4f0e8;
+  --frame-outer: #5c3d2e;
+  --frame-mid: #8b5a3c;
+  --frame-inner: #3d2817;
+  --clock-bg: rgba(20, 16, 12, 0.55);
+  --clock-text: #faf8f4;
+  --clock-muted: rgba(250, 248, 244, 0.82);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--wall);
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+
+.wall {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.04), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(255, 255, 255, 0.03), transparent 35%),
+    var(--wall);
+}
+
+.frame {
+  width: min(96vw, 1400px);
+  aspect-ratio: 4 / 3;
+}
+
+.frame-outer {
+  width: 100%;
+  height: 100%;
+  padding: 1.1rem;
+  border-radius: 0.35rem;
+  background:
+    linear-gradient(145deg, var(--frame-mid), var(--frame-outer) 45%, var(--frame-inner));
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.frame-inner {
+  width: 100%;
+  height: 100%;
+  padding: 0.55rem;
+  border-radius: 0.2rem;
+  background: linear-gradient(180deg, #2a1a10, var(--frame-inner));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.mat {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1rem, 3vw, 2.2rem);
+  background: var(--mat);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+    inset 0 0 40px rgba(0, 0, 0, 0.04);
+}
+
+.photo-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111;
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--transition-ms, 1500ms) ease-in-out;
+  will-change: transform, opacity;
+}
+
+.slide.visible {
+  opacity: 1;
+}
+
+.slide.ken-burns {
+  animation: kenBurns var(--slide-duration, 7000ms) ease-in-out forwards;
+}
+
+@keyframes kenBurns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.08) translate(-1.5%, -1%);
+  }
+}
+
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.88);
+  background: linear-gradient(160deg, #2a2520, #151311);
+}
+
+.empty-state .hint {
+  max-width: 28rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.empty-state code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.clock {
+  position: absolute;
+  right: clamp(1.4rem, 4vw, 2.6rem);
+  bottom: clamp(1.4rem, 4vw, 2.6rem);
+  padding: 0.85rem 1.1rem 0.75rem;
+  border-radius: 0.35rem;
+  background: var(--clock-bg);
+  color: var(--clock-text);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  user-select: none;
+}
+
+.clock-time {
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-date {
+  margin-top: 0.35rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: var(--clock-muted);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .wall {
+    padding: 0.75rem;
+  }
+
+  .frame-outer {
+    padding: 0.7rem;
+  }
+
+  .mat {
+    padding: 0.85rem;
+  }
+
+  .clock {
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.65rem 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    transition-duration: 0.01ms;
+  }
+
+  .slide.ken-burns {
+    animation: none;
+  }
+}
