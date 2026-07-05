@@ -1,40 +1,30 @@
-(function initSlideshow() {
-  const photos = Array.isArray(CONFIG.photos) ? CONFIG.photos.filter(Boolean) : [];
-  const slideA = document.getElementById('slide-a');
-  const slideB = document.getElementById('slide-b');
-  const emptyState = document.getElementById('empty-state');
-  const stage = document.getElementById('photo-stage');
-
-  const slideDurationMs = CONFIG.slideDurationMs || 7000;
+window.Slideshow = (function createSlideshowModule() {
+  const slideDurationMs = CONFIG.slideDurationMs || 60000;
   const transitionMs = CONFIG.transitionMs || 1500;
   const shuffle = CONFIG.shuffle !== false;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const slideA = document.getElementById('slide-a');
+  const slideB = document.getElementById('slide-b');
+  const emptyState = document.getElementById('empty-state');
+  const toolbar = document.getElementById('toolbar');
+
   document.documentElement.style.setProperty('--slide-duration', `${slideDurationMs}ms`);
   document.documentElement.style.setProperty('--transition-ms', `${transitionMs}ms`);
 
-  if (photos.length === 0) {
-    emptyState.hidden = false;
-    return;
-  }
-
-  emptyState.hidden = true;
-
-  let order = photos.map((url, index) => index);
+  let photos = [];
+  let order = [];
   let position = 0;
   let activeSlide = slideA;
   let idleSlide = slideB;
   let timerId = null;
 
   function shuffleOrder() {
+    order = photos.map((_, index) => index);
     for (let i = order.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
     }
-  }
-
-  if (shuffle) {
-    shuffleOrder();
   }
 
   function photoUrl(index) {
@@ -45,6 +35,7 @@
     activeSlide.classList.remove('visible', 'ken-burns');
     idleSlide.classList.add('visible');
     if (!reducedMotion) {
+      void idleSlide.offsetWidth;
       idleSlide.classList.add('ken-burns');
     }
 
@@ -73,7 +64,23 @@
     return 0;
   }
 
+  function setUiState(hasPhotos) {
+    emptyState.hidden = hasPhotos;
+    toolbar.hidden = !hasPhotos;
+  }
+
+  function stop() {
+    clearTimeout(timerId);
+    timerId = null;
+  }
+
   async function showPhoto(index) {
+    if (photos.length === 0) {
+      stop();
+      setUiState(false);
+      return;
+    }
+
     const url = photoUrl(index);
     try {
       await preload(url);
@@ -88,17 +95,47 @@
     }
 
     idleSlide.src = url;
-    idleSlide.alt = 'Album photo';
+    idleSlide.alt = 'Photo';
     swapSlides();
     position = nextIndex(index);
 
     const upcoming = photoUrl(position);
     preload(upcoming).catch(() => {});
 
-    clearTimeout(timerId);
+    stop();
     timerId = setTimeout(() => {
       showPhoto(position);
     }, slideDurationMs);
+  }
+
+  function start(photoUrls) {
+    stop();
+    photos = photoUrls.slice();
+    if (photos.length === 0) {
+      slideA.removeAttribute('src');
+      slideB.removeAttribute('src');
+      slideA.classList.remove('visible', 'ken-burns');
+      slideB.classList.remove('visible', 'ken-burns');
+      setUiState(false);
+      return;
+    }
+
+    setUiState(true);
+    if (shuffle) {
+      shuffleOrder();
+    } else {
+      order = photos.map((_, index) => index);
+    }
+    position = 0;
+    showPhoto(0);
+  }
+
+  function skip() {
+    if (photos.length === 0) {
+      return;
+    }
+    stop();
+    showPhoto(position);
   }
 
   slideA.addEventListener('error', () => {
@@ -109,10 +146,12 @@
     console.warn('Idle slide failed to render');
   });
 
-  stage.addEventListener('click', () => {
-    clearTimeout(timerId);
-    showPhoto(position);
+  document.getElementById('photo-stage').addEventListener('click', (event) => {
+    if (event.target.closest('.btn')) {
+      return;
+    }
+    skip();
   });
 
-  showPhoto(0);
+  return { start, skip, stop };
 })();
