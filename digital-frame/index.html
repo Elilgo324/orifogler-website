@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Digital Frame</title>
+    <link rel="stylesheet" href="./css/frame.css" />
+  </head>
+  <body>
+    <main class="wall">
+      <div class="frame" aria-label="Digital photo frame">
+        <div class="frame-outer">
+          <div class="frame-inner">
+            <div class="mat">
+              <div class="photo-stage" id="photo-stage">
+                <img class="slide slide-a" id="slide-a" alt="" />
+                <img class="slide slide-b" id="slide-b" alt="" />
+                <div class="empty-state" id="empty-state" hidden>
+                  <p>No photos yet.</p>
+                  <p class="hint">Add album links to <code>js/config.js</code>, run <code>resolve_albums.py</code>, then push to GitHub.</p>
+                </div>
+              </div>
+              <div class="clock" id="clock" aria-live="polite">
+                <div class="clock-time" id="clock-time">--:--</div>
+                <div class="clock-date" id="clock-date">Loading…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="./js/config.js"></script>
+    <script src="./js/clock.js"></script>
+    <script src="./js/slideshow.js"></script>
+  </body>
+</html>
