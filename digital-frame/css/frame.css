@@ -115,7 +115,8 @@ body {
 .empty-state[hidden],
 .toolbar[hidden],
 .processing-state[hidden],
-.drop-overlay[hidden] {
+.drop-overlay[hidden],
+.screen-controls [hidden] {
   display: none !important;
 }
 
@@ -219,6 +220,19 @@ body {
   background: rgba(20, 16, 12, 0.65);
 }
 
+.file-input-offscreen {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+label.btn {
+  display: inline-block;
+  cursor: pointer;
+}
+
 .toolbar {
   position: absolute;
   top: clamp(1.4rem, 4vw, 2.6rem);
@@ -228,20 +242,69 @@ body {
   z-index: 3;
 }
 
+.screen-controls {
+  position: absolute;
+  top: clamp(1.4rem, 4vw, 2.6rem);
+  right: clamp(1.4rem, 4vw, 2.6rem);
+  display: flex;
+  gap: 0.45rem;
+  z-index: 6;
+}
+
+.screen-controls .btn,
 .toolbar .btn {
   opacity: 0.35;
   transition: opacity 0.2s ease;
 }
 
+.screen-controls:hover .btn,
+.screen-controls:focus-within .btn,
 .toolbar:hover .btn,
 .toolbar:focus-within .btn {
   opacity: 1;
 }
 
 @media (hover: none) {
+  .screen-controls .btn,
   .toolbar .btn {
     opacity: 0.7;
   }
+}
+
+body.fullscreen-active,
+html:fullscreen,
+html:-webkit-full-screen {
+  overflow: hidden;
+}
+
+body.fullscreen-active .wall,
+html:fullscreen .wall,
+html:-webkit-full-screen .wall {
+  min-height: 100dvh;
+  height: 100dvh;
+  padding: 0;
+}
+
+body.fullscreen-active .frame,
+html:fullscreen .frame,
+html:-webkit-full-screen .frame {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  aspect-ratio: auto;
+}
+
+body.fullscreen-active .frame-outer,
+html:fullscreen .frame-outer,
+html:-webkit-full-screen .frame-outer {
+  padding: 0.45rem;
+  border-radius: 0;
+}
+
+body.fullscreen-active .mat,
+html:fullscreen .mat,
+html:-webkit-full-screen .mat {
+  padding: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 .clock {
@@ -291,6 +354,11 @@ body {
     bottom: 1rem;
     padding: 0.65rem 0.85rem;
   }
+
+  .screen-controls {
+    top: 1rem;
+    right: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -301,4 +369,88 @@ body {
   .slide.ken-burns {
     animation: none;
   }
+}
+
+body.night-mode {
+  background: #000;
+}
+
+body.night-mode .wall {
+  min-height: 100dvh;
+  height: 100dvh;
+  padding: 0;
+  background: #000;
+}
+
+body.night-mode .frame {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  aspect-ratio: auto;
+}
+
+body.night-mode .frame-outer,
+body.night-mode .frame-inner {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+body.night-mode .mat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.night-mode .photo-stage,
+body.night-mode .toolbar,
+body.night-mode .empty-state,
+body.night-mode .drop-overlay,
+body.night-mode .processing-state {
+  display: none !important;
+}
+
+body.night-mode .clock {
+  position: static;
+  right: auto;
+  bottom: auto;
+  pointer-events: none;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  text-align: center;
+  padding: 0;
+}
+
+body.night-mode .clock-time {
+  font-family: 'Share Tech Mono', ui-monospace, 'Courier New', monospace;
+  font-size: clamp(4.5rem, 24vw, 13rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #ff2b2b;
+  text-shadow:
+    0 0 6px rgba(255, 50, 50, 1),
+    0 0 18px rgba(255, 40, 40, 0.85),
+    0 0 40px rgba(255, 30, 30, 0.45),
+    0 0 80px rgba(255, 20, 20, 0.2);
+}
+
+body.night-mode .clock-date {
+  margin-top: 1rem;
+  font-family: 'Share Tech Mono', ui-monospace, 'Courier New', monospace;
+  font-size: clamp(0.9rem, 2.8vw, 1.25rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 90, 70, 0.72);
+  text-shadow: 0 0 10px rgba(255, 60, 50, 0.35);
+}
+
+body.night-mode .screen-controls {
+  top: 1rem;
+  right: 1rem;
 }

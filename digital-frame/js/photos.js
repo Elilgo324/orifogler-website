@@ -12,8 +12,6 @@
   const processingState = document.getElementById('processing-state');
   const statusMsg = document.getElementById('status-msg');
   const fileInput = document.getElementById('file-input');
-  const chooseButton = document.getElementById('choose-photos');
-  const addButton = document.getElementById('add-photos');
   const clearButton = document.getElementById('clear-photos');
 
   const objectUrls = new Map();
@@ -337,6 +335,7 @@
     const records = await getAllPhotos(db);
     const urls = await recordsToUrls(records);
     Slideshow.start(urls);
+    FrameMode.apply();
     return { records, urls };
   }
 
@@ -407,6 +406,7 @@
 
     const urls = await recordsToUrls(records);
     Slideshow.start(urls);
+    FrameMode.apply();
 
     if (records.length > 0 && urls.length === 0) {
       showStatus('Saved photos could not be loaded. Tap Clear and add them again.');
@@ -423,10 +423,7 @@
     revokeAllUrls();
     showStatus('');
     Slideshow.start([]);
-  }
-
-  function openFilePicker() {
-    fileInput.click();
+    FrameMode.apply();
   }
 
   function showDropOverlay() {
@@ -466,16 +463,6 @@
     fileInput.value = '';
   });
 
-  chooseButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-    openFilePicker();
-  });
-
-  addButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-    openFilePicker();
-  });
-
   clearButton.addEventListener('click', (event) => {
     event.stopPropagation();
     clearPhotos();
@@ -489,5 +476,6 @@
     console.error('Failed to load stored photos', error);
     showStatus('Could not load saved photos on this device.');
     Slideshow.start([]);
+    FrameMode.apply();
   });
 })();

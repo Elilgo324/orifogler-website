@@ -4,4 +4,7 @@ const CONFIG = {
   shuffle: true,
   showSeconds: false,
   locale: 'en-GB',
+  timeZone: 'Asia/Jerusalem',
+  nightStartHour: 0,
+  dayStartHour: 7,
 };

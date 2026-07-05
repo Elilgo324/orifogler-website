@@ -1,5 +1,5 @@
 (function initClock() {
-  const timeZone = 'Asia/Jerusalem';
+  const timeZone = CONFIG.timeZone || 'Asia/Jerusalem';
   const locale = CONFIG.locale || 'en-GB';
   const showSeconds = Boolean(CONFIG.showSeconds);
 

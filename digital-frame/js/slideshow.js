@@ -19,6 +19,7 @@ window.Slideshow = (function createSlideshowModule() {
   let idleSlide = slideB;
   let timerId = null;
   let failedUrls = new Set();
+  let paused = false;
 
   function shuffleOrder() {
     order = photos.map((_, index) => index);
@@ -75,6 +76,20 @@ window.Slideshow = (function createSlideshowModule() {
     timerId = null;
   }
 
+  function pause() {
+    paused = true;
+    stop();
+  }
+
+  function resume() {
+    paused = false;
+    if (photos.length === 0) {
+      return;
+    }
+    stop();
+    showPhoto(position, 0);
+  }
+
   async function showPhoto(index, attempt = 0) {
     if (photos.length === 0) {
       stop();
@@ -111,6 +126,10 @@ window.Slideshow = (function createSlideshowModule() {
       return;
     }
 
+    if (paused) {
+      return;
+    }
+
     idleSlide.src = url;
     idleSlide.alt = 'Photo';
     swapSlides();
@@ -122,6 +141,9 @@ window.Slideshow = (function createSlideshowModule() {
     }
 
     stop();
+    if (paused) {
+      return;
+    }
     timerId = setTimeout(() => {
       showPhoto(position, 0);
     }, slideDurationMs);
@@ -129,6 +151,7 @@ window.Slideshow = (function createSlideshowModule() {
 
   function start(photoUrls) {
     stop();
+    paused = false;
     failedUrls = new Set();
     photos = photoUrls.slice();
     if (photos.length === 0) {
@@ -173,5 +196,5 @@ window.Slideshow = (function createSlideshowModule() {
     skip();
   });
 
-  return { start, skip, stop };
+  return { start, skip, stop, pause, resume };
 })();
