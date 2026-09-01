@@ -317,7 +317,7 @@
 
     .section {
       position: relative;
-      padding: clamp(76px, 10vw, 140px) clamp(20px, 5vw, 72px);
+      padding: clamp(64px, 8vw, 110px) clamp(20px, 5vw, 72px);
     }
 
     .section-inner {
@@ -569,39 +569,6 @@
       clip: rect(1px, 1px, 1px, 1px) !important;
     }
 
-    .keepsake {
-      display: grid;
-      grid-template-columns: minmax(300px, 0.92fr) minmax(300px, 1.08fr);
-      gap: clamp(36px, 7vw, 90px);
-      align-items: center;
-    }
-
-    .keepsake-frame {
-      position: relative;
-      max-width: 540px;
-      margin-inline: auto;
-      padding: 14px;
-      background: var(--paper);
-      box-shadow: var(--shadow);
-      transform: rotate(-1.2deg);
-    }
-
-    .keepsake-frame::before {
-      content: "";
-      position: absolute;
-      inset: -12px 20px 16px -12px;
-      z-index: -1;
-      border: 1px solid rgba(197, 162, 111, 0.45);
-    }
-
-    .keepsake-copy blockquote {
-      margin: 26px 0 0;
-      color: var(--bronze-deep);
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 3.2vw, 2.5rem);
-      line-height: 1.45;
-    }
-
     footer {
       padding: 54px 20px;
       background: #332a22;
@@ -647,8 +614,7 @@
         padding-block: 68px;
       }
 
-      .venue-grid,
-      .keepsake {
+      .venue-grid {
         grid-template-columns: 1fr;
       }
 
@@ -673,34 +639,122 @@
       }
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: 760px) {
       body {
         font-size: 17px;
       }
 
+      .hero {
+        height: 100svh;
+        min-height: 100svh;
+        grid-template-rows: 53svh 47svh;
+        overflow: hidden;
+      }
+
       .hero-card {
-        padding: 50px 20px 58px;
+        height: 47svh;
+        min-height: 0;
+        padding: 14px 20px 18px;
+      }
+
+      .hero-card::before,
+      .hero-card::after {
+        width: 13rem;
+        height: 18rem;
+      }
+
+      .bsd {
+        margin-bottom: 3px;
+        font-size: 0.7rem;
+      }
+
+      .eyebrow {
+        display: none;
       }
 
       h1 {
-        font-size: clamp(4.7rem, 27vw, 6.5rem);
+        font-size: clamp(3rem, 15vw, 4.2rem);
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      h1 .ampersand {
+        display: inline;
+        margin: 0 0.06em;
+        font-size: 0.46em;
+        line-height: inherit;
+      }
+
+      .hero-lead {
+        margin: 6px auto 7px;
+        font-size: 0.93rem;
+        line-height: 1.22;
+      }
+
+      .date-lockup {
+        padding: 7px 0;
+      }
+
+      .date-lockup strong {
+        font-size: 1.45rem;
+      }
+
+      .date-lockup span {
+        font-size: 0.76rem;
+      }
+
+      .hero-location {
+        margin: 7px 0 9px;
+        font-size: 0.84rem;
+        line-height: 1.22;
+      }
+
+      .hero-location strong {
+        font-size: 1rem;
+      }
+
+      .hero-card .primary-link {
+        min-height: 40px;
+        padding: 7px 18px;
+        font-size: 0.84rem;
       }
 
       .hero-photo {
-        min-height: 72svh;
+        height: 53svh;
+        min-height: 0;
+        order: 0;
       }
 
       .hero-photo img {
-        object-position: 50% 38%;
+        object-position: 50% 44%;
       }
 
       .photo-caption {
         inset-inline: 20px;
-        bottom: 20px;
+        bottom: 12px;
       }
 
       .countdown {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-top: 30px;
+      }
+
+      .countdown-unit {
+        padding: 16px 2px 14px;
+      }
+
+      .countdown-number {
+        font-size: clamp(1.85rem, 10vw, 2.7rem);
+      }
+
+      .countdown-label {
+        margin-top: 5px;
+        font-size: 0.68rem;
+      }
+
+      .section {
+        padding-block: 54px;
       }
 
       .venue-actions {
@@ -718,10 +772,6 @@
 
       .rsvp-card {
         padding-inline: 22px;
-      }
-
-      .keepsake-frame {
-        transform: none;
       }
     }
 
@@ -876,20 +926,6 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="keepsake-title">
-      <div class="section-inner keepsake">
-        <div class="keepsake-frame">
-          <img src="assets/efi-shira-save-the-date.jpg" alt="הזמנת Save the Date של אפי ושירה ל-25 בנובמבר 2026" loading="lazy" />
-        </div>
-
-        <div class="keepsake-copy">
-          <p class="section-kicker">מחכים לכם</p>
-          <h2 class="section-title" id="keepsake-title">להתחלה החדשה שלנו</h2>
-          <p class="section-intro">השמחה שלנו תהיה שלמה כשתהיו שם איתנו.</p>
-          <blockquote>״שׂוֹשׂ אָשִׂישׂ בַּה׳, תָּגֵל נַפְשִׁי בֵּאלֹהַי״</blockquote>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer>
