@@ -262,14 +262,75 @@
     }
 
     .hero-location {
-      margin: 24px 0 32px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      width: min(100%, 430px);
+      margin: 22px auto 18px;
+      padding: 11px 13px;
+      border: 1px solid rgba(197, 162, 111, 0.42);
+      border-radius: 16px;
+      background: rgba(255, 253, 248, 0.72);
+      color: inherit;
+      text-align: right;
+      text-decoration: none;
+      box-shadow: 0 9px 24px rgba(111, 75, 38, 0.06);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .hero-location:hover,
+    .hero-location:focus-visible {
+      border-color: var(--gold);
+      box-shadow: 0 12px 28px rgba(111, 75, 38, 0.12);
+      transform: translateY(-2px);
     }
 
     .hero-location strong {
       display: block;
       color: var(--bronze-deep);
       font-family: var(--serif);
-      font-size: 1.3rem;
+      font-size: 1.12rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .location-pin {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(135, 144, 120, 0.13);
+      color: var(--sage-deep);
+    }
+
+    .location-pin svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .location-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .location-copy > span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .location-action {
+      color: var(--sage-deep);
+      direction: ltr;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
 
     .primary-link {
@@ -365,7 +426,7 @@
       grid-template-columns: repeat(4, minmax(100px, 1fr));
       gap: clamp(10px, 2vw, 22px);
       width: min(790px, 100%);
-      margin: 32px auto 0;
+      margin: 0 auto;
     }
 
     .countdown-unit {
@@ -394,21 +455,26 @@
       letter-spacing: 0.08em;
     }
 
-    .venue-grid {
-      width: min(720px, 100%);
-      text-align: center;
+    .countdown-caption {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin: 28px 0 0;
+      color: var(--gold-pale);
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 2.8vw, 2rem);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      line-height: 1;
     }
 
-    .venue-copy {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .venue-actions {
-      display: flex;
-      justify-content: center;
-      margin-top: 28px;
+    .countdown-caption::before,
+    .countdown-caption::after {
+      content: "";
+      width: clamp(30px, 6vw, 68px);
+      height: 1px;
+      background: rgba(231, 216, 189, 0.52);
     }
 
     .rsvp-section {
@@ -556,17 +622,6 @@
         padding-block: 68px;
       }
 
-      .venue-copy {
-        text-align: center;
-      }
-
-      .venue-copy .section-intro {
-        margin-inline: auto;
-      }
-
-      .venue-actions {
-        justify-content: center;
-      }
     }
 
     @media (max-width: 760px) {
@@ -636,13 +691,29 @@
       }
 
       .hero-location {
-        margin: 7px 0 9px;
-        font-size: 0.84rem;
-        line-height: 1.22;
+        gap: 8px;
+        margin: 6px auto 7px;
+        padding: 6px 8px;
+        border-radius: 12px;
       }
 
       .hero-location strong {
-        font-size: 1rem;
+        font-size: 0.86rem;
+      }
+
+      .location-pin {
+        width: 30px;
+        height: 30px;
+      }
+
+      .location-pin svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .location-copy > span,
+      .location-action {
+        font-size: 0.64rem;
       }
 
       .hero-card .primary-link {
@@ -669,7 +740,6 @@
       .countdown {
         grid-template-columns: repeat(4, 1fr);
         gap: 6px;
-        margin-top: 30px;
       }
 
       .countdown-unit {
@@ -685,12 +755,14 @@
         font-size: 0.68rem;
       }
 
-      .section {
-        padding-block: 54px;
+      .countdown-caption {
+        gap: 10px;
+        margin-top: 22px;
+        font-size: 1.25rem;
       }
 
-      .venue-actions {
-        display: grid;
+      .section {
+        padding-block: 54px;
       }
 
       .rsvp-form {
@@ -746,10 +818,19 @@
           <span>יום רביעי · ט״ו בכסלו תשפ״ז</span>
         </div>
 
-        <p class="hero-location">
-          <strong>אולמי דימול</strong>
-          דרך זאב ז׳בוטינסקי 1, רמת גן
-        </p>
+        <a class="hero-location" href="https://www.waze.com/ul?q=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F&amp;navigate=yes" target="_blank" rel="noopener" aria-label="ניווט ב-Waze לאולמי דימול">
+          <span class="location-pin" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+          </span>
+          <span class="location-copy">
+            <strong>אולמי דימול</strong>
+            <span>דרך זאב ז׳בוטינסקי 1, רמת גן</span>
+          </span>
+          <span class="location-action">Waze ↗</span>
+        </a>
         <a class="primary-link" href="#rsvp">לאישור הגעה <span aria-hidden="true">↓</span></a>
       </div>
     </div>
@@ -758,8 +839,6 @@
   <main id="main">
     <section class="section countdown-section" aria-labelledby="countdown-title">
       <div class="section-inner">
-        <h2 class="section-title" id="countdown-title">לחופה</h2>
-
         <div class="countdown" id="countdown" aria-live="polite">
           <div class="countdown-unit">
             <span class="countdown-number" id="days">—</span>
@@ -778,19 +857,7 @@
             <span class="countdown-label">שניות</span>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="venue-title">
-      <div class="section-inner venue-grid">
-        <div class="venue-copy">
-          <p class="section-kicker">מיקום</p>
-          <h2 class="section-title" id="venue-title">אולמי דימול</h2>
-          <p class="section-intro">דרך זאב ז׳בוטינסקי 1, רמת גן</p>
-          <div class="venue-actions">
-            <a class="primary-link" href="https://www.waze.com/ul?q=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F&amp;navigate=yes" target="_blank" rel="noopener">ניווט ב-Waze</a>
-          </div>
-        </div>
+        <h2 class="countdown-caption" id="countdown-title">לחופה</h2>
       </div>
     </section>
 
