@@ -5,9 +5,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f4eee4" />
-  <title>אפי ושירה מתחתנים | 25.11.2026</title>
-  <meta name="description" content="הזמנה לחתונה של אפי ושירה — יום רביעי, 25 בנובמבר 2026, אולמי דימול ברמת גן" />
-  <meta property="og:title" content="אפי ושירה מתחתנים" />
+  <title>אפרים ושירה מתחתנים | 25.11.2026</title>
+  <meta name="description" content="הזמנה לחתונה של אפרים ושירה — יום רביעי, 25 בנובמבר 2026, אולמי דימול ברמת גן" />
+  <meta property="og:title" content="אפרים ושירה מתחתנים" />
   <meta property="og:description" content="25.11.2026 · אולמי דימול, רמת גן" />
   <meta property="og:image" content="https://orifogler.com/invitations/assets/efi-shira-save-the-date.jpg" />
   <meta property="og:type" content="website" />
@@ -202,26 +202,6 @@
       letter-spacing: 0.08em;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 22px;
-      color: var(--sage-deep);
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before,
-    .eyebrow::after {
-      content: "";
-      width: 36px;
-      height: 1px;
-      background: var(--gold);
-    }
-
     h1 {
       margin: 0;
       font-family: var(--serif);
@@ -242,12 +222,21 @@
       line-height: 0.7;
     }
 
-    .hero-lead {
-      margin: 34px auto 26px;
+    .hero-verse {
+      margin: 30px auto 8px;
+      color: var(--bronze-deep);
       font-family: var(--serif);
-      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      font-size: clamp(1.35rem, 2.3vw, 1.8rem);
       font-weight: 500;
-      line-height: 1.55;
+      line-height: 1.35;
+    }
+
+    .hero-lead {
+      margin: 0 auto 24px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 1.45;
     }
 
     .date-lockup {
@@ -283,8 +272,7 @@
       font-size: 1.3rem;
     }
 
-    .primary-link,
-    .secondary-link {
+    .primary-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -303,14 +291,7 @@
       box-shadow: 0 10px 26px rgba(111, 75, 38, 0.2);
     }
 
-    .secondary-link {
-      border: 1px solid var(--line);
-      background: rgba(255, 253, 248, 0.72);
-      color: var(--bronze-deep);
-    }
-
     .primary-link:hover,
-    .secondary-link:hover,
     button:hover {
       transform: translateY(-2px);
     }
@@ -384,7 +365,7 @@
       grid-template-columns: repeat(4, minmax(100px, 1fr));
       gap: clamp(10px, 2vw, 22px);
       width: min(790px, 100%);
-      margin: 48px auto 0;
+      margin: 32px auto 0;
     }
 
     .countdown-unit {
@@ -414,10 +395,8 @@
     }
 
     .venue-grid {
-      display: grid;
-      grid-template-columns: minmax(300px, 0.78fr) minmax(420px, 1.22fr);
-      gap: clamp(28px, 5vw, 72px);
-      align-items: stretch;
+      width: min(720px, 100%);
+      text-align: center;
     }
 
     .venue-copy {
@@ -426,47 +405,10 @@
       justify-content: center;
     }
 
-    .address-card {
-      margin-top: 34px;
-      padding: 26px;
-      border: 1px solid var(--line);
-      background: rgba(255, 253, 248, 0.7);
-      box-shadow: 0 16px 50px rgba(77, 58, 37, 0.07);
-    }
-
-    .address-card strong {
-      display: block;
-      color: var(--bronze-deep);
-      font-family: var(--serif);
-      font-size: 1.4rem;
-    }
-
-    .address-card p {
-      margin: 4px 0 20px;
-      color: var(--muted);
-    }
-
     .venue-actions {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .map-frame {
-      min-height: 520px;
-      border: 10px solid var(--paper);
-      box-shadow: var(--shadow);
-      background: var(--paper-soft);
-      overflow: hidden;
-    }
-
-    .map-frame iframe {
-      width: 100%;
-      height: 100%;
-      min-height: 500px;
-      display: block;
-      border: 0;
-      filter: sepia(0.08) saturate(0.82) contrast(0.96);
+      justify-content: center;
+      margin-top: 28px;
     }
 
     .rsvp-section {
@@ -614,10 +556,6 @@
         padding-block: 68px;
       }
 
-      .venue-grid {
-        grid-template-columns: 1fr;
-      }
-
       .venue-copy {
         text-align: center;
       }
@@ -626,16 +564,8 @@
         margin-inline: auto;
       }
 
-      .address-card {
-        text-align: center;
-      }
-
       .venue-actions {
         justify-content: center;
-      }
-
-      .map-frame {
-        min-height: 450px;
       }
     }
 
@@ -668,12 +598,8 @@
         font-size: 0.7rem;
       }
 
-      .eyebrow {
-        display: none;
-      }
-
       h1 {
-        font-size: clamp(3rem, 15vw, 4.2rem);
+        font-size: clamp(2.65rem, 13vw, 3.7rem);
         line-height: 1;
         white-space: nowrap;
       }
@@ -685,10 +611,16 @@
         line-height: inherit;
       }
 
+      .hero-verse {
+        margin: 4px auto 2px;
+        font-size: 0.98rem;
+        line-height: 1.18;
+      }
+
       .hero-lead {
-        margin: 6px auto 7px;
-        font-size: 0.93rem;
-        line-height: 1.22;
+        margin: 0 auto 5px;
+        font-size: 0.72rem;
+        line-height: 1.15;
       }
 
       .date-lockup {
@@ -761,11 +693,6 @@
         display: grid;
       }
 
-      .map-frame,
-      .map-frame iframe {
-        min-height: 390px;
-      }
-
       .rsvp-form {
         grid-template-columns: 1fr;
       }
@@ -796,9 +723,9 @@
 
   <header class="hero" aria-labelledby="couple-names">
     <div class="hero-photo">
-      <img src="assets/efi-shira-couple.jpg" alt="אפי ושירה עומדים יחד מול נוף ירושלמי" />
+      <img src="assets/efi-shira-couple.jpg" alt="אפרים ושירה עומדים יחד מול נוף ירושלמי" />
       <div class="photo-caption" aria-hidden="true">
-        <span>EFI &amp; SHIRA</span>
+        <span>EFRAIM &amp; SHIRA</span>
         <span>25 · 11 · 26</span>
       </div>
     </div>
@@ -806,13 +733,13 @@
     <div class="hero-card">
       <div class="hero-copy">
         <p class="bsd">בס״ד</p>
-        <div class="eyebrow">SAVE THE DATE</div>
         <h1 id="couple-names">
-          אפי
+          אפרים
           <span class="ampersand">&amp;</span>
           שירה
         </h1>
-        <p class="hero-lead">נרגשים ושמחים להזמין אתכם<br />לחגוג איתנו את יום חתונתנו</p>
+        <p class="hero-verse">אֲנִי לְדוֹדִי וְדוֹדִי לִי</p>
+        <p class="hero-lead">בשבח והודיה להשי״ת<br />הננו שמחים להזמינכם לשמחת נישואינו</p>
 
         <div class="date-lockup">
           <strong>25 · 11 · 2026</strong>
@@ -831,9 +758,7 @@
   <main id="main">
     <section class="section countdown-section" aria-labelledby="countdown-title">
       <div class="section-inner">
-        <p class="section-kicker">מתקרבים לרגע הגדול</p>
-        <h2 class="section-title" id="countdown-title">סופרים איתכם לאחור</h2>
-        <p class="section-intro">עד ליום שבו נעמוד יחד מתחת לחופה</p>
+        <h2 class="section-title" id="countdown-title">לחופה</h2>
 
         <div class="countdown" id="countdown" aria-live="polite">
           <div class="countdown-unit">
@@ -859,27 +784,12 @@
     <section class="section" aria-labelledby="venue-title">
       <div class="section-inner venue-grid">
         <div class="venue-copy">
-          <p class="section-kicker">איך מגיעים?</p>
-          <h2 class="section-title" id="venue-title">ניפגש בדימול</h2>
-          <p class="section-intro">בלב מתחם הבורסה ברמת גן, סמוך לתחנת רכבת תל אביב–סבידור מרכז.</p>
-
-          <div class="address-card">
-            <strong>אולמי דימול</strong>
-            <p>דרך זאב ז׳בוטינסקי 1, רמת גן</p>
-            <div class="venue-actions">
-              <a class="primary-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%2C%20%D7%96%D7%90%D7%91%20%D7%96%27%D7%91%D7%95%D7%98%D7%99%D7%A0%D7%A1%D7%A7%D7%99%201%2C%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F" target="_blank" rel="noopener">ניווט ב-Google Maps</a>
-              <a class="secondary-link" href="https://www.waze.com/ul?q=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F&amp;navigate=yes" target="_blank" rel="noopener">פתיחה ב-Waze</a>
-            </div>
+          <p class="section-kicker">מיקום</p>
+          <h2 class="section-title" id="venue-title">אולמי דימול</h2>
+          <p class="section-intro">דרך זאב ז׳בוטינסקי 1, רמת גן</p>
+          <div class="venue-actions">
+            <a class="primary-link" href="https://www.waze.com/ul?q=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F&amp;navigate=yes" target="_blank" rel="noopener">ניווט ב-Waze</a>
           </div>
-        </div>
-
-        <div class="map-frame">
-          <iframe
-            title="מפת הגעה לאולמי דימול"
-            src="https://www.google.com/maps?q=%D7%93%D7%99%D7%9E%D7%95%D7%9C%20%D7%A4%D7%9C%D7%98%D7%99%D7%A0%D7%95%D7%9D%2C%20%D7%96%D7%90%D7%91%20%D7%96%27%D7%91%D7%95%D7%98%D7%99%D7%A0%D7%A1%D7%A7%D7%99%201%2C%20%D7%A8%D7%9E%D7%AA%20%D7%92%D7%9F&amp;output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen></iframe>
         </div>
       </div>
     </section>
@@ -892,7 +802,7 @@
           <p class="section-intro">נשמח לדעת שאתם מגיעים. מלאו שם ומספר אורחים, והאישור יישלח אלינו.</p>
 
           <form class="rsvp-form" id="rsvp-form" action="https://formsubmit.co/me@orifogler.com" method="post">
-            <input type="hidden" name="_subject" value="אישור הגעה חדש — חתונת אפי ושירה" />
+            <input type="hidden" name="_subject" value="אישור הגעה חדש — חתונת אפרים ושירה" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
@@ -929,7 +839,7 @@
   </main>
 
   <footer>
-    <span class="names">אפי &amp; שירה</span>
+    <span class="names">אפרים &amp; שירה</span>
     <p>25.11.2026 · אולמי דימול, רמת גן</p>
   </footer>
 
@@ -948,7 +858,7 @@
         const distance = weddingDate - Date.now();
 
         if (distance <= 0) {
-          countdown.innerHTML = '<div class="countdown-unit" style="grid-column: 1 / -1"><span class="countdown-number">היום זה קורה!</span><span class="countdown-label">מזל טוב לאפי ושירה</span></div>';
+          countdown.innerHTML = '<div class="countdown-unit" style="grid-column: 1 / -1"><span class="countdown-number">היום זה קורה!</span><span class="countdown-label">מזל טוב לאפרים ושירה</span></div>';
           return;
         }
 
