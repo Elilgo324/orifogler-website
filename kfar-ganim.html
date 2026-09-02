@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>כפר גנים על המפה</title>
+  <meta name="description" content="מפת המקומות המשפחתיים שלנו בכפר גנים, פתח תקווה." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231f4b43'/><path d='M18 30 32 18l14 12v17H18z' fill='white'/><path d='M28 47V35h8v12' fill='%23d67b54'/></svg>" />
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="preconnect" href="https://tile.openstreetmap.org" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17322d;
+      --muted: #66716d;
+      --forest: #1f4b43;
+      --forest-deep: #143a34;
+      --sage: #dce8df;
+      --cream: #f4f0e7;
+      --paper: #fffdf8;
+      --terracotta: #d67b54;
+      --terracotta-dark: #aa5637;
+      --line: #d8ddd7;
+      --shadow: 0 22px 55px rgba(31, 75, 67, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(214, 123, 84, 0.12), transparent 28rem),
+        var(--cream);
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    a { font: inherit; }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1440px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: clamp(22px, 4vw, 56px);
+      display: grid;
+      grid-template-rows: auto minmax(560px, 1fr) auto;
+      gap: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--terracotta-dark);
+      font-size: 0.77rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--forest-deep);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.75rem, 6vw, 5.7rem);
+      font-weight: 600;
+      letter-spacing: -0.055em;
+      line-height: 0.95;
+    }
+
+    .intro {
+      max-width: 420px;
+      margin: 0 0 5px;
+      color: #53605c;
+      font-size: clamp(1rem, 1.5vw, 1.12rem);
+    }
+
+    .map-shell {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      direction: ltr;
+      overflow: hidden;
+      border: 1px solid rgba(31, 75, 67, 0.17);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .map-wrap {
+      position: relative;
+      min-height: 560px;
+      background: #dfe8df;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .map-note {
+      position: absolute;
+      z-index: 500;
+      inset-inline-start: 18px;
+      bottom: 18px;
+      margin: 0;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(20, 58, 52, 0.88);
+      box-shadow: 0 8px 25px rgba(20, 58, 52, 0.25);
+      font-size: 0.78rem;
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .places {
+      position: relative;
+      z-index: 2;
+      direction: rtl;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border-inline-start: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.97);
+    }
+
+    .places h2 {
+      margin: 0 2px 18px;
+      color: var(--forest);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .place-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .place-card {
+      width: 100%;
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 22px;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      color: var(--ink);
+      background: transparent;
+      text-align: right;
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .place-card:hover,
+    .place-card:focus-visible,
+    .place-card.active {
+      border-color: #c8d7ce;
+      background: #f0f5f0;
+      transform: translateX(-2px);
+      outline: none;
+    }
+
+    .place-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: #fff;
+      background: var(--forest);
+    }
+
+    .place-icon.synagogue { background: var(--terracotta-dark); }
+
+    .place-icon svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .place-copy strong {
+      display: block;
+      color: var(--forest-deep);
+      font-size: 0.98rem;
+    }
+
+    .place-copy span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.81rem;
+    }
+
+    .arrow {
+      color: #89928e;
+      font-size: 1.1rem;
+      transform: scaleX(-1);
+    }
+
+    .places-footer {
+      margin-top: auto;
+      padding: 20px 3px 2px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .site-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--forest);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .site-link:hover { text-decoration: underline; }
+
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: #75807c;
+      font-size: 0.8rem;
+    }
+
+    .custom-marker {
+      border: 0;
+      background: transparent;
+    }
+
+    .marker-pin {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 3px solid #fff;
+      border-radius: 50% 50% 50% 12px;
+      color: #fff;
+      background: var(--forest);
+      box-shadow: 0 8px 18px rgba(20, 58, 52, 0.3);
+      transform: rotate(-45deg);
+    }
+
+    .marker-pin.synagogue { background: var(--terracotta-dark); }
+
+    .marker-pin svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transform: rotate(45deg);
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(20, 58, 52, 0.2);
+    }
+
+    .leaflet-popup-content {
+      width: 210px !important;
+      margin: 16px 18px;
+      direction: rtl;
+      text-align: right;
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+    }
+
+    .popup-title {
+      margin: 0;
+      color: var(--forest-deep);
+      font-size: 1rem;
+    }
+
+    .popup-address {
+      margin: 4px 0 13px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .popup-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 13px;
+      border-radius: 10px;
+      color: #fff !important;
+      background: var(--forest);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .leaflet-control-zoom a {
+      color: var(--forest-deep);
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        padding: 24px 16px 30px;
+        grid-template-rows: auto auto auto;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      h1 { font-size: clamp(3.1rem, 14vw, 5.2rem); }
+
+      .intro { max-width: 560px; }
+
+      .map-shell {
+        grid-template-columns: 1fr;
+        border-radius: 22px;
+      }
+
+      .map-wrap { min-height: 58svh; }
+
+      .places {
+        padding: 18px;
+        border-top: 1px solid var(--line);
+        border-inline-start: 0;
+      }
+
+      .places h2 { margin-bottom: 10px; }
+
+      .place-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .places-footer { margin-top: 16px; }
+    }
+
+    @media (max-width: 570px) {
+      .place-list { grid-template-columns: 1fr; }
+      .map-wrap { min-height: 52svh; }
+      .page-footer { flex-direction: column; gap: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .place-card { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">פתח תקווה · הבית שלנו</p>
+        <h1>כפר גנים על המפה</h1>
+      </div>
+      <p class="intro">ארבע תחנות, שכונה אחת. לחצו על מקום ברשימה כדי למצוא אותו על המפה.</p>
+    </header>
+
+    <section class="map-shell" aria-label="מפת המקומות בכפר גנים">
+      <div class="map-wrap">
+        <div id="map" role="application" aria-label="מפה אינטראקטיבית עם ארבעה מקומות בכפר גנים"></div>
+        <p class="map-note">אפשר להזיז ולהגדיל את המפה</p>
+      </div>
+
+      <aside class="places" aria-labelledby="places-title">
+        <h2 id="places-title">המקומות שלנו</h2>
+        <div class="place-list" id="place-list"></div>
+        <div class="places-footer">
+          <a class="site-link" href="./" aria-label="חזרה לאתר של אורי פוגלר">← חזרה לאתר</a>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="page-footer">
+      <span>המפה נשמרת מחוץ למנועי חיפוש.</span>
+      <span>נתוני מפה © OpenStreetMap</span>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const icons = {
+      home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>',
+      synagogue: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V9l7-6 7 6v12"/><path d="M3 21h18"/><path d="M9 21v-6h6v6"/><path d="m12 6 .8 1.6 1.7.2-1.2 1.3.3 1.8-1.6-.8-1.6.8.3-1.8-1.2-1.3 1.7-.2z"/></svg>'
+    };
+
+    const places = [
+      {
+        name: 'בית ההורים',
+        address: 'ויצמן 39, פתח תקווה',
+        lat: 32.0767962,
+        lng: 34.8732414,
+        type: 'home'
+      },
+      {
+        name: 'אורי ושירה',
+        address: 'נחום ניר 18, פתח תקווה',
+        lat: 32.0785704,
+        lng: 34.8766945,
+        type: 'home'
+      },
+      {
+        name: 'יוני ואיילה',
+        address: 'דגל ראובן 42, פתח תקווה',
+        lat: 32.0820873,
+        lng: 34.8733357,
+        type: 'home'
+      },
+      {
+        name: 'בית הכנסת קהל חסידים',
+        address: 'אליהו דוד שולזינגר 3, פתח תקווה',
+        lat: 32.0766153,
+        lng: 34.8769877,
+        type: 'synagogue'
+      }
+    ];
+
+    const map = L.map('map', {
+      zoomControl: true,
+      scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    map.attributionControl.setPrefix(false);
+
+    const markerByIndex = [];
+    const bounds = L.latLngBounds([]);
+    const list = document.getElementById('place-list');
+
+    places.forEach((place, index) => {
+      const markerIcon = L.divIcon({
+        className: 'custom-marker',
+        html: `<span class="marker-pin ${place.type === 'synagogue' ? 'synagogue' : ''}">${icons[place.type]}</span>`,
+        iconSize: [44, 44],
+        iconAnchor: [22, 43],
+        popupAnchor: [0, -40]
+      });
+
+      const navigationUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.address)}`;
+      const marker = L.marker([place.lat, place.lng], {
+        icon: markerIcon,
+        title: place.name,
+        keyboard: true
+      })
+        .addTo(map)
+        .bindPopup(`
+          <strong class="popup-title">${place.name}</strong>
+          <p class="popup-address">${place.address}</p>
+          <a class="popup-nav" href="${navigationUrl}" target="_blank" rel="noopener noreferrer">פתיחה לניווט</a>
+        `);
+
+      marker.on('click', () => setActive(index));
+      markerByIndex.push(marker);
+      bounds.extend([place.lat, place.lng]);
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'place-card';
+      button.dataset.index = index;
+      button.setAttribute('aria-label', `הצגת ${place.name} על המפה`);
+      button.innerHTML = `
+        <span class="place-icon ${place.type === 'synagogue' ? 'synagogue' : ''}">${icons[place.type]}</span>
+        <span class="place-copy">
+          <strong>${place.name}</strong>
+          <span>${place.address}</span>
+        </span>
+        <span class="arrow" aria-hidden="true">←</span>
+      `;
+      button.addEventListener('click', () => {
+        map.flyTo([place.lat, place.lng], 17, { duration: 0.7 });
+        marker.openPopup();
+        setActive(index);
+      });
+      list.appendChild(button);
+    });
+
+    function setActive(index) {
+      document.querySelectorAll('.place-card').forEach((card) => {
+        card.classList.toggle('active', Number(card.dataset.index) === index);
+      });
+    }
+
+    map.fitBounds(bounds, {
+      padding: [70, 70],
+      maxZoom: 16
+    });
+  </script>
+</body>
+</html>
