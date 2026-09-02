@@ -511,6 +511,17 @@
       .compass { border-color: #cad4d0; color: #d95f45; }
       .actions, .map-tools, .map-hint, .leaflet-control-zoom { display: none !important; }
 
+      .map-stage::after { display: none; }
+
+      #map,
+      .leaflet-container,
+      .leaflet-map-pane,
+      .leaflet-tile-pane,
+      .leaflet-tile {
+        filter: none !important;
+        opacity: 1 !important;
+      }
+
       .map-stage {
         min-height: 0;
         overflow: hidden;
@@ -530,6 +541,7 @@
         border-radius: 5mm;
         background: rgba(9, 22, 19, 0.9);
         box-shadow: none;
+        backdrop-filter: none;
       }
 
       .place-card { min-height: 14mm; break-inside: avoid; }
@@ -544,7 +556,7 @@
     <header class="topbar">
       <div class="title-wrap">
         <div>
-          <p class="eyebrow">האנשים והמקומות שלנו · פתח תקווה</p>
+          <p class="eyebrow">כפר גנים · הפריז של פתח תקווה</p>
           <h1>כפר גנים על המפה</h1>
         </div>
         <span class="compass" aria-hidden="true">
@@ -690,13 +702,7 @@
 
     document.getElementById('print-button').addEventListener('click', () => {
       map.closePopup();
-      map.fitBounds(bounds, { padding: [70, 70], maxZoom: 16 });
-      setTimeout(() => window.print(), 350);
-    });
-
-    window.addEventListener('beforeprint', () => {
-      map.invalidateSize();
-      map.fitBounds(bounds, { padding: [55, 55], maxZoom: 16, animate: false });
+      window.print();
     });
 
     window.addEventListener('afterprint', () => setTimeout(() => map.invalidateSize(), 100));
