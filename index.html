@@ -3,460 +3,302 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ori Fogler – Algorithms Researcher, Author, Developer</title>
-  <meta name="description" content="Personal site of Ori Fogler. Senior algorithms researcher at Via Transportation and author of two Torah commentary books ('Avi Ve'Yishi', 'Eli Teshukati'). Also hosts a blog, a Hebrew siddur, and a collection of small utility apps." />
+  <title>Ori Fogler — Algorithms Researcher</title>
+  <meta name="description" content="Ori Fogler is a senior algorithms researcher specializing in large-scale optimization, routing, and real-time decision systems." />
   <link rel="canonical" href="https://orifogler.com/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Ori Fogler – Algorithms Researcher, Author, Developer" />
-  <meta property="og:description" content="Personal site with two original Torah commentary books, a blog, a siddur, and utility apps. Senior algorithms researcher at Via Transportation." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Ori Fogler — Algorithms Researcher" />
+  <meta property="og:description" content="Senior algorithms researcher working on large-scale optimization, routing, and real-time decision systems." />
   <meta property="og:url" content="https://orifogler.com/" />
+  <meta property="og:image" content="https://orifogler.com/assets/og-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Ori Fogler — Algorithms Researcher" />
+  <meta name="twitter:description" content="Senior algorithms researcher working on large-scale optimization, routing, and real-time decision systems." />
+  <meta name="twitter:image" content="https://orifogler.com/assets/og-home.png" />
   <link rel="icon"
-    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b4f8a'/><text x='32' y='44' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='700' fill='white'>OF</text></svg>" />
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2316324f'/><text x='32' y='44' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='700' fill='white'>OF</text></svg>" />
+
   <style>
     :root {
       color-scheme: light;
-      --text: #14151a;
-      --muted: #5b606e;
-      --accent: #0b4f8a;
-      --accent-2: #0f5c4d;
-      --accent-soft: #e8f0f9;
-      --accent-soft-2: #e6f1ee;
-      --bg: #fafaf7;
-      --surface: #ffffff;
-      --border: #e3e0d8;
-      --shadow: 0 14px 40px rgba(26, 27, 31, 0.08);
-      --shadow-sm: 0 6px 16px rgba(26, 27, 31, 0.06);
+      --ink: #14202b;
+      --muted: #65717c;
+      --navy: #16324f;
+      --blue: #2b6f95;
+      --blue-soft: #edf4f7;
+      --paper: #ffffff;
+      --canvas: #f6f7f5;
+      --line: #dfe4e5;
+      --max-width: 1080px;
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: var(--text);
-      background: var(--bg);
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    nav.topnav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(255, 255, 255, 0.92);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
     }
-    nav.topnav .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
+
+    a:hover { color: var(--blue); }
+
+    main {
+      min-height: 100svh;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 24px;
-      flex-wrap: wrap;
-    }
-    nav.topnav .brand {
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: var(--text);
-    }
-    nav.topnav ul {
-      list-style: none;
-      display: flex;
-      gap: 6px;
-      margin: 0;
-      padding: 0;
-      flex-wrap: wrap;
-    }
-    nav.topnav a {
-      padding: 8px 14px;
-      border-radius: 999px;
-      color: var(--accent);
-      font-weight: 600;
-      background: var(--accent-soft);
-      font-size: 0.92rem;
-      transition: transform 0.2s;
-    }
-    nav.topnav a:hover { transform: translateY(-1px); text-decoration: none; }
-
-    header.hero {
-      background:
-        radial-gradient(1000px 500px at 15% -10%, rgba(11, 79, 138, 0.1) 0%, rgba(11, 79, 138, 0) 60%),
-        radial-gradient(900px 500px at 85% 110%, rgba(15, 92, 77, 0.12) 0%, rgba(15, 92, 77, 0) 60%),
-        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
-      padding: 60px 24px 48px;
+      flex-direction: column;
     }
 
-    .hero-wrap {
-      max-width: 1100px;
+    .shell {
+      width: min(var(--max-width), calc(100% - 48px));
       margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 0;
+      flex: 1;
       display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 44px;
+      grid-template-columns: minmax(0, 0.95fr) minmax(440px, 1.05fr);
       align-items: center;
+      gap: 64px;
+      padding-block: clamp(18px, 3vh, 40px);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 750;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
     }
 
     .hero h1 {
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
-      margin: 0 0 14px;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-    .hero .role {
-      color: var(--text);
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0 0 6px;
-    }
-    .hero .role-sub {
-      color: var(--muted);
-      font-size: 1.1rem;
-      font-weight: 400;
       margin: 0;
-      max-width: 42ch;
+      max-width: 760px;
+      color: var(--navy);
+      font-size: clamp(3.25rem, 8vw, 6.6rem);
+      font-weight: 740;
+      letter-spacing: -0.065em;
+      line-height: 0.95;
     }
-    .hero .cta {
-      margin-top: 22px;
+
+    .hero-summary {
+      max-width: 640px;
+      margin: 24px 0 0;
+      color: #394957;
+      font-size: clamp(1.16rem, 2.2vw, 1.45rem);
+      line-height: 1.52;
+    }
+
+    .hero-actions {
       display: flex;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
     }
-    .btn {
+
+    .button {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 12px 22px;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn.primary {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 8px 20px rgba(11, 79, 138, 0.25);
-    }
-    .btn.primary:hover { transform: translateY(-2px); text-decoration: none; box-shadow: 0 12px 26px rgba(11, 79, 138, 0.35); }
-    .btn.secondary {
-      background: var(--surface);
-      color: var(--accent);
-      border: 1px solid var(--border);
-    }
-    .btn.secondary:hover { transform: translateY(-2px); text-decoration: none; }
-
-    .hero-art {
-      display: flex;
       justify-content: center;
-      align-items: center;
-    }
-    .hero-portrait {
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: 30% center;
-      border: 5px solid #fff;
-      box-shadow: 0 14px 38px rgba(11, 79, 138, 0.18);
+      min-height: 46px;
+      padding: 0 19px;
+      border: 1px solid var(--navy);
+      border-radius: 6px;
+      font-size: 0.92rem;
+      font-weight: 680;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
     }
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 24px 60px;
+    .button:hover {
+      transform: translateY(-1px);
+      color: var(--navy);
     }
 
-    section.block {
-      margin: 60px 0;
+    .button.primary {
+      color: #fff;
+      background: var(--navy);
     }
 
-    section.block h2 {
-      font-size: 1.7rem;
-      margin: 0 0 8px;
-      letter-spacing: -0.01em;
-    }
-    section.block > p.lead {
-      color: var(--muted);
-      margin: 0 0 28px;
-      font-size: 1.05rem;
-      max-width: 64ch;
+    .button.primary:hover {
+      color: #fff;
+      background: #204768;
     }
 
-    .cards {
+    .portrait-wrap { position: relative; }
+
+    .portrait-wrap::before {
+      position: absolute;
+      inset: 18px -18px -18px 18px;
+      z-index: -1;
+      border: 1px solid #b9ccd5;
+      content: "";
+    }
+
+    .portrait {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: saturate(0.82) contrast(1.03);
+    }
+
+    .writing-section {
+      padding: 0 0 clamp(20px, 3vh, 40px);
+    }
+
+    .writing-card {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 56px;
+      padding: 28px 36px;
+      border: 1px solid #cfdee3;
+      background: var(--blue-soft);
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 24px;
+    .writing-kicker {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .writing-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .writing-card p:not(.writing-kicker) {
+      max-width: 620px;
+      margin: 10px 0 0;
+      color: #405462;
+      font-size: 1rem;
+    }
+
+    .writing-links {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--text);
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: var(--shadow-sm);
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-      text-decoration: none;
-    }
-
-    .card .tag {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .card h3 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.97rem;
-    }
-    .card .meta {
-      margin-top: auto;
-      padding-top: 10px;
-      color: var(--accent);
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .card.featured {
-      background: linear-gradient(150deg, #0f5c4d 0%, #083d31 100%);
-      color: #f3e8c7;
-      border-color: transparent;
-    }
-    .card.featured .tag { color: #e8c992; }
-    .card.featured p { color: rgba(243, 232, 199, 0.85); }
-    .card.featured .meta { color: #e8c992; }
-
-    .card.featured.blue {
-      background: linear-gradient(150deg, #1860a0 0%, #0a3868 100%);
-    }
-
-    .about {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 36px;
-      box-shadow: var(--shadow-sm);
-    }
-    .about h2 { margin-top: 0; }
-    .about p { margin: 0 0 12px; font-size: 1.02rem; }
-    .about ul { padding-right: 20px; padding-left: 20px; color: var(--muted); }
-    .about li { margin: 4px 0; }
-
-    .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      align-items: flex-start;
       gap: 12px;
-    }
-    .app-link {
-      display: block;
-      padding: 14px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      text-decoration: none;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .app-link:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-      text-decoration: none;
-    }
-    .app-link strong {
-      display: block;
-      color: var(--accent);
-      margin-bottom: 2px;
-    }
-    .app-link span {
-      font-size: 0.9rem;
-      color: var(--muted);
+      color: var(--navy);
+      font-size: 0.92rem;
+      font-weight: 680;
+      white-space: nowrap;
     }
 
     footer {
-      border-top: 1px solid var(--border);
-      padding: 28px 24px 40px;
-      text-align: center;
+      padding: 38px 0 48px;
+      border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-    footer a { margin: 0 8px; }
 
-    @media (max-width: 820px) {
-      .hero-wrap { grid-template-columns: 1fr; }
-      .hero-art { order: -1; margin-bottom: 20px; }
-      .hero-portrait { width: 180px; height: 180px; border-width: 4px; }
+    footer .shell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        min-height: auto;
+        display: block;
+      }
+
+      .shell { width: min(100% - 32px, var(--max-width)); }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 54px;
+        padding-block: 64px 76px;
+      }
+
+      .hero h1 { font-size: clamp(3.6rem, 17vw, 5.4rem); }
+
+      .portrait-wrap {
+        width: 100%;
+        margin: 0;
+      }
+
+      .writing-section { padding-bottom: 64px; }
+
+      .writing-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 28px;
+        padding: 30px 26px;
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button { transition: none; }
     }
   </style>
 </head>
+
 <body>
-
-<nav class="topnav" aria-label="Main navigation">
-  <div class="wrap">
-    <div class="brand">Ori Fogler</div>
-    <ul>
-      <li><a href="#books">Books</a></li>
-      <li><a href="blog/">Blog</a></li>
-      <li><a href="siddur/">Siddur</a></li>
-      <li><a href="#apps">Apps</a></li>
-      <li><a href="resume.html">Resume</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="hero-wrap">
-    <div>
-      <h1>Ori Fogler</h1>
-      <p class="role">Senior algorithms researcher.</p>
-      <p class="role-sub">Studies and writes on Talmudic sugyot and Torah thought.</p>
-      <div class="cta">
-        <a class="btn primary" href="#books">Read my books</a>
-        <a class="btn secondary" href="resume.html">View resume</a>
+  <main id="top">
+    <header class="hero shell">
+      <div>
+        <p class="eyebrow">Algorithms · Optimization · AI</p>
+        <h1>Ori<br />Fogler</h1>
+        <p class="hero-summary">
+          Senior Algorithms Researcher at Via, building large-scale optimization and real-time decision systems—from problem formulation to production.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="resume.html">View resume</a>
+          <a class="button" href="mailto:me@orifogler.com">Email</a>
+          <a class="button" href="https://www.linkedin.com/in/foglero/">LinkedIn</a>
+        </div>
       </div>
+      <div class="portrait-wrap">
+        <img class="portrait" src="assets/ori-alps-wide.webp" alt="Ori Fogler outdoors by an alpine lake" width="1600" height="1223" loading="eager" />
+      </div>
+    </header>
+
+    <section class="writing-section" id="writing" aria-labelledby="writing-title">
+      <div class="shell">
+        <div class="writing-card">
+          <div>
+            <p class="writing-kicker">Beyond algorithms</p>
+            <h2 id="writing-title">Writing on the weekly Torah portion</h2>
+            <p>I share a short reflection in Hebrew each week and have published two books collecting longer essays and ideas.</p>
+          </div>
+          <div class="writing-links">
+            <a href="blog/">Read the latest post →</a>
+            <a href="books.html">Browse the books →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <span>© 2026 Ori Fogler</span>
+      <span aria-hidden="true">·</span>
+      <a href="blog/privacy-policy.html">Privacy</a>
     </div>
-    <div class="hero-art">
-      <img class="hero-portrait" src="assets/ori.jpg"
-           alt="Ori Fogler" width="260" height="260" loading="eager" />
-    </div>
-  </div>
-</header>
-
-<main>
-
-  <section class="block" id="books">
-    <h2>Books</h2>
-    <p class="lead">
-      Two original Torah commentary books. Both are written in Hebrew and cover the weekly Torah
-      portions and the yearly cycle of Jewish holidays. Read online or download as PDF.
-    </p>
-
-    <div class="cards">
-      <a class="card featured" href="reader.html?book=avi_veishi">
-        <span class="tag">NEW · Sivan 5786</span>
-        <h3>אבי וישעי – תורה והגיגים</h3>
-        <p>A 385-page commentary on the entire Pentateuch, organized by weekly portion, followed by chapters on the annual festivals. Contains original questions, classical sources and personal insights collected over years of study.</p>
-        <span class="meta">Read online →</span>
-      </a>
-
-      <a class="card featured blue" href="reader.html?book=eli_teshukati">
-        <span class="tag">Tishrei 5781</span>
-        <h3>אלי תשוקתי – ברית אליעזר, תורה ומועדים</h3>
-        <p>A 293-page volume opening with an in-depth study of the laws and meaning of brit milah, including family memories of grandfather Eliezer z"l, followed by weekly Torah commentary and essays on the Jewish holidays.</p>
-        <span class="meta">Read online →</span>
-      </a>
-
-      <a class="card" href="books.html">
-        <span class="tag">Library</span>
-        <h3>Browse the library</h3>
-        <p>See both books side by side, with full tables of contents, dedications, and descriptions. Includes download links for PDF copies.</p>
-        <span class="meta">Open library →</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="block">
-    <h2>Blog &amp; Siddur</h2>
-    <p class="lead">
-      A running Torah blog with short weekly thoughts, and a clean digital siddur I built to have a readable prayer book on my phone.
-    </p>
-
-    <div class="cards">
-      <a class="card" href="blog/">
-        <span class="tag">Blog</span>
-        <h3>הגיגי אמרי</h3>
-        <p>Short weekly Torah thoughts and commentary on the parasha, aggregated automatically from my Blogspot feed.</p>
-        <span class="meta">Read latest posts →</span>
-      </a>
-
-      <a class="card" href="siddur/">
-        <span class="tag">Siddur</span>
-        <h3>Digital Siddur</h3>
-        <p>A clean Hebrew prayer book with selectable nusach (Sepharad, Ashkenaz, Edot HaMizrach), sourced from Hebrew Wikisource.</p>
-        <span class="meta">Open siddur →</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="block" id="apps">
-    <h2>Utility apps</h2>
-    <p class="lead">
-      A small collection of tools I built to scratch my own itches. All open in the browser, no install needed.
-    </p>
-
-    <div class="apps-grid">
-      <a class="app-link" href="apps/TSPartner.html">
-        <strong>TSPartner</strong>
-        <span>Interactive traveling-salesman playground</span>
-      </a>
-      <a class="app-link" href="apps/WoltShare.html">
-        <strong>WoltShare</strong>
-        <span>Split a Wolt order between friends</span>
-      </a>
-      <a class="app-link" href="apps/coordinator.html">
-        <strong>Coordinator</strong>
-        <span>Coordinate meeting times across people</span>
-      </a>
-      <a class="app-link" href="apps/gshift.html">
-        <strong>gShift</strong>
-        <span>Shift and time-slot helper</span>
-      </a>
-      <a class="app-link" href="apps/jsonformatter.html">
-        <strong>JSON Formatter</strong>
-        <span>Pretty-print and validate JSON</span>
-      </a>
-      <a class="app-link" href="apps/namemate.html">
-        <strong>NameMate</strong>
-        <span>Generate name pairings &amp; matches</span>
-      </a>
-      <a class="app-link" href="apps/shift-scheduler.html">
-        <strong>Shift Scheduler</strong>
-        <span>Build weekly shift schedules</span>
-      </a>
-      <a class="app-link" href="apps/timestamper.html">
-        <strong>Timestamper</strong>
-        <span>Convert between time formats</span>
-      </a>
-    </div>
-  </section>
-
-  <section class="block">
-    <div class="about">
-      <h2>Get in touch</h2>
-      <p>
-        <a href="mailto:me@orifogler.com">me@orifogler.com</a> ·
-        <a href="https://www.linkedin.com/in/foglero/">LinkedIn</a> ·
-        <a href="resume.html">Full resume</a>
-      </p>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  © Ori Fogler ·
-  <a href="books.html">Books</a> ·
-  <a href="blog/">Blog</a> ·
-  <a href="resume.html">Resume</a> ·
-  <a href="blog/privacy-policy.html">Privacy Policy</a>
-</footer>
-
+  </footer>
 </body>
 </html>
