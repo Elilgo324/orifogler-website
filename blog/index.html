@@ -1,691 +1,700 @@
 <!doctype html>
 <html lang="he" dir="rtl">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>הגיגי אמרי — שלושת הפוסטים האחרונים</title>
-    <meta name="description" content="תצוגה דינמית של שלושת הפוסטים האחרונים מהבלוג הגיגי אמרי." />
-    <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23f6e5d1'/%3E%3Cstop offset='100%25' stop-color='%23d4a76a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M7 9.5A1.5 1.5 0 0 1 8.5 8H14a2.5 2.5 0 0 1 2 1 2.5 2.5 0 0 1 2-1h5.5A1.5 1.5 0 0 1 25 9.5V22a1 1 0 0 1-1.1 1l-4.8-.7a3.5 3.5 0 0 0-2.5.8l-.6.5-.6-.5a3.5 3.5 0 0 0-2.5-.8l-4.8.7A1 1 0 0 1 7 22V9.5z' fill='none' stroke='%236b3e16' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16 9v14' stroke='%236b3e16' stroke-width='1.5'/%3E%3C/svg%3E" />
-
-    <!-- Professional Hebrew typeface -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <style>
-        /* ── Design Tokens ──────────────────────────────── */
-        :root {
-            color-scheme: light;
-
-            --ink-900: #1a1b1e;
-            --ink-700: #33363f;
-            --ink-500: #6b7084;
-            --ink-400: #8e92a4;
-
-            --paper-50: #ffffff;
-            --paper-100: #faf8f5;
-            --paper-200: #f3efe9;
-            --paper-300: #e8e1d8;
-            --paper-400: #d9cfc2;
-
-            --accent-600: #7a4d1e;
-            --accent-500: #9b6530;
-            --accent-400: #b87d3e;
-            --accent-100: #fdf3e7;
-
-            --radius-sm: 12px;
-            --radius-md: 20px;
-            --radius-lg: 28px;
-            --radius-pill: 999px;
-
-            --shadow-sm: 0 1px 3px rgba(26, 27, 30, 0.04), 0 4px 12px rgba(26, 27, 30, 0.06);
-            --shadow-md: 0 4px 12px rgba(26, 27, 30, 0.04), 0 20px 48px rgba(26, 27, 30, 0.08);
-            --shadow-lg: 0 8px 20px rgba(26, 27, 30, 0.05), 0 32px 64px rgba(26, 27, 30, 0.1);
-
-            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* ── Reset & Base ───────────────────────────────── */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: "Rubik", "Segoe UI", system-ui, -apple-system, sans-serif;
-            background:
-                radial-gradient(ellipse 1100px 600px at 80% -8%, rgba(253, 243, 231, 0.8) 0%, transparent 70%),
-                radial-gradient(ellipse 800px 400px at 10% 100%, rgba(253, 243, 231, 0.5) 0%, transparent 70%),
-                var(--paper-100);
-            color: var(--ink-900);
-            line-height: 1.78;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        ::selection {
-            background: var(--accent-100);
-            color: var(--accent-600);
-        }
-
-        /* ── Page Layout ────────────────────────────────── */
-        .page {
-            max-width: 820px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            gap: 0;
-            padding: 0 clamp(20px, 5vw, 48px);
-        }
-
-        /* ── Hero ───────────────────────────────────────── */
-        .hero {
-            padding: clamp(48px, 8vw, 80px) 0 clamp(32px, 5vw, 48px);
-            display: grid;
-            gap: 14px;
-        }
-
-        .hero-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .hero-icon {
-            flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            color: var(--accent-600);
-            background: linear-gradient(135deg, #fff8ee 0%, #f0dfc5 100%);
-            box-shadow:
-                0 1px 2px rgba(139, 91, 43, 0.08),
-                0 8px 20px rgba(139, 91, 43, 0.12);
-        }
-
-        .hero-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .hero h1 {
-            margin: 0;
-            font-size: clamp(28px, 4.5vw, 44px);
-            font-weight: 700;
-            letter-spacing: -0.025em;
-            line-height: 1.15;
-        }
-
-        .hero-subtitle {
-            margin: 0;
-            color: var(--ink-500);
-            font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-            max-width: 52ch;
-            line-height: 1.7;
-        }
-
-        .hero-divider {
-            width: 48px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--paper-300);
-            margin-top: 4px;
-        }
-
-        /* ── Posts Grid ─────────────────────────────────── */
-        .posts {
-            display: grid;
-            gap: 24px;
-            padding-bottom: clamp(40px, 6vw, 64px);
-        }
-
-        /* ── Card ───────────────────────────────────────── */
-        .card {
-            background: var(--paper-50);
-            border: 1px solid var(--paper-300);
-            border-radius: var(--radius-lg);
-            padding: clamp(28px, 4vw, 44px);
-            box-shadow: var(--shadow-sm);
-            display: grid;
-            gap: 20px;
-            transition:
-                box-shadow 0.4s var(--ease-out),
-                border-color 0.4s var(--ease-out),
-                transform 0.4s var(--ease-out);
-            /* entrance animation */
-            opacity: 0;
-            transform: translateY(20px);
-            animation: card-enter 0.6s var(--ease-out) forwards;
-        }
-
-        .card:nth-child(1) { animation-delay: 0s; }
-        .card:nth-child(2) { animation-delay: 0.08s; }
-        .card:nth-child(3) { animation-delay: 0.16s; }
-
-        @keyframes card-enter {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--paper-400);
-            transform: translateY(-2px);
-        }
-
-        /* ── Post Meta (date) ───────────────────────────── */
-        .post-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--ink-400);
-            font-size: 0.88rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-
-        .post-meta-icon {
-            width: 16px;
-            height: 16px;
-            opacity: 0.6;
-        }
-
-        /* ── Post Title ─────────────────────────────────── */
-        .post-title {
-            margin: 0;
-            font-size: clamp(22px, 3.5vw, 32px);
-            font-weight: 700;
-            line-height: 1.25;
-            letter-spacing: -0.015em;
-        }
-
-        /* ── Post Content ───────────────────────────────── */
-        .post-content {
-            display: grid;
-            gap: 16px;
-            font-size: 1rem;
-            color: var(--ink-700);
-            line-height: 1.85;
-        }
-
-        .post-content p {
-            margin: 0;
-        }
-
-        .post-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--paper-300);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .post-content a {
-            color: var(--accent-500);
-            font-weight: 600;
-            text-decoration: underline;
-            text-decoration-color: rgba(155, 101, 48, 0.3);
-            text-decoration-thickness: 2px;
-            text-underline-offset: 3px;
-            transition: text-decoration-color 0.2s ease;
-        }
-
-        .post-content a:hover {
-            text-decoration-color: var(--accent-500);
-        }
-
-        .post-content blockquote {
-            margin: 8px 0;
-            padding: 16px 24px;
-            border-inline-start: 3px solid var(--accent-400);
-            background: var(--accent-100);
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-style: italic;
-            color: var(--ink-700);
-        }
-
-        .post-content h2,
-        .post-content h3,
-        .post-content h4 {
-            margin: 8px 0 0;
-            font-weight: 600;
-            line-height: 1.3;
-            color: var(--ink-900);
-        }
-
-        .post-content ul,
-        .post-content ol {
-            padding-inline-start: 24px;
-            margin: 0;
-        }
-
-        .post-content li {
-            margin-bottom: 4px;
-        }
-
-        .post-content pre,
-        .post-content code {
-            font-family: "SF Mono", "Fira Code", "Consolas", monospace;
-            font-size: 0.9em;
-            background: var(--paper-200);
-            border-radius: 6px;
-            padding: 2px 6px;
-        }
-
-        .post-content pre {
-            padding: 16px 20px;
-            overflow-x: auto;
-            border: 1px solid var(--paper-300);
-        }
-
-        .post-content pre code {
-            background: none;
-            padding: 0;
-        }
-
-        /* ── Post Footer / Link Button ──────────────────── */
-        .post-footer {
-            display: flex;
-            justify-content: flex-start;
-            padding-top: 4px;
-        }
-
-        .post-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: var(--radius-pill);
-            background: var(--ink-900);
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            transition:
-                background 0.25s ease,
-                transform 0.3s var(--ease-spring),
-                box-shadow 0.3s ease;
-            box-shadow: 0 2px 8px rgba(26, 27, 30, 0.15);
-        }
-
-        .post-link:hover {
-            background: var(--ink-700);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(26, 27, 30, 0.2);
-        }
-
-        .post-link:active {
-            transform: translateY(0);
-        }
-
-        .post-link-arrow {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s var(--ease-spring);
-        }
-
-        .post-link:hover .post-link-arrow {
-            transform: translateX(-3px);
-        }
-
-        /* ── Site Footer ────────────────────────────────── */
-        .site-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 28px 0 36px;
-            border-top: 1px solid var(--paper-300);
-            color: var(--ink-400);
-            font-size: 0.85rem;
-        }
-
-        .site-footer-dot {
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-            background: var(--paper-400);
-        }
-
-        .site-footer a {
-            color: var(--ink-500);
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .site-footer a:hover {
-            color: var(--accent-500);
-        }
-
-        /* ── Loading Skeletons ──────────────────────────── */
-        .loading .post-body {
-            display: none;
-        }
-
-        .skeleton-block {
-            display: grid;
-            gap: 14px;
-        }
-
-        .skeleton {
-            position: relative;
-            overflow: hidden;
-            background: var(--paper-200);
-            border-radius: var(--radius-pill);
-            height: 14px;
-        }
-
-        .skeleton::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            transform: translateX(-100%);
-            background: linear-gradient(90deg,
-                    transparent 0%,
-                    rgba(255, 255, 255, 0.5) 50%,
-                    transparent 100%);
-            animation: shimmer 1.8s ease-in-out infinite;
-        }
-
-        .skeleton-meta {
-            width: 120px;
-            height: 12px;
-        }
-
-        .skeleton-title {
-            height: 28px;
-            width: 60%;
-            border-radius: var(--radius-sm);
-        }
-
-        .skeleton-line {
-            border-radius: 8px;
-        }
-
-        .skeleton-line.short {
-            width: 75%;
-        }
-
-        .skeleton-line.shorter {
-            width: 55%;
-        }
-
-        @keyframes shimmer {
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        /* ── Error / Empty State ────────────────────────── */
-        .empty-state {
-            text-align: center;
-            padding: 64px 24px;
-            color: var(--ink-400);
-        }
-
-        .empty-state-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 16px;
-            color: var(--paper-400);
-        }
-
-        .empty-state h2 {
-            margin: 0 0 8px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--ink-700);
-        }
-
-        .empty-state p {
-            margin: 0;
-            font-size: 0.95rem;
-        }
-
-        /* ── Responsive ─────────────────────────────────── */
-        @media (max-width: 640px) {
-            .hero {
-                padding: 36px 0 28px;
-            }
-
-            .hero-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
-            }
-
-            .hero-icon svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .card {
-                border-radius: var(--radius-md);
-                padding: 24px;
-            }
-
-            .post-footer {
-                justify-content: stretch;
-            }
-
-            .post-link {
-                width: 100%;
-                justify-content: center;
-                padding: 12px 20px;
-            }
-
-            .site-footer {
-                flex-wrap: wrap;
-                text-align: center;
-                padding: 24px 0 32px;
-            }
-        }
-
-        /* ── Print ──────────────────────────────────────── */
-        @media print {
-            body {
-                background: #fff;
-            }
-
-            .card {
-                box-shadow: none;
-                border: 1px solid #ddd;
-                break-inside: avoid;
-            }
-
-            .post-link {
-                color: var(--ink-900);
-                background: none;
-                border: 1px solid var(--ink-900);
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#173d39" />
+  <title>הגיגי אמרי</title>
+  <meta name="description" content="הגיגי אמרי — מאמרים בפרשת השבוע ובמחשבת ישראל." />
+  <link rel="canonical" href="https://orifogler.com/blog/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:title" content="הגיגי אמרי" />
+  <meta property="og:description" content="מאמרים בפרשת השבוע ובמחשבת ישראל." />
+  <meta property="og:url" content="https://orifogler.com/blog/" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23173d39'/%3E%3Cpath d='M7 9.5A1.5 1.5 0 0 1 8.5 8H14a2.5 2.5 0 0 1 2 1 2.5 2.5 0 0 1 2-1h5.5A1.5 1.5 0 0 1 25 9.5V22a1 1 0 0 1-1.1 1l-4.8-.7a3.5 3.5 0 0 0-2.5.8l-.6.5-.6-.5a3.5 3.5 0 0 0-2.5-.8l-4.8.7A1 1 0 0 1 7 22V9.5z' fill='none' stroke='%23f3d7a2' stroke-width='1.5'/%3E%3Cpath d='M16 9v14' stroke='%23f3d7a2' stroke-width='1.5'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: light;
+      --green-950: #102c29;
+      --green-900: #173d39;
+      --green-800: #24534d;
+      --ink: #202724;
+      --text: #46504b;
+      --muted: #707a74;
+      --paper: #fffefb;
+      --canvas: #f7f3eb;
+      --gold: #c99542;
+      --gold-light: #e3c27f;
+      --line: rgba(23, 61, 57, 0.15);
+      --serif: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+      --sans: "Assistant", "Segoe UI", Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: var(--sans);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.dialog-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    ::selection { color: var(--green-950); background: #f3d9a7; }
+    .shell { width: min(1080px, calc(100% - 40px)); margin-inline: auto; }
+
+    .skip-link {
+      position: fixed;
+      inset: 10px 10px auto auto;
+      z-index: 100;
+      padding: 9px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--green-900);
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-header, .hero { color: #fff; background: var(--green-900); }
+    .site-header { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+    .nav {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(243, 215, 162, 0.38);
+      border-radius: 50%;
+      color: #f3d7a2;
+    }
+    .brand-mark svg { width: 17px; height: 17px; }
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .home-link:hover { color: #fff; }
+    .home-link svg { width: 15px; height: 15px; }
+
+    .hero { padding-block: clamp(42px, 6vw, 64px); }
+    .hero h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1;
+    }
+    .hero p {
+      margin: 15px 0 0;
+      color: rgba(255, 255, 255, 0.66);
+      font-size: 1.05rem;
+    }
+
+    .content-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 240px;
+      align-items: start;
+      gap: 28px;
+      padding-block: clamp(54px, 7vw, 82px);
+    }
+    .books {
+      position: sticky;
+      top: 24px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .books h2 {
+      margin: 0;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--green-900);
+      font-size: 0.9rem;
+    }
+    .book-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--line);
+      transition: background 160ms ease;
+    }
+    .book-link:last-child { border-bottom: 0; }
+    .book-link:hover { background: #f1f5f2; }
+    .book-link strong { display: block; font-family: var(--serif); font-size: 1.05rem; }
+    .book-link span { display: block; margin-top: 1px; color: var(--muted); font-size: 0.78rem; }
+    .book-link svg { flex: none; width: 18px; height: 18px; color: var(--green-800); }
+
+    .posts-section { min-width: 0; }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+      font-weight: 600;
+    }
+    .archive-link {
+      color: var(--green-800);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-thickness: 1px;
+    }
+    .archive-link:hover { color: var(--gold); }
+
+    .posts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .card {
+      min-width: 0;
+      min-height: 370px;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(24px, 3vw, 32px);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      animation: card-in 420ms ease both;
+    }
+    .card-featured {
+      grid-column: 1 / -1;
+      min-height: 390px;
+      padding: clamp(30px, 5vw, 50px);
+      border-color: rgba(23, 61, 57, 0.22);
+      background: #edf2ef;
+    }
+    .card:nth-of-type(2) { animation-delay: 60ms; }
+    .card:nth-of-type(3) { animation-delay: 120ms; }
+    .card:nth-of-type(4) { animation-delay: 180ms; }
+    .card:hover {
+      border-color: rgba(23, 61, 57, 0.3);
+      box-shadow: 0 16px 38px rgba(32, 39, 36, 0.07);
+      transform: translateY(-3px);
+    }
+    .post-meta {
+      min-height: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .post-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.55; }
+    .new-label {
+      padding: 2px 8px 3px;
+      border-radius: 999px;
+      color: var(--green-900);
+      background: #e6efeb;
+      font-size: 0.68rem;
+    }
+    .post-title {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 3vw, 2.15rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+    .card-featured .post-title {
+      max-width: 680px;
+      font-size: clamp(2.35rem, 5vw, 3.65rem);
+    }
+    .post-excerpt {
+      margin: 17px 0 24px;
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
+    .card-featured .post-excerpt { max-width: 700px; font-size: 1.05rem; }
+    .previous-label {
+      grid-column: 1 / -1;
+      margin: 10px 0 -4px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+    .post-actions { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+    .read-button {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--green-900);
+      border-radius: 4px;
+      color: #fff;
+      background: var(--green-900);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .read-button:hover { background: var(--green-800); }
+    .source-link { color: var(--muted); font-size: 0.86rem; font-weight: 600; }
+    .source-link:hover { color: var(--green-800); }
+
+    .loading-card { min-height: 300px; }
+    .loading-card:first-child { grid-column: 1 / -1; min-height: 390px; background: #edf2ef; }
+    .skeleton { overflow: hidden; position: relative; border-radius: 999px; background: rgba(23, 61, 57, 0.09); }
+    .skeleton::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent);
+      content: "";
+      transform: translateX(-100%);
+      animation: shimmer 1.5s infinite;
+    }
+    .skeleton-meta { width: 130px; height: 11px; }
+    .skeleton-title { width: 70%; height: 32px; margin-top: 26px; border-radius: 4px; }
+    .skeleton-copy { width: 95%; height: 12px; margin-top: 30px; }
+    .skeleton-copy.short { width: 63%; margin-top: 11px; }
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 54px 24px;
+      border: 1px solid var(--line);
+      text-align: center;
+      background: var(--paper);
+    }
+    .empty-state h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 1.5rem; }
+    .empty-state p { margin: 0 0 18px; color: var(--muted); }
+    .empty-state a { color: var(--green-800); font-weight: 700; text-decoration: underline; }
+
+    .article-dialog {
+      width: min(820px, calc(100% - 32px));
+      max-height: min(90vh, 920px);
+      margin: auto;
+      padding: 0;
+      border: 0;
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: 0 28px 90px rgba(8, 24, 22, 0.3);
+    }
+    .article-dialog::backdrop { background: rgba(10, 28, 26, 0.76); backdrop-filter: blur(3px); }
+    .dialog-bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 251, 0.96);
+    }
+    .dialog-actions { display: flex; align-items: center; gap: 9px; }
+    .dialog-button, .dialog-source, .dialog-close {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--green-900);
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .dialog-button:hover, .dialog-source:hover, .dialog-close:hover { border-color: var(--green-800); background: #f1f5f2; }
+    .dialog-button svg, .dialog-source svg { width: 16px; height: 16px; }
+    .dialog-close { width: 38px; padding: 0; font-size: 1.4rem; font-weight: 400; }
+    .article-reading { max-width: 66ch; margin-inline: auto; padding: clamp(38px, 7vw, 72px) clamp(24px, 7vw, 64px) 80px; }
+    .article-reading time { color: var(--muted); font-size: 0.9rem; }
+    .article-reading h2 {
+      margin: 10px 0 32px;
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+    }
+    .article-body { font-family: var(--serif); font-size: 1.15rem; line-height: 1.95; }
+    .article-body p { margin: 0 0 1.3em; }
+    .print-sheet { display: none; }
+
+    .site-footer { border-top: 1px solid var(--line); background: rgba(255, 254, 251, 0.55); }
+    .footer-inner {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .footer-brand { color: var(--green-900); font-family: var(--serif); font-weight: 700; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 20px; }
+    .footer-links a:hover { color: var(--green-800); }
+
+    @keyframes card-in { from { opacity: 0; transform: translateY(10px); } }
+    @keyframes shimmer { to { transform: translateX(100%); } }
+
+    @media (max-width: 980px) {
+      .content-layout { grid-template-columns: 1fr; }
+      .books { position: static; display: grid; grid-template-columns: auto 1fr 1fr; }
+      .books h2 { display: flex; align-items: center; border-bottom: 0; border-inline-end: 1px solid var(--line); }
+      .book-link { border-bottom: 0; border-inline-end: 1px solid var(--line); }
+      .book-link:last-child { border-inline-end: 0; }
+    }
+    @media (max-width: 800px) {
+      .posts { grid-template-columns: 1fr; }
+      .card-featured, .loading-card:first-child { grid-column: auto; }
+      .card { min-height: 0; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 28px, 1080px); }
+      .home-link span { display: none; }
+      .home-link { width: 36px; height: 36px; justify-content: center; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; }
+      .hero { padding-block: 38px 44px; }
+      .hero h1 { font-size: 3rem; }
+      .hero p { max-width: 290px; font-size: 0.98rem; }
+      .content-layout { gap: 42px; }
+      .books { grid-template-columns: 1fr; }
+      .books h2 { min-height: 48px; border-inline-end: 0; border-bottom: 1px solid var(--line); }
+      .book-link { min-height: 72px; border-inline-end: 0; border-bottom: 1px solid var(--line); }
+      .book-link:last-child { border-bottom: 0; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .article-dialog { width: 100%; max-width: none; height: 100%; max-height: none; }
+      .dialog-source span { display: none; }
+      .article-reading { padding-top: 36px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; padding-block: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    @media print {
+      @page { margin: 18mm; }
+      body.printing-article { background: #fff; }
+      body.printing-article > * { display: none !important; }
+      body.printing-article > .print-sheet {
+        display: block !important;
+        max-width: 720px;
+        margin: 0 auto;
+        color: #000;
+        font-family: var(--serif);
+        direction: rtl;
+      }
+      .print-sheet h1 { margin: 0 0 8px; font-size: 30pt; line-height: 1.1; }
+      .print-sheet time { display: block; margin-bottom: 28px; color: #555; font: 11pt var(--sans); }
+      .print-sheet p { margin: 0 0 12pt; font-size: 13pt; line-height: 1.75; }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="page">
-        <header class="hero" id="hero" hidden>
-            <div class="hero-row">
-                <span class="hero-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M4.5 6.5c0-1.1.9-2 2-2h5.6c1 0 1.9.6 2.4 1.4.5-.8 1.4-1.4 2.4-1.4h5.6c1.1 0 2 .9 2 2V19c0 .8-.7 1.4-1.5 1.3l-5.8-.9c-1.2-.2-2.4.2-3.1 1.1l-.4.4-.4-.4c-.7-.9-1.9-1.3-3.1-1.1l-5.8.9c-.8.1-1.5-.5-1.5-1.3V6.5z" />
-                        <path d="M12 6v14" />
-                    </svg>
-                </span>
-                <h1 id="blog-title"></h1>
-            </div>
-            <p class="hero-subtitle" id="blog-subtitle"></p>
-            <div class="hero-divider" aria-hidden="true"></div>
-        </header>
+  <a class="skip-link" href="#articles">דילוג למאמרים</a>
 
-        <main class="posts loading" id="posts" aria-busy="true">
-            <article class="card" style="animation: none; opacity: 1; transform: none;">
-                <div class="skeleton-block">
-                    <div class="skeleton skeleton-meta"></div>
-                    <div class="skeleton skeleton-title"></div>
-                    <div class="skeleton skeleton-line"></div>
-                    <div class="skeleton skeleton-line short"></div>
-                    <div class="skeleton skeleton-line shorter"></div>
-                </div>
-            </article>
-            <article class="card" style="animation: none; opacity: 1; transform: none;">
-                <div class="skeleton-block">
-                    <div class="skeleton skeleton-meta"></div>
-                    <div class="skeleton skeleton-title"></div>
-                    <div class="skeleton skeleton-line"></div>
-                    <div class="skeleton skeleton-line short"></div>
-                </div>
-            </article>
-            <article class="card" style="animation: none; opacity: 1; transform: none;">
-                <div class="skeleton-block">
-                    <div class="skeleton skeleton-meta"></div>
-                    <div class="skeleton skeleton-title"></div>
-                    <div class="skeleton skeleton-line"></div>
-                    <div class="skeleton skeleton-line short"></div>
-                </div>
-            </article>
-        </main>
+  <header class="site-header">
+    <nav class="nav shell" aria-label="ניווט ראשי">
+      <a class="brand" href="./" aria-label="הגיגי אמרי — ראש הדף">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 5.5c0-1 .8-1.8 1.8-1.8h4.3c1 0 1.9.5 2.4 1.3.5-.8 1.4-1.3 2.4-1.3h4.3c1 0 1.8.8 1.8 1.8v12c0 .7-.6 1.2-1.3 1.1l-4.5-.7c-1.1-.2-2.1.2-2.7 1-.6-.8-1.6-1.2-2.7-1l-4.5.7c-.7.1-1.3-.4-1.3-1.1v-12z" />
+            <path d="M12 5v14" />
+          </svg>
+        </span>
+        <span>הגיגי אמרי</span>
+      </a>
+      <a class="home-link" href="../" aria-label="חזרה לאתר של אורי פוגלר">
+        <span>לאתר של אורי</span>
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11.5 4-5 5 5 5" /></svg>
+      </a>
+    </nav>
+  </header>
 
-        <footer class="site-footer">
-            <span>עמוד מדיניות פרטיות</span>
-            <span class="site-footer-dot" aria-hidden="true"></span>
-            <a href="./privacy-policy.html">Privacy Policy</a>
-        </footer>
+  <section class="hero">
+    <div class="shell">
+      <h1>הגיגי אמרי</h1>
+      <p>מאמרים בפרשת השבוע ובמחשבת ישראל.</p>
     </div>
+  </section>
 
-    <script>
-        const posts = document.getElementById("posts");
-        const hero = document.getElementById("hero");
-        const blogTitle = document.getElementById("blog-title");
-        const blogSubtitle = document.getElementById("blog-subtitle");
+  <main id="articles">
+    <div class="content-layout shell">
+    <section class="posts-section" aria-labelledby="articles-title">
+      <div class="section-heading">
+        <h2 id="articles-title">המאמר האחרון</h2>
+        <a class="archive-link" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener noreferrer">לכל המאמרים</a>
+      </div>
+      <div class="posts" id="posts" aria-live="polite" aria-busy="true">
+        <article class="card loading-card" aria-hidden="true"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-copy"></div><div class="skeleton skeleton-copy short"></div></article>
+        <article class="card loading-card" aria-hidden="true"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-copy"></div><div class="skeleton skeleton-copy short"></div></article>
+        <article class="card loading-card" aria-hidden="true"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-copy"></div><div class="skeleton skeleton-copy short"></div></article>
+        <article class="card loading-card" aria-hidden="true"><div class="skeleton skeleton-meta"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-copy"></div><div class="skeleton skeleton-copy short"></div></article>
+      </div>
+      <noscript><div class="empty-state"><h3>לא ניתן לטעון את המאמרים</h3><p>יש להפעיל JavaScript או לעבור לארכיון.</p><a href="https://hagigey.blogspot.com/">לארכיון המאמרים</a></div></noscript>
+    </section>
+    <aside class="books" aria-labelledby="books-title">
+      <h2 id="books-title">ספרים להורדה</h2>
+      <a class="book-link" href="../books/avi_veishi.pdf" download>
+        <div><strong>אבי וישעי</strong><span>תשפ״ו · PDF</span></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" /><path d="M5 19h14" /></svg>
+      </a>
+      <a class="book-link" href="../books/eli_teshukati.pdf" download>
+        <div><strong>אלי תשוקתי</strong><span>תשפ״א · PDF</span></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4" /><path d="M5 19h14" /></svg>
+      </a>
+    </aside>
+    </div>
+  </main>
 
-        function getLinkHost(linkUrl) {
-            try {
-                return new URL(linkUrl).host;
-            } catch {
-                return linkUrl;
-            }
-        }
+  <footer class="site-footer">
+    <div class="footer-inner shell">
+      <div><span class="footer-brand">הגיגי אמרי</span> · אורי פוגלר</div>
+      <div class="footer-links"><a href="../books.html">הספרים</a><a href="../">דף הבית</a><a href="./privacy-policy.html">מדיניות פרטיות</a></div>
+    </div>
+  </footer>
 
-        /* SVG icon helpers */
-        const calendarIcon = `<svg class="post-meta-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M5 1.5v2M11 1.5v2M2 7h12"/></svg>`;
+  <dialog class="article-dialog" id="article-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-bar">
+      <div class="dialog-actions">
+        <button class="dialog-button" id="print-button" type="button">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7V3h10v4" /><rect x="4" y="11" width="12" height="6" /><path d="M4 14H2V8h16v6h-2" /><path d="M15 10h.01" /></svg>
+          הדפסה
+        </button>
+        <a class="dialog-source" id="dialog-source" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener noreferrer">
+          <span>למקור</span>
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3h4v4M15 3 8 10" /><path d="M14 10v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4" /></svg>
+        </a>
+      </div>
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="סגירת המאמר">×</button>
+    </div>
+    <article class="article-reading">
+      <time id="dialog-date"></time>
+      <h2 id="dialog-title"></h2>
+      <div class="article-body" id="dialog-body"></div>
+    </article>
+  </dialog>
 
-        const arrowIcon = `<svg class="post-link-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l-4 4 4 4"/></svg>`;
+  <article class="print-sheet" id="print-sheet" aria-hidden="true"></article>
 
-        function buildPostCard(entry) {
-            const title = entry.title?.$t ?? "";
-            const content = entry.content?.$t ?? entry.summary?.$t ?? "";
-            const published = entry.published?.$t ?? entry.updated?.$t ?? "";
-            const date = published ? new Date(published) : null;
-            const formattedDate = date
-                ? new Intl.DateTimeFormat("he-IL", { dateStyle: "long" }).format(date)
-                : "";
-            const alternateLink = (entry.link || []).find(
-                (link) => link.rel === "alternate"
-            );
-            const linkUrl = alternateLink?.href ?? "https://hagigey.blogspot.com/";
+  <script>
+    const posts = document.getElementById("posts");
+    const dialog = document.getElementById("article-dialog");
+    const dialogTitle = document.getElementById("dialog-title");
+    const dialogDate = document.getElementById("dialog-date");
+    const dialogBody = document.getElementById("dialog-body");
+    const dialogSource = document.getElementById("dialog-source");
+    const printSheet = document.getElementById("print-sheet");
+    let activeArticle = null;
+    let originalDocumentTitle = document.title;
 
-            const card = document.createElement("article");
-            card.className = "card";
+    function paragraphsFromHtml(html, title) {
+      const container = document.createElement("div");
+      container.innerHTML = html;
+      container.querySelectorAll("script, style, iframe, object, embed, form, noscript").forEach((node) => node.remove());
+      const paragraphs = Array.from(container.querySelectorAll("p"))
+        .map((paragraph) => paragraph.textContent.replace(/\s+/g, " ").trim())
+        .filter((text) => text && text !== title);
+      if (paragraphs.length) return paragraphs;
+      const text = container.textContent.replace(/\s+/g, " ").trim();
+      return text && text !== title ? [text] : [];
+    }
 
-            const meta = document.createElement("div");
-            meta.className = "post-meta";
-            meta.innerHTML = `${calendarIcon}<span>${formattedDate}</span>`;
+    function articleData(entry) {
+      const title = entry.title?.$t?.trim() || "מאמר ללא כותרת";
+      const html = entry.content?.$t ?? entry.summary?.$t ?? "";
+      const paragraphs = paragraphsFromHtml(html, title);
+      const fullText = paragraphs.join(" ");
+      const published = entry.published?.$t ?? entry.updated?.$t ?? "";
+      const parsedDate = published ? new Date(published) : null;
+      const date = parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate : null;
+      const alternateLink = (entry.link || []).find((link) => link.rel === "alternate");
+      return { title, paragraphs, fullText, date, url: alternateLink?.href ?? "https://hagigey.blogspot.com/" };
+    }
 
-            const heading = document.createElement("h2");
-            heading.className = "post-title";
-            heading.textContent = title;
+    function formattedDate(date) {
+      if (!date) return "";
+      return new Intl.DateTimeFormat("he-IL", { day: "numeric", month: "long", year: "numeric" }).format(date);
+    }
 
-            const body = document.createElement("div");
-            body.className = "post-content";
-            body.innerHTML = content;
+    function readingTime(text) {
+      return Math.max(2, Math.round(text.split(/\s+/).filter(Boolean).length / 180));
+    }
 
-            const footer = document.createElement("div");
-            footer.className = "post-footer";
+    function excerpt(text, maxLength = 210) {
+      if (text.length <= maxLength) return text;
+      const shortened = text.slice(0, maxLength);
+      const lastSpace = shortened.lastIndexOf(" ");
+      return `${shortened.slice(0, lastSpace > maxLength * 0.75 ? lastSpace : maxLength).trim()}…`;
+    }
 
-            const linkEl = document.createElement("a");
-            linkEl.className = "post-link";
-            linkEl.href = linkUrl;
-            linkEl.target = "_blank";
-            linkEl.rel = "noreferrer";
-            linkEl.innerHTML = `<span>קראו עוד</span>${arrowIcon}`;
+    function appendParagraphs(container, paragraphs) {
+      container.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      paragraphs.forEach((text) => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = text;
+        fragment.appendChild(paragraph);
+      });
+      container.appendChild(fragment);
+    }
 
-            footer.appendChild(linkEl);
-            card.append(meta, heading, body, footer);
+    function openArticle(article) {
+      activeArticle = article;
+      dialogTitle.textContent = article.title;
+      dialogDate.textContent = formattedDate(article.date);
+      dialogDate.dateTime = article.date?.toISOString() || "";
+      dialogSource.href = article.url;
+      appendParagraphs(dialogBody, article.paragraphs);
+      document.body.classList.add("dialog-open");
+      dialog.showModal();
+    }
 
-            return card;
-        }
+    function closeArticle() {
+      dialog.close();
+      document.body.classList.remove("dialog-open");
+    }
 
-        function showEmptyState() {
-            posts.innerHTML = `
-                <div class="empty-state">
-                    <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4.5 6.5c0-1.1.9-2 2-2h5.6c1 0 1.9.6 2.4 1.4.5-.8 1.4-1.4 2.4-1.4h5.6c1.1 0 2 .9 2 2V19c0 .8-.7 1.4-1.5 1.3l-5.8-.9c-1.2-.2-2.4.2-3.1 1.1l-.4.4-.4-.4c-.7-.9-1.9-1.3-3.1-1.1l-5.8.9c-.8.1-1.5-.5-1.5-1.3V6.5z"/>
-                        <path d="M12 6v14"/>
-                    </svg>
-                    <h2>אין פוסטים להצגה</h2>
-                    <p>לא הצלחנו לטעון את הפוסטים כרגע. נסו שוב מאוחר יותר.</p>
-                </div>`;
-            posts.classList.remove("loading");
-            posts.setAttribute("aria-busy", "false");
-        }
+    function buildPrintSheet(article) {
+      printSheet.innerHTML = "";
+      const title = document.createElement("h1");
+      title.textContent = article.title;
+      const date = document.createElement("time");
+      date.textContent = formattedDate(article.date);
+      const body = document.createElement("div");
+      appendParagraphs(body, article.paragraphs);
+      printSheet.append(title, date, body);
+    }
 
-        function renderHagigey(data) {
-            const feed = data?.feed;
-            const entries = feed?.entry ?? [];
+    function finishPrinting() {
+      document.body.classList.remove("printing-article");
+      document.title = originalDocumentTitle;
+    }
 
-            if (!feed || entries.length === 0) {
-                showEmptyState();
-                return;
-            }
+    function printArticle() {
+      if (!activeArticle) return;
+      buildPrintSheet(activeArticle);
+      originalDocumentTitle = document.title;
+      document.title = `${activeArticle.title} — הגיגי אמרי`;
+      document.body.classList.add("printing-article");
+      window.print();
+      window.setTimeout(finishPrinting, 500);
+    }
 
-            blogTitle.textContent = feed.title?.$t ?? "";
-            blogSubtitle.textContent = feed.subtitle?.$t ?? "";
-            blogSubtitle.hidden = !blogSubtitle.textContent;
-            hero.hidden = !blogTitle.textContent;
+    function createMeta(article, isNewest) {
+      const meta = document.createElement("div");
+      meta.className = "post-meta";
+      if (isNewest) {
+        const label = document.createElement("span");
+        label.className = "new-label";
+        label.textContent = "חדש";
+        meta.appendChild(label);
+      }
+      if (article.date) {
+        const time = document.createElement("time");
+        time.dateTime = article.date.toISOString();
+        time.textContent = formattedDate(article.date);
+        meta.appendChild(time);
+      }
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.setAttribute("aria-hidden", "true");
+      const duration = document.createElement("span");
+      duration.textContent = `${readingTime(article.fullText)} דקות`;
+      meta.append(dot, duration);
+      return meta;
+    }
 
-            posts.innerHTML = "";
-            entries.slice(0, 3).forEach((entry) => {
-                posts.appendChild(buildPostCard(entry));
-            });
+    function buildPostCard(entry, index) {
+      const article = articleData(entry);
+      const card = document.createElement("article");
+      card.className = `card${index === 0 ? " card-featured" : ""}`;
+      card.appendChild(createMeta(article, index === 0));
 
-            document.title = blogTitle.textContent
-                ? `${blogTitle.textContent} — שלושת הפוסטים האחרונים`
-                : document.title;
+      const heading = document.createElement("h3");
+      heading.className = "post-title";
+      heading.textContent = article.title;
+      const summary = document.createElement("p");
+      summary.className = "post-excerpt";
+      summary.textContent = excerpt(article.fullText, index === 0 ? 330 : 150);
 
-            posts.classList.remove("loading");
-            posts.setAttribute("aria-busy", "false");
-        }
+      const actions = document.createElement("div");
+      actions.className = "post-actions";
+      const readButton = document.createElement("button");
+      readButton.className = "read-button";
+      readButton.type = "button";
+      readButton.textContent = "פתיחת המאמר";
+      readButton.addEventListener("click", () => openArticle(article));
+      const sourceLink = document.createElement("a");
+      sourceLink.className = "source-link";
+      sourceLink.href = article.url;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noopener noreferrer";
+      sourceLink.textContent = "בבלוג";
+      actions.append(readButton, sourceLink);
+      card.append(heading, summary, actions);
+      return card;
+    }
 
-        /* Timeout fallback — show empty state if feed fails to load */
-        setTimeout(() => {
-            if (posts.classList.contains("loading")) {
-                showEmptyState();
-            }
-        }, 12000);
-    </script>
-    <script
-        src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&max-results=3&callback=renderHagigey">
-    </script>
+    function showEmptyState() {
+      posts.innerHTML = `<div class="empty-state"><h3>לא ניתן לטעון את המאמרים</h3><p>אפשר לקרוא אותם בארכיון המלא.</p><a href="https://hagigey.blogspot.com/">לארכיון המאמרים</a></div>`;
+      posts.setAttribute("aria-busy", "false");
+    }
+
+    function renderHagigey(data) {
+      const entries = data?.feed?.entry ?? [];
+      if (!entries.length) { showEmptyState(); return; }
+      posts.innerHTML = "";
+      const visibleEntries = entries.slice(0, 4);
+      posts.appendChild(buildPostCard(visibleEntries[0], 0));
+      if (visibleEntries.length > 1) {
+        const previousLabel = document.createElement("p");
+        previousLabel.className = "previous-label";
+        previousLabel.textContent = "מאמרים קודמים";
+        posts.appendChild(previousLabel);
+      }
+      visibleEntries.slice(1).forEach((entry, index) => posts.appendChild(buildPostCard(entry, index + 1)));
+      posts.setAttribute("aria-busy", "false");
+    }
+
+    document.getElementById("dialog-close").addEventListener("click", closeArticle);
+    document.getElementById("print-button").addEventListener("click", printArticle);
+    dialog.addEventListener("close", () => document.body.classList.remove("dialog-open"));
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) closeArticle(); });
+    window.addEventListener("afterprint", finishPrinting);
+    window.setTimeout(() => { if (posts.getAttribute("aria-busy") === "true") showEmptyState(); }, 12000);
+  </script>
+  <script src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&amp;max-results=4&amp;callback=renderHagigey"></script>
 </body>
-
 </html>
