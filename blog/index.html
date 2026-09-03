@@ -703,6 +703,20 @@
       posts.setAttribute("aria-busy", "false");
     }
 
+    function renderSharedArticle(data) {
+      if (!data?.entry) return;
+      openArticle(articleData(data.entry), false);
+    }
+
+    function loadSharedArticle(id) {
+      if (!/^\d+$/.test(id)) return;
+      const script = document.createElement("script");
+      script.src = `https://hagigey.blogspot.com/feeds/posts/default/${encodeURIComponent(id)}?alt=json-in-script&callback=renderSharedArticle`;
+      script.addEventListener("load", () => script.remove());
+      script.addEventListener("error", () => script.remove());
+      document.body.appendChild(script);
+    }
+
     function renderHagigey(data) {
       const entries = data?.feed?.entry ?? [];
       if (!entries.length) { showEmptyState(); return; }
@@ -722,6 +736,7 @@
       const requestedId = new URL(window.location.href).searchParams.get("article");
       const requestedArticle = requestedId ? articlesById.get(requestedId) : null;
       if (requestedArticle) openArticle(requestedArticle, false);
+      else if (requestedId) loadSharedArticle(requestedId);
     }
 
     document.getElementById("dialog-close").addEventListener("click", closeArticle);
