@@ -10,6 +10,8 @@
   <meta property="og:title" content="ספרי תורה והגיגים | אורי פוגלר" />
   <meta property="og:description" content="ספרייה דיגיטלית של שני ספרים: 'אבי וישעי' ו'אלי תשוקתי' – הגיגים על פרשיות השבוע והמועדים." />
   <meta property="og:url" content="https://orifogler.com/books.html" />
+  <meta name="google-adsense-account" content="ca-pub-9772429963587397" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9772429963587397" crossorigin="anonymous"></script>
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230f5c4d'/><path d='M16 14h12a6 6 0 0 1 4 1.5A6 6 0 0 1 36 14h12v34H36a4 4 0 0 0-4 2 4 4 0 0 0-4-2H16z' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/><path d='M32 15.5v32.5' stroke='white' stroke-width='2'/></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -106,6 +108,25 @@
       display: grid;
       gap: 44px;
     }
+
+    .library-intro {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 26px 30px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .library-intro h2 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-family: "Frank Ruhl Libre", serif;
+      font-size: 1.65rem;
+    }
+
+    .library-intro p { margin: 0; color: var(--muted); }
+    .library-intro a { color: var(--accent); font-weight: 700; }
 
     .book {
       background: var(--surface);
@@ -230,6 +251,16 @@
       .book { padding: 24px; }
     }
   </style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {"@type":"CollectionPage","name":"ספרי תורה והגיגים","url":"https://orifogler.com/books.html","inLanguage":"he"},
+        {"@type":"Book","name":"אבי וישעי – תורה והגיגים","author":{"@type":"Person","name":"אורי פוגלר","url":"https://orifogler.com/about.html"},"datePublished":"2026","inLanguage":"he","numberOfPages":385,"url":"https://orifogler.com/reader.html?book=avi_veishi"},
+        {"@type":"Book","name":"אלי תשוקתי – ברית אליעזר, תורה ומועדים","author":{"@type":"Person","name":"אורי פוגלר","url":"https://orifogler.com/about.html"},"datePublished":"2020","inLanguage":"he","numberOfPages":293,"url":"https://orifogler.com/reader.html?book=eli_teshukati"}
+      ]
+    }
+  </script>
 </head>
 <body>
   <header class="site">
@@ -241,19 +272,26 @@
     <a href="index.html">דף הבית</a>
     <a href="books.html">ספרים</a>
     <a href="blog/">בלוג</a>
+    <a href="about.html">אודות</a>
     <a href="siddur/">סידור</a>
     <a href="apps/TSPartner.html">כלים</a>
     <a href="resume.html">קורות חיים</a>
   </nav>
 
   <main>
+    <section class="library-intro" aria-labelledby="library-intro-title">
+      <h2 id="library-intro-title">ספרייה של כתיבה מקורית</h2>
+      <p>שני הספרים מאגדים מאות עמודים של מאמרים שכתב אורי פוגלר על התורה, התלמוד ומועדי ישראל. אפשר לקרוא אותם כאן בדפדפן או להוריד ללא תשלום. למאמרים קצרים ועדכניים יותר, בקרו גם ב<a href="blog/">הגיגי אמרי</a>.</p>
+    </section>
+
     <article class="book" id="avi-veishi">
       <div class="book-info">
         <h2>אבי וישעי – תורה והגיגים</h2>
         <div class="meta">מאת אורי פוגלר · סיוון תשפ״ו (2026) · 385 עמודים</div>
 
         <div class="description">
-          <p>הגיגי תורה לפי סדר פרשיות השבוע ומועדי השנה.</p>
+          <p>אסופה רחבה של מאמרים מקוריים המסודרים לפי חמשת חומשי התורה ומועדי השנה. הספר נע בין עיון בפשט הפסוקים ובדברי חז״ל לבין בירור רעיוני והלכתי, ומבקש להציע בכל פרשה מהלך שלם הנולד מתוך שאלה בלימוד.</p>
+          <p>המהדורה כוללת הקדמה, שער לכל אחד מחמשת החומשים ושער נפרד למועדי ישראל.</p>
         </div>
 
         <div class="actions">
@@ -329,7 +367,7 @@
         <div class="meta">מאת אורי פוגלר · תשרי תשפ״א (2020) · 293 עמודים</div>
 
         <div class="description">
-          <p>הגיגי תורה לפי סדר פרשיות השבוע ומועדי השנה.</p>
+          <p>הספר משלב שלושה שערים: עיונים בברית המילה לזכר סבא אליעזר ז״ל, מאמרים על פרשיות התורה, ומאמרים על מועדי ישראל וענייני השנה. המאמרים מחברים בין מקרא, תלמוד, ראשונים ואחרונים ומפתחים מתוכם מהלכים עצמאיים.</p>
         </div>
 
         <div class="actions">
@@ -375,7 +413,8 @@
   <footer>
     הספרים זמינים לקריאה חופשית. כל הזכויות שמורות לאורי פוגלר.
     &nbsp;·&nbsp; <a href="index.html">דף הבית</a>
-    &nbsp;·&nbsp; <a href="blog/privacy-policy.html">מדיניות פרטיות</a>
+    &nbsp;·&nbsp; <a href="about.html">אודות הכותב</a>
+    &nbsp;·&nbsp; <a href="privacy.html">מדיניות פרטיות</a>
   </footer>
 </body>
 </html>
