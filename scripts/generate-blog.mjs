@@ -128,12 +128,14 @@ function cards(posts) {
 
 function blogIndex(posts) {
   const latest = posts.slice(0, 13);
-  const lead = latest.shift();
-  const leadHtml = `<article class="lead">
-      <p class="eyebrow">המאמר האחרון · ${escapeHtml(hebrewDate(lead.date))}</p>
-      <h1><a href="posts/${lead.id}.html">${escapeHtml(lead.title)}</a></h1>
-      <p class="lead-copy">${escapeHtml(excerpt(lead.text, 430))}</p>
-      <a class="primary-link" href="posts/${lead.id}.html">לקריאת המאמר המלא ←</a>
+  latest.shift();
+  const leadHtml = `<article class="lead" id="latest-article" aria-live="polite" aria-busy="true">
+      <p class="eyebrow" id="latest-meta">המאמר האחרון · נטען מ-Blogger</p>
+      <h1 id="latest-title">טוען את המאמר האחרון…</h1>
+      <p class="lead-copy latest-loading" id="latest-excerpt">המאמר החדש ביותר יופיע כאן באופן אוטומטי.</p>
+      <button class="primary-link latest-open" id="latest-open" type="button" hidden>לקריאת המאמר המלא ←</button>
+      <a class="primary-link" id="latest-fallback" href="https://hagigey.blogspot.com/" hidden>לבלוג המקורי ←</a>
+      <noscript><p><a class="primary-link" href="https://hagigey.blogspot.com/">למאמר האחרון ב-Blogger ←</a></p></noscript>
     </article>`;
   return `<!doctype html>
 <html lang="he" dir="rtl">
@@ -152,6 +154,7 @@ function blogIndex(posts) {
   <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
   ${adSenseCode()}
   <link rel="stylesheet" href="article.css" />
+  <link rel="stylesheet" href="latest.css" />
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org", "@type": "Blog", name: "הגיגי אמרי",
     url: `${SITE}/blog/`, inLanguage: "he", author: { "@type": "Person", name: "אורי פוגלר", url: `${SITE}/about.html` },
@@ -171,8 +174,20 @@ function blogIndex(posts) {
     </section>
     <aside class="books-callout"><div><p class="eyebrow">להעמקה נוספת</p><h2>שני ספרים לקריאה חופשית</h2><p>מאות עמודים של מאמרים והגיגים על פרשיות השבוע, מועדי ישראל וסוגיות תלמודיות.</p></div><a class="primary-link" href="../books.html">לספרייה הדיגיטלית ←</a></aside>
   </main>
+  <dialog class="latest-dialog" id="latest-dialog" aria-labelledby="latest-dialog-title">
+    <div class="latest-dialog-bar">
+      <a id="latest-blogger-link" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener">פתיחה ב-Blogger</a>
+      <button id="latest-close" type="button" aria-label="סגירת המאמר">×</button>
+    </div>
+    <article class="latest-reading">
+      <time id="latest-dialog-date"></time>
+      <h2 id="latest-dialog-title"></h2>
+      <div class="latest-body" id="latest-dialog-body"></div>
+    </article>
+  </dialog>
   ${footer("../")}
-  <script>const article = new URLSearchParams(location.search).get("article"); if (/^\\d+$/.test(article || "")) location.replace("posts/" + article + ".html");</script>
+  <script src="latest.js"></script>
+  <script src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&amp;max-results=1&amp;callback=renderLatestHagigey"></script>
 </body>
 </html>\n`;
 }

@@ -16,6 +16,7 @@
   <meta name="google-adsense-account" content="ca-pub-9772429963587397" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9772429963587397" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="article.css" />
+  <link rel="stylesheet" href="latest.css" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"הגיגי אמרי","url":"https://orifogler.com/blog/","inLanguage":"he","author":{"@type":"Person","name":"אורי פוגלר","url":"https://orifogler.com/about.html"}}</script>
 </head>
 <body class="blog-home">
@@ -30,11 +31,13 @@
     <p class="tagline">עיון שבועי בתורה, בתלמוד ובהלכה</p>
   </div></header>
   <main id="content" class="shell blog-main">
-    <article class="lead">
-      <p class="eyebrow">המאמר האחרון · 8 בספטמבר 2026</p>
-      <h1><a href="posts/3290732894958634982.html">שירה בפיהם</a></h1>
-      <p class="lead-copy">בוילך (פרק לא פסוק יט), ועתה כתבו לכם את השירה הזאת ולמדה את בני ישראל שימה בפיהם למען תהיה לי השירה הזאת לעד בבני ישראל. ע&quot;כ. השירה הזאת, מבאר רש&quot;י, היא שירת האזינו, האזינו השמים עד וכפר אדמתו עמו. אם כן, הקב&quot;ה מצווה למשה לכתוב את שירת האזינו, ללמדה את בני ישראל ולשים אותה בפיהם, וכל זאת למען תעמוד השירה כעדות בבני ישראל. וממשיך הכתוב על דרך זו שהשירה עומדת כעדות (בפסוק כא), והיה כי תמצאן אותו רעות רבות וצרות וענתה השירה…</p>
-      <a class="primary-link" href="posts/3290732894958634982.html">לקריאת המאמר המלא ←</a>
+    <article class="lead" id="latest-article" aria-live="polite" aria-busy="true">
+      <p class="eyebrow" id="latest-meta">המאמר האחרון · נטען מ-Blogger</p>
+      <h1 id="latest-title">טוען את המאמר האחרון…</h1>
+      <p class="lead-copy latest-loading" id="latest-excerpt">המאמר החדש ביותר יופיע כאן באופן אוטומטי.</p>
+      <button class="primary-link latest-open" id="latest-open" type="button" hidden>לקריאת המאמר המלא ←</button>
+      <a class="primary-link" id="latest-fallback" href="https://hagigey.blogspot.com/" hidden>לבלוג המקורי ←</a>
+      <noscript><p><a class="primary-link" href="https://hagigey.blogspot.com/">למאמר האחרון ב-Blogger ←</a></p></noscript>
     </article>
     <section class="recent" aria-labelledby="recent-title">
       <div class="section-heading"><div><p class="eyebrow">מן הארכיון</p><h2 id="recent-title">מאמרים אחרונים</h2></div><a href="archive.html">לכל 455 המאמרים ←</a></div>
@@ -113,12 +116,24 @@
     </section>
     <aside class="books-callout"><div><p class="eyebrow">להעמקה נוספת</p><h2>שני ספרים לקריאה חופשית</h2><p>מאות עמודים של מאמרים והגיגים על פרשיות השבוע, מועדי ישראל וסוגיות תלמודיות.</p></div><a class="primary-link" href="../books.html">לספרייה הדיגיטלית ←</a></aside>
   </main>
+  <dialog class="latest-dialog" id="latest-dialog" aria-labelledby="latest-dialog-title">
+    <div class="latest-dialog-bar">
+      <a id="latest-blogger-link" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener">פתיחה ב-Blogger</a>
+      <button id="latest-close" type="button" aria-label="סגירת המאמר">×</button>
+    </div>
+    <article class="latest-reading">
+      <time id="latest-dialog-date"></time>
+      <h2 id="latest-dialog-title"></h2>
+      <div class="latest-body" id="latest-dialog-body"></div>
+    </article>
+  </dialog>
   <footer><div class="shell footer-inner">
     <span>© 2026 אורי פוגלר</span>
     <a href="../about.html">אודות הכותב</a>
     <a href="../privacy.html">מדיניות פרטיות</a>
     <a href="mailto:me@orifogler.com">יצירת קשר</a>
   </div></footer>
-  <script>const article = new URLSearchParams(location.search).get("article"); if (/^\d+$/.test(article || "")) location.replace("posts/" + article + ".html");</script>
+  <script src="latest.js"></script>
+  <script src="https://hagigey.blogspot.com/feeds/posts/default?alt=json-in-script&amp;max-results=1&amp;callback=renderLatestHagigey"></script>
 </body>
 </html>
