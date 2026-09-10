@@ -133,7 +133,10 @@ function blogIndex(posts) {
       <p class="eyebrow" id="latest-meta">המאמר האחרון · נטען מ-Blogger</p>
       <h1 id="latest-title">טוען את המאמר האחרון…</h1>
       <p class="lead-copy latest-loading" id="latest-excerpt">המאמר החדש ביותר יופיע כאן באופן אוטומטי.</p>
-      <button class="primary-link latest-open" id="latest-open" type="button" hidden>לקריאת המאמר המלא ←</button>
+      <div class="latest-actions" id="latest-actions" hidden>
+        <button class="primary-link latest-open" id="latest-open" type="button">לקריאת המאמר המלא ←</button>
+        <button class="latest-share" id="latest-share" type="button">שיתוף קישור</button>
+      </div>
       <a class="primary-link" id="latest-fallback" href="https://hagigey.blogspot.com/" hidden>לבלוג המקורי ←</a>
       <noscript><p><a class="primary-link" href="https://hagigey.blogspot.com/">למאמר האחרון ב-Blogger ←</a></p></noscript>
     </article>`;

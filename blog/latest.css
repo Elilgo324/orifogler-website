@@ -10,6 +10,13 @@ body.dialog-open {
   color: var(--muted);
 }
 
+.latest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
 .latest-open {
   padding: 0;
   border: 0;
@@ -18,6 +25,22 @@ body.dialog-open {
   text-decoration: underline;
   text-underline-offset: 4px;
   cursor: pointer;
+}
+
+.latest-share {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  color: var(--green);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.latest-share:hover {
+  border-color: var(--green);
+  background: #f1f5f2;
 }
 
 .latest-dialog {
