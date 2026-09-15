@@ -54,25 +54,17 @@
 
     a:hover { color: var(--blue); }
 
-    main {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-    }
-
     .shell {
       width: min(var(--max-width), calc(100% - 48px));
       margin: 0 auto;
     }
 
     .hero {
-      min-height: 0;
-      flex: 1;
       display: grid;
       grid-template-columns: minmax(0, 0.95fr) minmax(440px, 1.05fr);
       align-items: center;
       gap: 64px;
-      padding-block: clamp(18px, 3vh, 40px);
+      padding-block: 56px 48px;
     }
 
     .eyebrow {
@@ -219,15 +211,9 @@
     }
 
     @media (max-width: 900px) {
-      main {
-        min-height: auto;
-        display: block;
-      }
-
       .shell { width: min(100% - 32px, var(--max-width)); }
 
       .hero {
-        min-height: auto;
         grid-template-columns: 1fr;
         gap: 54px;
         padding-block: 64px 76px;
@@ -239,6 +225,8 @@
         width: 100%;
         margin: 0;
       }
+
+      .portrait-wrap::before { inset: 12px -12px -12px 12px; }
 
       .writing-section { padding-bottom: 64px; }
 
