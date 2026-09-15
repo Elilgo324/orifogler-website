@@ -65,21 +65,6 @@
       margin: 0 auto;
     }
 
-    .site-nav {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 24px;
-      min-height: 62px;
-      border-bottom: 1px solid var(--line);
-      color: var(--navy);
-      font-size: 0.9rem;
-      font-weight: 680;
-    }
-
-    .site-nav a { text-decoration: none; }
-    .site-nav .home-link { margin-right: auto; font-weight: 800; }
-
     .hero {
       min-height: 0;
       flex: 1;
@@ -241,8 +226,6 @@
 
       .shell { width: min(100% - 32px, var(--max-width)); }
 
-      .site-nav { gap: 16px; min-height: 56px; font-size: 0.84rem; }
-
       .hero {
         min-height: auto;
         grid-template-columns: 1fr;
@@ -279,13 +262,6 @@
 </head>
 
 <body>
-  <nav class="site-nav shell" aria-label="Main navigation">
-    <a class="home-link" href="index.html" aria-current="page">Ori Fogler</a>
-    <a href="blog/">Blog</a>
-    <a href="books.html">Books</a>
-    <a href="about.html">About</a>
-    <a href="resume.html">Resume</a>
-  </nav>
   <main id="top">
     <header class="hero shell">
       <div>
