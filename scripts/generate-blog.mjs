@@ -5,7 +5,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const POSTS_DIR = join(ROOT, "blog", "posts");
+const POSTS_DIR = join(ROOT, "hagigey", "posts");
 const ADSENSE_ID = "ca-pub-9772429963587397";
 const SITE = "https://orifogler.com";
 const inputIndex = process.argv.indexOf("--input");
@@ -102,7 +102,7 @@ function adSenseCode() {
 function topNav(prefix = "../") {
   return `<nav class="site-nav" aria-label="ניווט ראשי">
     <a href="${prefix}index.html">ראשי</a>
-    <a href="${prefix}blog/" aria-current="page">בלוג</a>
+    <a href="${prefix}hagigey/" aria-current="page">הגיגי אמרי</a>
     <a href="${prefix}books.html">ספרים</a>
     <a href="${prefix}about.html">אודות</a>
   </nav>`;
@@ -148,19 +148,19 @@ function blogIndex(posts) {
   <meta name="theme-color" content="#173d39" />
   <title>הגיגי אמרי — מאמרים בפרשת השבוע מאת אורי פוגלר</title>
   <meta name="description" content="מאמרים מקוריים בפרשת השבוע, תלמוד והלכה מאת אורי פוגלר. ארכיון של ${posts.length} מאמרים לקריאה חופשית." />
-  <link rel="canonical" href="${SITE}/blog/" />
+  <link rel="canonical" href="${SITE}/hagigey/" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="he_IL" />
   <meta property="og:title" content="הגיגי אמרי — מאמרים בפרשת השבוע" />
   <meta property="og:description" content="מאמרים מקוריים בפרשת השבוע, תלמוד והלכה מאת אורי פוגלר." />
-  <meta property="og:url" content="${SITE}/blog/" />
+  <meta property="og:url" content="${SITE}/hagigey/" />
   <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
   ${adSenseCode()}
   <link rel="stylesheet" href="article.css" />
   <link rel="stylesheet" href="latest.css" />
   <script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org", "@type": "Blog", name: "הגיגי אמרי",
-    url: `${SITE}/blog/`, inLanguage: "he", author: { "@type": "Person", name: "אורי פוגלר", url: `${SITE}/about.html` },
+    url: `${SITE}/hagigey/`, inLanguage: "he", author: { "@type": "Person", name: "אורי פוגלר", url: `${SITE}/about.html` },
   }).replaceAll("<", "\\u003c")}</script>
 </head>
 <body class="blog-home">
@@ -198,7 +198,7 @@ function blogIndex(posts) {
 function articlePage(post, previous, next) {
   const description = excerpt(post.text, 155);
   const keywords = post.labels.slice(0, 8).join(", ");
-  const url = `${SITE}/blog/posts/${post.id}.html`;
+  const url = `${SITE}/hagigey/posts/${post.id}.html`;
   const articleJson = {
     "@context": "https://schema.org", "@type": "Article", headline: post.title,
     description, datePublished: post.published, dateModified: post.published, inLanguage: "he",
@@ -257,7 +257,7 @@ function archivePage(posts) {
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ארכיון מאמרים | הגיגי אמרי</title>
   <meta name="description" content="ארכיון מלא של ${posts.length} מאמרים מקוריים מאת אורי פוגלר, מסודרים לפי שנת פרסום." />
-  <link rel="canonical" href="${SITE}/blog/archive.html" /><link rel="icon" href="../favicon.svg" type="image/svg+xml" /><link rel="stylesheet" href="article.css" />
+  <link rel="canonical" href="${SITE}/hagigey/archive.html" /><link rel="icon" href="../favicon.svg" type="image/svg+xml" /><link rel="stylesheet" href="article.css" />
 </head><body><a class="skip-link" href="#archive">דילוג לארכיון</a>
   <header class="article-header"><div class="shell">${topNav("../")}</div></header>
   <main id="archive" class="archive-wrap"><p class="eyebrow">הגיגי אמרי</p><h1>ארכיון המאמרים</h1><p class="archive-intro">${posts.length} מאמרים מקוריים בפרשת השבוע, תלמוד והלכה.</p>${groups}</main>
@@ -315,17 +315,17 @@ const posts = [...unique.values()].sort((a, b) => b.date - a.date);
 if (!posts.length) throw new Error("No usable Blogger posts were found.");
 
 await mkdir(POSTS_DIR, { recursive: true });
-await writeFile(join(ROOT, "blog", "article.css"), articleCss);
-await writeFile(join(ROOT, "blog", "index.html"), blogIndex(posts));
-await writeFile(join(ROOT, "blog", "archive.html"), archivePage(posts));
+await writeFile(join(ROOT, "hagigey", "article.css"), articleCss);
+await writeFile(join(ROOT, "hagigey", "index.html"), blogIndex(posts));
+await writeFile(join(ROOT, "hagigey", "archive.html"), archivePage(posts));
 for (let index = 0; index < posts.length; index += 1) {
   await writeFile(join(POSTS_DIR, `${posts[index].id}.html`), articlePage(posts[index], posts[index - 1], posts[index + 1]));
 }
 
 const sitemapPages = [
-  ["/", posts[0].published], ["/blog/", posts[0].published], ["/blog/archive.html", posts[0].published],
+  ["/", posts[0].published], ["/hagigey/", posts[0].published], ["/hagigey/archive.html", posts[0].published],
   ["/books.html", "2026-09-10"], ["/about.html", "2026-09-10"], ["/privacy.html", "2026-09-10"],
-  ...posts.map((post) => [`/blog/posts/${post.id}.html`, post.published]),
+  ...posts.map((post) => [`/hagigey/posts/${post.id}.html`, post.published]),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapPages.map(([path, modified]) => `  <url><loc>${SITE}${path}</loc><lastmod>${String(modified).slice(0, 10)}</lastmod></url>`).join("\n")}\n</urlset>\n`;
 await writeFile(join(ROOT, "sitemap.xml"), sitemap);
