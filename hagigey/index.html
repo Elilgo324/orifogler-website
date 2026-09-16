@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="article.css" />
   <link rel="stylesheet" href="latest.css" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"הגיגי אמרי","url":"https://orifogler.com/hagigey/","inLanguage":"he","author":{"@type":"Person","name":"אורי פוגלר","url":"https://orifogler.com/about.html"}}</script>
+  <link rel="stylesheet" href="../assets/blog-print.css" />
+  <script src="../assets/blog-print.js" defer></script>
 </head>
 <body class="blog-home">
   <a class="skip-link" href="#content">דילוג לתוכן</a>
@@ -31,6 +33,7 @@
     <p class="tagline">עיון שבועי בתורה, בתלמוד ובהלכה</p>
   </div></header>
   <main id="content" class="shell blog-main">
+    <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>הדפסת העמוד</span></button></div>
     <article class="lead" id="latest-article" aria-live="polite" aria-busy="true">
       <p class="eyebrow" id="latest-meta">המאמר האחרון · נטען מ-Blogger</p>
       <h1 id="latest-title">טוען את המאמר האחרון…</h1>
@@ -122,6 +125,7 @@
   <dialog class="latest-dialog" id="latest-dialog" aria-labelledby="latest-dialog-title">
     <div class="latest-dialog-bar">
       <a id="latest-blogger-link" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener">פתיחה ב-Blogger</a>
+      <button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>הדפסת המאמר</span></button>
       <button id="latest-close" type="button" aria-label="סגירת המאמר">×</button>
     </div>
     <article class="latest-reading">

@@ -1,0 +1,95 @@
+.print-actions { margin-block: 16px 0; }
+.print-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: .875rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.print-button[hidden] { display: none; }
+.print-button:hover { background: rgba(127, 127, 127, .1); }
+.print-button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.print-button svg { width: 16px; height: 16px; flex: none; }
+.latest-dialog-bar .print-button { width: auto; height: auto; padding: 6px 12px; font-size: .875rem; }
+.print-dialog-content, .print-source { display: none; }
+
+@page { margin: 16mm; }
+@media print {
+  html, body { min-width: 0 !important; height: auto !important; overflow: visible !important; }
+  body { margin: 0 !important; color: #000 !important; background: #fff !important; font-size: 12pt; line-height: 1.55; }
+  *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
+  .site-header, .article-header, .site-nav, .breadcrumbs, .related, .back-link,
+  .site-footer, footer, .skip-link, .article-end, .print-actions, .print-button,
+  .latest-actions, .latest-dialog-bar, .books-callout, .read-more, .read-link,
+  #latest-fallback, .adsbygoogle, iframe { display: none !important; }
+  .shell, .article-wrap, .article-content, .article-layout, .blog-main,
+  .archive-wrap, .blog-index, .latest-reading {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  .article-heading, .index-heading { padding: 0 0 6mm !important; }
+  .article-content > header { padding: 0 0 5mm; margin-bottom: 5mm; border-bottom: 1px solid #aaa; }
+  h1, h2, h3, .brand { color: #000 !important; letter-spacing: normal !important; break-after: avoid; page-break-after: avoid; }
+  h1, .article-content h1, .lead h1, .latest-reading h2 { margin: 3mm 0 !important; font-size: 23pt !important; line-height: 1.2 !important; }
+  h2, .prose h2 { margin: 6mm 0 3mm; font-size: 16pt !important; line-height: 1.3; }
+  h3, .prose h3 { font-size: 13pt !important; }
+  p, li { orphans: 3; widows: 3; }
+  a { color: inherit !important; text-decoration: none !important; overflow-wrap: anywhere; }
+  .prose, .latest-body, .lead-copy { padding: 0 !important; color: #000 !important; font-size: 12pt !important; line-height: 1.5 !important; }
+  .prose p, .latest-body p { margin: 0 0 3.5mm; }
+  .byline, time, .post-meta, .source-note, .article-subtitle, .intro, figcaption { color: #333 !important; }
+  .article-subtitle { font-size: 14pt; }
+  pre, .prose pre {
+    max-width: 100%;
+    padding: 3mm !important;
+    color: #000 !important;
+    background: #f6f6f6 !important;
+    border: 1px solid #ddd;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    overflow: visible !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    font-size: 9pt !important;
+    line-height: 1.45 !important;
+  }
+  pre code, .prose pre code { white-space: inherit; overflow-wrap: inherit; font-size: inherit !important; }
+  .code-label { break-after: avoid; }
+  figure, .graph-figure, blockquote { break-inside: avoid; page-break-inside: avoid; }
+  img, svg { max-width: 100% !important; }
+  .graph-figure svg { max-height: 85mm; }
+  .masthead { min-height: 0; padding-bottom: 6mm; color: #000; background: none; }
+  .brand { margin: 0; font-size: 26pt; }
+  .tagline { margin-top: 2mm; color: #333; }
+  .lead, .post-card { min-height: 0; padding: 4mm 0; border: 0; background: none; }
+  .post-card { break-inside: avoid; border-top: 1px solid #ccc; }
+  .post-card h2 { margin: 2mm 0; }
+  .post-card p { color: #000; }
+  .recent { padding-block: 6mm; }
+  .post-grid { display: block; }
+  .section-heading > a { display: none; }
+  .archive-intro { margin: 3mm 0 6mm; }
+  .archive-year { display: block; padding-block: 4mm; }
+  .archive-year h2 { margin-bottom: 2mm; }
+  .archive-year li { break-inside: avoid; }
+  .print-source { display: block; margin: 8mm 0 0 !important; padding-top: 3mm; border-top: 1px solid #ccc; color: #333; font: 9pt/1.5 Arial, sans-serif; overflow-wrap: anywhere; }
+  .print-source a { display: inline-block; max-width: 100%; }
+  /* A modal's top layer and scroll constraints must never reach the paper. */
+  body.printing-dialog > :not(.print-dialog-content) { display: none !important; }
+  body.printing-dialog .print-dialog-content { display: block !important; }
+  body.printing-dialog .latest-reading { display: block; }
+}

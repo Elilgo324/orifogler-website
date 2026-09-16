@@ -99,6 +99,15 @@ function adSenseCode() {
   return `<meta name="google-adsense-account" content="${ADSENSE_ID}" />\n  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}" crossorigin="anonymous"></script>`;
 }
 
+function printAssets(prefix) {
+  return `<link rel="stylesheet" href="${prefix}assets/blog-print.css" />
+  <script src="${prefix}assets/blog-print.js" defer></script>`;
+}
+
+function printButton(label) {
+  return `<button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>${label}</span></button>`;
+}
+
 function topNav(prefix = "../") {
   return `<nav class="site-nav" aria-label="ניווט ראשי">
     <a href="${prefix}index.html">ראשי</a>
@@ -162,6 +171,7 @@ function blogIndex(posts) {
     "@context": "https://schema.org", "@type": "Blog", name: "הגיגי אמרי",
     url: `${SITE}/hagigey/`, inLanguage: "he", author: { "@type": "Person", name: "אורי פוגלר", url: `${SITE}/about.html` },
   }).replaceAll("<", "\\u003c")}</script>
+  ${printAssets("../")}
 </head>
 <body class="blog-home">
   <a class="skip-link" href="#content">דילוג לתוכן</a>
@@ -170,6 +180,7 @@ function blogIndex(posts) {
     <p class="tagline">עיון שבועי בתורה, בתלמוד ובהלכה</p>
   </div></header>
   <main id="content" class="shell blog-main">
+    <div class="print-actions">${printButton("הדפסת העמוד")}</div>
     ${leadHtml}
     <section class="recent" aria-labelledby="recent-title">
       <div class="section-heading"><div><p class="eyebrow">מן הארכיון</p><h2 id="recent-title">מאמרים אחרונים</h2></div><a href="archive.html">לכל ${posts.length} המאמרים ←</a></div>
@@ -180,6 +191,7 @@ function blogIndex(posts) {
   <dialog class="latest-dialog" id="latest-dialog" aria-labelledby="latest-dialog-title">
     <div class="latest-dialog-bar">
       <a id="latest-blogger-link" href="https://hagigey.blogspot.com/" target="_blank" rel="noopener">פתיחה ב-Blogger</a>
+      ${printButton("הדפסת המאמר")}
       <button id="latest-close" type="button" aria-label="סגירת המאמר">×</button>
     </div>
     <article class="latest-reading">
@@ -226,6 +238,7 @@ function articlePage(post, previous, next) {
   ${adSenseCode()}
   <link rel="stylesheet" href="../article.css" />
   <script type="application/ld+json">${JSON.stringify(articleJson).replaceAll("<", "\\u003c")}</script>
+  ${printAssets("../../")}
 </head>
 <body>
   <a class="skip-link" href="#article">דילוג למאמר</a>
@@ -233,7 +246,7 @@ function articlePage(post, previous, next) {
   <main id="article" class="article-wrap">
     <nav class="breadcrumbs" aria-label="פירורי לחם"><a href="../">הגיגי אמרי</a><span aria-hidden="true">/</span><span>${escapeHtml(post.title)}</span></nav>
     <article class="article-content">
-      <header><time datetime="${escapeHtml(post.published)}">${escapeHtml(hebrewDate(post.date))}</time><h1>${escapeHtml(post.title)}</h1><p class="byline">מאת <a href="../../about.html">אורי פוגלר</a></p></header>
+      <header><time datetime="${escapeHtml(post.published)}">${escapeHtml(hebrewDate(post.date))}</time><h1>${escapeHtml(post.title)}</h1><p class="byline">מאת <a href="../../about.html">אורי פוגלר</a></p><div class="print-actions">${printButton("הדפסת המאמר")}</div></header>
       <div class="prose">${post.blocks.join("\n        ")}</div>
     </article>
     ${related ? `<nav class="related" aria-label="מאמרים נוספים"><p class="eyebrow">המשך קריאה</p>${related}</nav>` : ""}
@@ -258,9 +271,10 @@ function archivePage(posts) {
   <title>ארכיון מאמרים | הגיגי אמרי</title>
   <meta name="description" content="ארכיון מלא של ${posts.length} מאמרים מקוריים מאת אורי פוגלר, מסודרים לפי שנת פרסום." />
   <link rel="canonical" href="${SITE}/hagigey/archive.html" /><link rel="icon" href="../favicon.svg" type="image/svg+xml" /><link rel="stylesheet" href="article.css" />
+  ${printAssets("../")}
 </head><body><a class="skip-link" href="#archive">דילוג לארכיון</a>
   <header class="article-header"><div class="shell">${topNav("../")}</div></header>
-  <main id="archive" class="archive-wrap"><p class="eyebrow">הגיגי אמרי</p><h1>ארכיון המאמרים</h1><p class="archive-intro">${posts.length} מאמרים מקוריים בפרשת השבוע, תלמוד והלכה.</p>${groups}</main>
+  <main id="archive" class="archive-wrap"><p class="eyebrow">הגיגי אמרי</p><h1>ארכיון המאמרים</h1><div class="print-actions">${printButton("הדפסת הארכיון")}</div><p class="archive-intro">${posts.length} מאמרים מקוריים בפרשת השבוע, תלמוד והלכה.</p>${groups}</main>
   ${footer("../")}</body></html>\n`;
 }
 

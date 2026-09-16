@@ -16,6 +16,7 @@
   const dialogBody = document.getElementById("latest-dialog-body");
   const bloggerLink = document.getElementById("latest-blogger-link");
   let latestArticle = null;
+  const pageTitle = document.title;
 
   function paragraphsFromHtml(html, articleTitle) {
     const container = document.createElement("div");
@@ -86,6 +87,7 @@
 
   function openArticle(article = latestArticle, updateUrl = true) {
     if (!article) return;
+    document.title = `${article.title} | הגיגי אמרי`;
     dialogTitle.textContent = article.title;
     dialogDate.textContent = formattedDate(article.date);
     dialogDate.dateTime = article.date ? article.date.toISOString() : "";
@@ -177,6 +179,7 @@
   shareButton.addEventListener("click", shareLatest);
   closeButton.addEventListener("click", closeArticle);
   dialog.addEventListener("close", () => {
+    document.title = pageTitle;
     document.body.classList.remove("dialog-open");
     clearArticleFromUrl();
   });
