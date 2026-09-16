@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reinforcement Learning: A Map of the Ideas — Ori Fogler</title>
+  <meta name="description" content="A readable guide to reinforcement learning: values, policies, actor–critic, DQN, PPO, SAC, and AlphaZero. What each learns, how it chooses, and when to use it." />
+  <link rel="canonical" href="https://orifogler.com/blog/posts/reinforcement-learning.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Reinforcement learning: a map of the ideas" />
+  <meta property="og:description" content="One running example, a clear vocabulary, and the reasons to choose one RL method over another." />
+  <meta property="og:url" content="https://orifogler.com/blog/posts/reinforcement-learning.html" />
+  <meta property="article:published_time" content="2026-09-16" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../blog.css" />
+  <link rel="stylesheet" href="../rl-article.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Reinforcement learning: a map of the ideas","description":"A readable guide to RL terminology, methods, and the tradeoffs behind choosing them.","datePublished":"2026-09-16","dateModified":"2026-09-16","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/reinforcement-learning.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="../../">Ori Fogler</a>
+    <nav aria-label="Main navigation"><a href="../">Blog</a><a href="../../resume.html">Resume</a></nav>
+  </header>
+  <main id="content" class="shell rl-article">
+    <article>
+      <header class="article-heading">
+        <p class="article-kicker">Machine learning · A practical field guide</p>
+        <h1>Reinforcement learning: a map of the ideas</h1>
+        <p class="article-subtitle">What the methods learn, how they choose, and why you might prefer one over another.</p>
+        <p class="byline">Ori Fogler · <time datetime="2026-09-16">September 16, 2026</time> · <span id="reading-time">About 25 minutes</span></p>
+      </header>
+      <div class="article-layout"><div class="prose">
+        <p>A robot reaches a junction in a maze. Left looks familiar. Right might be a shortcut. Which way should it go?</p>
+        <p>One system compares learned scores for left and right. Another has learned a rule that directly picks a direction. A third imagines several possible futures before moving. All three can be part of reinforcement learning.</p>
+        <p>The confusing part is that the names describe different things. “Actor–critic” describes the roles of learned components. “Off-policy” describes which experience an update can use. “PPO” names a particular algorithm. They belong on different lines of the same description.</p>
+        <p>We will keep returning to this robot. Each new method should answer two concrete questions: <strong>what does it learn, and what determines its next action?</strong></p>
+        <nav class="article-toc" aria-label="In this article">
+          <strong>In this article</strong>
+          <ol>
+            <li><a href="#the-problem">The problem and its vocabulary</a></li>
+            <li><a href="#three-objects">Three objects: policy, value, model</a></li>
+            <li><a href="#learning-values">Learning values: Q-learning and DQN</a></li>
+            <li><a href="#learning-policies">Learning policies: REINFORCE and actor–critic</a></li>
+            <li><a href="#ppo">Careful policy updates: TRPO and PPO</a></li>
+            <li><a href="#continuous-control">Continuous control: DDPG, TD3, and SAC</a></li>
+            <li><a href="#planning">Planning: MCTS, AlphaZero, and learned models</a></li>
+            <li><a href="#labels">The labels that cut across the methods</a></li>
+            <li><a href="#choosing">Choosing a method</a></li>
+            <li><a href="#other-directions">Other names you will encounter</a></li>
+            <li><a href="#glossary">Names, synonyms, and a glossary</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="the-problem">1. Learning from consequences</h2>
+        <p>In supervised learning, a training example often comes with the answer: this image contains a cat. In <strong>reinforcement learning (RL)</strong>, the learner takes an action and receives feedback about what happened. It usually gets no label saying which action would have been best.</p>
+        <p>The learner is the <strong>agent</strong>. Everything it interacts with is the <strong>environment</strong>. Our robot is the agent; the maze, its doors, and its rules are the environment.</p>
+        <p>At each step, the robot observes its situation, chooses an <strong>action</strong>, and receives a numerical <strong>reward</strong>. The environment changes, and the loop repeats. Reaching the exit might earn +10; taking a step might cost −1. The objective is to learn behavior that earns a high total reward over time.</p>
+        <div class="memory-note"><p><strong>The essential difficulty:</strong> an action can be useful now and harmful later. RL must connect a later outcome to the earlier decisions that helped cause it. This is the <strong>credit assignment</strong> problem.</p></div>
+
+        <h3>State and observation: the situation versus what you can see</h3>
+        <p>A <strong>state</strong>, written <code>s</code>, contains the information needed to predict what happens next, given an action. In a simple maze, that might be the robot’s position. If locked doors and limited battery matter, position alone is insufficient: we also need the key inventory and battery level.</p>
+        <p>This is the <strong>Markov property</strong>: once we know the current state and action, older history adds no information about the next-state and reward distribution. A problem with this structure is a <strong>Markov decision process (MDP)</strong>.</p>
+        <p>An <strong>observation</strong>, written <code>o</code>, is what the agent actually receives. A camera image may hide the key behind a wall. When observations do not reveal the full state, the problem is partially observable—a <strong>POMDP</strong>. Memory, a recurrent network, or a belief about hidden state can help. Merely calling a vector “the state” does not make it Markov.</p>
+
+        <h3>Reward, return, and discount: three different things</h3>
+        <p>A reward is one piece of feedback. The <strong>return</strong>, written <code>G</code>, adds up rewards from a point onward. A common objective discounts later rewards:</p>
+        <div class="equation" aria-label="Return equals next reward plus gamma times the following reward plus gamma squared times the next reward, and so on">G<sub>t</sub> = r<sub>t+1</sub> + γr<sub>t+2</sub> + γ²r<sub>t+3</sub> + …</div>
+        <p>The <strong>discount factor</strong> <code>γ</code> (gamma) controls how heavily the objective weights the future. With <code>γ = 0</code>, only the next reward counts. A value near 1 gives distant consequences more weight. Finite episodes can use 1; continuing discounted problems commonly use a value below 1. Discounting changes the objective—it is not a prediction of whether a reward will arrive.</p>
+        <p>A complete attempt, from starting the maze to reaching an ending, is an <strong>episode</strong>. A <strong>trajectory</strong> is the sequence of observations or states, actions, and rewards. A <strong>rollout</strong> is a collected sequence, which may stop before the episode ends. These words overlap, but “rollout” does not necessarily mean a complete game.</p>
+        <p>The reward must express what we actually want. If the robot gets a bonus every time it touches a key, it might learn to pick it up and drop it repeatedly. A high training reward is evidence of success only when the reward and evaluation capture the intended task.</p>
+
+        <h2 id="three-objects">2. Policy, value, model: three objects to remember</h2>
+        <p>Most of the vocabulary becomes easier if we separate three things an agent might know.</p>
+        <div class="concept-map" aria-label="Three learned objects and the questions they answer">
+          <div><span class="concept-number">01</span><h3>Policy</h3><p>What should I do?</p><small>A rule for choosing an action.</small></div>
+          <div><span class="concept-number">02</span><h3>Value</h3><p>How good is this?</p><small>A prediction of future return.</small></div>
+          <div><span class="concept-number">03</span><h3>Model</h3><p>What happens next?</p><small>A prediction of consequences.</small></div>
+        </div>
+        <h3>A policy is the decision rule</h3>
+        <p>A <strong>policy</strong>, written <code>π</code> (pi), maps the agent’s information to an action or a distribution over actions. A deterministic policy might always choose right at this junction. A stochastic policy might assign left a probability of 30% and right 70%.</p>
+        <p>Sampling from that distribution means choosing right about 70% of the time across repeated choices in the same situation. Taking the most probable action means always choosing right here. Those are different decision rules; an implementation must specify which it uses.</p>
+        <p>Choosing the most probable action at deployment is common, but it changes a stochastic policy and is not always better. Some tasks benefit from retaining randomness.</p>
+
+        <h3>A value is a forecast, not an immediate reward</h3>
+        <p>The <strong>state-value function</strong> <code>V<sup>π</sup>(s)</code> predicts the expected return starting in state <code>s</code> and following policy <code>π</code>. The <strong>action-value function</strong> <code>Q<sup>π</sup>(s, a)</code> predicts the expected return if we first take action <code>a</code>, then follow that policy.</p>
+        <p>At our junction, <code>Q(s, left) = 4</code> and <code>Q(s, right) = 7</code> would favor right. Those numbers are predicted returns, not probabilities. The superscript matters: a route can be promising for a skilled policy and poor for one that gets lost later. <code>Q*</code>, read “Q-star,” denotes values under optimal future behavior.</p>
+        <p>The <strong>advantage</strong> compares an action with the policy’s usual prospects in that state:</p>
+        <div class="equation">A<sup>π</sup>(s, a) = Q<sup>π</sup>(s, a) − V<sup>π</sup>(s)</div>
+        <p>If an action’s expected return is 8 while the policy’s average from that state is 5, its advantage is +3. “Good” now means better than the relevant baseline, rather than merely receiving a positive reward.</p>
+
+        <h3>A model predicts consequences</h3>
+        <p>An <strong>environment model</strong> predicts the next state and reward, or their probability distributions. It may be a supplied simulator or something learned from experience. A model lets the robot ask what would happen if it moved right without actually moving right.</p>
+        <p>A neural network that predicts Q-values is a machine-learning model in everyday language. In the specific phrase <strong>model-based RL</strong>, however, “model” refers to a model of environment consequences. DQN has a neural network and is still called model-free.</p>
+        <div class="memory-note"><p><strong>Keep the questions separate:</strong> a policy chooses; a value evaluates; an environment model predicts. An algorithm can combine them.</p></div>
+        <p><strong>Value-based</strong> methods build the decision around learned action values. <strong>Policy-based</strong> methods directly learn the decision rule. <strong>Actor–critic</strong> combines a learned policy with a value estimator. These are useful descriptions, not three completely separate boxes; “model-based” adds another dimension.</p>
+        <p class="reference">For the formal definitions, see <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html">Spinning Up: Key Concepts in RL</a>.</p>
+
+        <h2 id="learning-values">3. Learning a score for each action</h2>
+        <p>Suppose we give the robot a notebook. Each row is a maze state; each column is an action. The entries estimate the return from taking that action. This is a <strong>Q-table</strong>.</p>
+        <p>To exploit what it knows, the robot selects the action with the highest Q-value. To discover alternatives, it must sometimes <strong>explore</strong>. In <strong>epsilon-greedy</strong> exploration, it takes a random available action with probability <code>ε</code> and otherwise takes a highest-valued action. A greedy policy is still a policy, even when there is no separate policy network.</p>
+
+        <h3>Monte Carlo and temporal difference: when do we learn?</h3>
+        <p>One option is to finish the attempt and use the actual return to update the notebook. This is a <strong>Monte Carlo (MC)</strong> target: learn from the sampled outcome. It needs no estimate of what lies beyond that completed return, but outcomes can be noisy and feedback arrives late.</p>
+        <p>A <strong>temporal-difference (TD)</strong> target combines the next observed reward with an estimate of what follows. For a state-value estimate, a one-step target is <code>r + γV(next state)</code>. Updating an estimate using another estimate is called <strong>bootstrapping</strong>. It lets learning proceed before the episode ends, at the cost of depending on imperfect predictions.</p>
+        <p>Imagine our current estimate is 4. We observe reward 1, and estimate the remaining return as 6. With <code>γ = 0.9</code>, the target is <code>1 + 0.9 × 6 = 6.4</code>. A learning rate of 0.5 moves our estimate halfway toward it: <code>4 + 0.5 × (6.4 − 4) = 5.2</code>. The gap between target and estimate is the <strong>TD error</strong>.</p>
+        <p>The recursive idea—return now equals the next reward plus future return—is expressed by <strong>Bellman equations</strong>. They relate values across states; they are not a separate neural-network architecture.</p>
+        <p><strong>n-step returns</strong> sit between one-step TD and a complete Monte Carlo return: collect several actual rewards, then bootstrap from an estimate of what remains. <strong>Eligibility traces</strong> are a related mechanism for spreading updates across recently visited states or actions. These are ways to assign credit, not new choices of policy architecture.</p>
+
+        <h3>Q-learning versus SARSA: which future action?</h3>
+        <p><strong>Q-learning</strong> uses the highest estimated Q-value at the next state:</p>
+        <div class="equation">target = r + γ max<sub>a′</sub> Q(s′, a′)</div>
+        <p>It learns toward greedy future behavior even when the data-collecting robot explores. <strong>SARSA</strong> instead uses the next action the robot actually selected:</p>
+        <div class="equation">target = r + γ Q(s′, a′ actually selected)</div>
+        <p>SARSA’s name comes from the sequence <em>state, action, reward, state, action</em>. If the robot keeps exploring near a dangerous shortcut, SARSA’s target reflects that exploratory behavior. Q-learning’s target assumes a greedy choice next. This is the core distinction, rather than “one is careful and the other is reckless.”</p>
+        <p>Q-learning is <strong>off-policy</strong>: the policy being learned about can differ from the one collecting experience. Ordinary SARSA is <strong>on-policy</strong>: it evaluates and improves the policy generating its actions. At a true terminal state, both targets have no future-value term.</p>
+        <p><strong>When to use a table:</strong> when the state and action sets are small enough to revisit and store. A table does not infer a useful value for an unseen state. Grouping states into bins can help, but the grouping decides which differences the agent can no longer distinguish.</p>
+
+        <h3>DQN: replace the notebook with a neural network</h3>
+        <p>A <strong>Deep Q-Network (DQN)</strong> predicts action values from features or observations. In a common setup, one network receives the state and outputs a score for each discrete action. At decision time, compare those scores; during training, usually add exploration.</p>
+        <p>The network can share what it learns across similar inputs. It does not guarantee good decisions in unfamiliar situations. Standard DQN uses <strong>experience replay</strong>, a buffer of old transitions sampled for training, and a slowly updated <strong>target network</strong> that supplies more stable learning targets. These serve different purposes: replay reuses and mixes experience; the target network slows the movement of the prediction target.</p>
+        <p><strong>Double DQN</strong> separates the action-selection and action-evaluation parts of the target to reduce overestimation. <strong>Dueling DQN</strong> changes the network to estimate a state-value component and relative action advantages. “Double” and “dueling” are different ideas and can be combined. <strong>Rainbow</strong> combines several DQN improvements, including these and distributional value learning.</p>
+        <p><strong>Why choose this family?</strong> It is a natural fit when the available actions are discrete and manageable, and reusing expensive experience matters. Its difficulty is learning reliable values while its own predictions influence future targets. Standard DQN also becomes awkward when selecting the best action requires searching a huge or continuous action space.</p>
+        <p class="reference">Sources: <a href="https://www.nature.com/articles/nature14236">DQN</a>, <a href="https://arxiv.org/abs/1509.06461">Double DQN</a>, <a href="https://arxiv.org/abs/1511.06581">dueling networks</a>, and <a href="https://arxiv.org/abs/1710.02298">Rainbow</a>.</p>
+
+        <h2 id="learning-policies">4. Learning the decision rule directly</h2>
+        <p>Instead of learning a score and then searching for its maximum, we can directly adjust the policy. At the junction, the network might output <code>π(left | s) = 0.3</code> and <code>π(right | s) = 0.7</code>. The vertical bar means “given this state.”</p>
+        <p><strong>Policy gradient</strong> methods update the policy’s parameters to increase expected return. Intuitively, they make actions associated with better outcomes more likely. The gradient tells the optimizer how changing the parameters changes the objective; it does not require differentiating through the real environment.</p>
+
+        <h3>REINFORCE: learn from completed attempts</h3>
+        <p><strong>REINFORCE</strong> is a classic Monte Carlo policy-gradient method. Run the policy, observe returns, and use them to weight updates to the probabilities of the sampled actions. An action followed by a high return gets a larger positive push than one followed by a low return.</p>
+        <p>This works without a critic. The problem is noisy credit assignment: the robot might turn right sensibly and then lose because of a much later mistake. A single failed attempt is weak evidence that turning right was wrong. A <strong>baseline</strong> helps compare outcomes with what was normally expected.</p>
+        <p><strong>Why start here?</strong> REINFORCE is useful for understanding policy learning and for simple episodic problems. Long, noisy episodes make its gradient estimates difficult to learn from efficiently. <a href="https://link.springer.com/article/10.1007/BF00992696">Williams’s original paper</a> develops the underlying update.</p>
+
+        <h3>Actor–critic: learn an action rule and an evaluator</h3>
+        <p>The <strong>actor</strong> is the policy. The <strong>critic</strong> is a learned value estimator that helps train it. These are roles: they can be separate networks, or share a network with different output heads.</p>
+        <p>Suppose the critic predicts return 5 from the junction. The robot samples right and eventually gets return 8. The difference, +3, is a sample-based advantage estimate: this outcome was better than expected. The actor increases the probability of the sampled action accordingly. One lucky outcome is not proof; repeated data makes the estimate useful.</p>
+        <p>With a critic, we can also use short TD-based targets instead of waiting until the end. This can reduce variance and speed feedback, while introducing dependence on the critic’s accuracy. <strong>The critic is useful, not logically necessary.</strong> It makes the actor’s learning signal more informative.</p>
+        <p><strong>A3C</strong> means Asynchronous Advantage Actor–Critic: multiple workers collect experience and update shared parameters asynchronously. <strong>Advantage Actor–Critic (A2C)</strong> is the synchronous counterpart, combining workers’ data for coordinated updates. They belong to the same actor–critic family; their names mainly distinguish how collection and updates are organized. <a href="https://arxiv.org/abs/1602.01783">The A3C paper</a> explains the asynchronous approach.</p>
+        <p><strong>Generalized advantage estimation (GAE)</strong> blends TD errors across several future steps to estimate advantage. It provides a practical bias–variance tradeoff through a parameter called <code>λ</code> (lambda). GAE is an estimation technique used inside methods such as PPO, not an alternative complete agent. <a href="https://arxiv.org/abs/1506.02438">The GAE paper</a> develops this connection.</p>
+        <p>Here, <strong>variance</strong> means how much an estimate fluctuates across sampled experience. <strong>Bias</strong> means systematic error in the estimate. Reducing noise by relying more on an imperfect critic can trade one problem for the other.</p>
+
+        <h3>Why learn a policy if Q-values already tell us what to do?</h3>
+        <p>For four directions, comparing four Q-values is easy. Now let the robot choose any steering angle and motor torque. Finding the action that maximizes a learned Q-function becomes an optimization problem at every decision. An actor can produce an action directly.</p>
+        <p>Policies also naturally represent randomized behavior and structured action distributions. These are useful reasons to learn one. They do <em>not</em> mean policy methods are only for continuous actions. They work with discrete actions too, and having continuous state features is a different issue from having continuous actions.</p>
+        <p>The cost is that policy learning can require a lot of fresh experience, depending on the algorithm. Some policy methods are on-policy; others deliberately reuse old data. We need the particular algorithm’s description before judging this tradeoff.</p>
+
+        <h2 id="ppo">5. TRPO and PPO: improve without changing too much at once</h2>
+        <p>A policy update changes which situations the robot will encounter. A large update based on yesterday’s experience can produce behavior for which that experience is no longer informative.</p>
+        <p><strong>Trust Region Policy Optimization (TRPO)</strong> addresses this by approximately optimizing an improvement objective subject to a limit on how far the policy distribution changes. It measures that change with <strong>KL divergence</strong>, a measure of the difference between probability distributions. Its constrained update is more involved than ordinary gradient optimization. <a href="https://arxiv.org/abs/1502.05477">TRPO</a> is the important predecessor here.</p>
+        <p><strong>Proximal Policy Optimization (PPO)</strong> offers a simpler approach. In the commonly used PPO-Clip variant, the objective stops rewarding certain probability changes once they become too large.</p>
+        <p>Suppose right had probability 0.4 when data was collected, and its estimated advantage is positive. Raising its probability should help the objective. With a clipping parameter of 0.2, the beneficial contribution for that sample plateaus once the new-to-old probability ratio passes 1.2—here, a new probability of 0.48.</p>
+        <p><strong>This is not a hard cap on the probability.</strong> Other samples and shared parameters can still move it further. Clipping discourages excessive updates; it does not guarantee that every update improves the policy.</p>
+        <p>A typical PPO implementation collects fresh rollouts, estimates advantages with a critic, performs several minibatch passes over that batch, then collects more experience. It supports both discrete and continuous actions. <a href="https://arxiv.org/abs/1707.06347">The PPO paper</a> presents the objective and experiments.</p>
+        <div class="memory-note"><p><strong>PPO at training time:</strong> actor chooses, environment responds, critic helps judge the outcome, clipped updates adjust the actor.<br /><strong>PPO at deployment:</strong> the actor produces the action distribution. No tree search is inherent in PPO, and the critic is usually unnecessary for choosing the action.</p></div>
+        <p><strong>Why choose PPO?</strong> I would consider it when fresh simulation is affordable and a widely supported actor–critic baseline is useful. If collecting transitions is the main expense, an algorithm that reuses a replay buffer may be a better starting point. That is a reason to compare methods, not a promise that one will win.</p>
+
+        <h2 id="continuous-control">6. DDPG, TD3, and SAC: actors that reuse experience</h2>
+        <p>Return to the robot with steering and torque controls. We want an actor to output actions directly, but we also want to reuse past experience. These algorithms combine both.</p>
+        <h3>DDPG and TD3: an actor guided by Q-values</h3>
+        <p><strong>Deep Deterministic Policy Gradient (DDPG)</strong> learns a deterministic actor and a Q-function critic. The critic learns from replayed transitions. The actor is adjusted toward actions that the critic scores highly. Exploration normally adds noise during data collection.</p>
+        <p>This is efficient in principle, but it can exploit errors in its own critic: an action may look excellent because its estimated value is wrong. <strong>Twin Delayed DDPG (TD3)</strong> addresses this with two critics, delayed actor updates, and smoothing of target actions. Its targets use the smaller critic estimate to limit overestimation.</p>
+        <p><strong>Why choose TD3?</strong> It is a candidate for continuous control when replay and a deterministic actor suit the task. For a new baseline in this family, its corrections give a reason to prefer it over plain DDPG. <a href="https://arxiv.org/abs/1509.02971">DDPG</a> and <a href="https://arxiv.org/abs/1802.09477">TD3</a> describe the details.</p>
+
+        <h3>SAC: reward plus room to explore</h3>
+        <p><strong>Soft Actor–Critic (SAC)</strong> learns a stochastic actor and uses off-policy value learning. Its objective balances reward with <strong>entropy</strong>, a measure of how spread out the policy distribution is. This encourages the agent to keep alternatives available rather than becoming certain too early.</p>
+        <p>“Soft” refers to this entropy-regularized objective. It does not mean gentle actions or soft constraints. A temperature parameter controls the reward–entropy balance and can itself be adjusted during learning.</p>
+        <p><strong>Why choose SAC?</strong> It is a strong candidate for continuous control when environment interactions are costly and replay is valuable. The original formulation targets continuous actions; discrete variants also exist. SAC is an actor–critic method and off-policy, so “actor–critic” cannot be a synonym for “on-policy.” <a href="https://arxiv.org/abs/1801.01290">The original SAC paper</a> explains the maximum-entropy objective.</p>
+
+        <h2 id="planning">7. Planning: think before moving</h2>
+        <p>Until now, the robot’s learned values or policy have handled the decision directly. Suppose it also has a simulator. It can test hypothetical moves, inspect their consequences, and compare continuations before acting.</p>
+        <p>This is <strong>planning</strong>. Learning improves reusable knowledge from experience. Planning uses a model to compute what to do. They can work together, but neither word implies the other.</p>
+        <h3>Dynamic programming, Dyna, and model predictive control</h3>
+        <p>If a small environment’s dynamics are known, <strong>value iteration</strong> repeatedly applies Bellman optimality updates. <strong>Policy iteration</strong> alternates evaluating a policy and improving it. These are classic dynamic-programming planning methods; no trial-and-error data collection is necessary when the model is already supplied.</p>
+        <p><strong>Dyna</strong> combines real transitions with simulated transitions from a learned model to update values. <strong>Model predictive control (MPC)</strong> plans a finite sequence of actions, executes the first, then replans from the new situation. MPC can use a known model or a learned one; it is not inherently an RL learning algorithm. The shared attraction is using predicted consequences. The shared risk, with a learned model, is planning around predictions that are wrong.</p>
+
+        <h3>MCTS: spend computation on promising futures</h3>
+        <p><strong>Monte Carlo tree search (MCTS)</strong> grows a search tree through repeated simulations. One search iteration descends through candidate actions, expands a new node when appropriate, evaluates the resulting position, and backs that evaluation up along the path.</p>
+        <p>Selection balances actions with good estimated outcomes against actions that deserve more investigation. Basic variants may evaluate a leaf with a simulated continuation to the end. Neural variants can use a value estimate and stop much earlier.</p>
+        <p><strong>How deep does it search?</strong> There is no universal depth. A time or simulation budget limits the work, and branches can reach different depths. A better value estimator can make short searches useful; more simulations do not require every branch to reach a terminal state.</p>
+        <p>These simulations happen before committing to one real move. After making that move and observing its result, the agent can search again from the new situation.</p>
+
+        <h3>AlphaZero: a network guides search, and search teaches the network</h3>
+        <p>AlphaZero uses a policy head and a value head, commonly on one shared network. The policy gives MCTS prior probabilities; the value evaluates newly reached positions. Inside search, a PUCT-style rule combines estimated action value with an exploration bonus based on the prior and visit counts.</p>
+        <p>In training, self-play search produces a distribution over moves from root visit counts. The policy learns to match that search distribution; the value learns from the eventual game outcome. Early self-play moves are sampled to encourage exploration.</p>
+        <p>During evaluation, AlphaZero also runs MCTS and typically picks the most visited root move. The raw policy probability is not the final decision rule. For example, right could begin with a 70% prior, yet left could receive more search visits after promising continuations are discovered.</p>
+        <p>Using only the trained policy is a possible faster deployment choice, but it changes the system and must be evaluated separately. <a href="https://arxiv.org/abs/1712.01815">The AlphaZero paper</a> describes the search-and-learning loop.</p>
+        <div class="memory-note"><p><strong>Two uses of “Monte Carlo”:</strong> Monte Carlo learning targets use sampled returns. Monte Carlo tree search is a planning procedure. Sharing those words does not make them the same algorithm.</p></div>
+        <p><strong>Why choose search with learning?</strong> Consider it when hypothetical transitions are reliable and cheap enough, and improving each decision is worth extra runtime. Without a usable simulator, or under a strict action-latency budget, a policy or value network that acts directly may be more practical.</p>
+        <p>AlphaZero plans with known game rules. Its policy training target comes from search; it is not PPO with a second network.</p>
+
+        <h3>MuZero and Dreamer: learning what to imagine</h3>
+        <p><strong>MuZero</strong> learns a representation and dynamics useful for predicting rewards, policies, and values inside search. Its internal states need not reconstruct the visible world. This lets it plan without being given the environment’s transition rules.</p>
+        <p><strong>Dreamer</strong> learns a world model and trains an actor–critic using imagined trajectories. The actor can then choose actions without a fresh tree search at every decision. So “model-based” does not automatically mean “MCTS at deployment.” <a href="https://arxiv.org/abs/1911.08265">MuZero</a> and <a href="https://arxiv.org/abs/1912.01603">Dreamer</a> illustrate two different uses of learned models.</p>
+        <h2 id="labels">8. Labels that answer different questions</h2>
+        <p>We can now describe an algorithm without forcing every term into one hierarchy. For example: <em>PPO is a model-free, on-policy policy-optimization algorithm, usually implemented with an actor and critic.</em> Each part adds different information.</p>
+        <h3>On-policy versus off-policy: whose experience can an update use?</h3>
+        <p>The <strong>behavior policy</strong> collects the data. The <strong>target policy</strong> is the policy being evaluated or improved. Off-policy methods allow these to differ. On-policy methods rely on experience from the policy being updated, allowing whatever limited reuse or correction the algorithm explicitly supports.</p>
+        <p>PPO performs several updates on a fresh batch using probability ratios, but that does not make it a general replay-buffer algorithm. DQN, TD3, and SAC are designed to learn from replayed experience collected under older behavior.</p>
+
+        <h3>Online versus offline: can we collect more data?</h3>
+        <p><strong>Online RL</strong> can interact with the environment as learning proceeds. <strong>Offline RL</strong> learns from a fixed dataset, without collecting new experience during that training process. This is a different distinction from on-policy versus off-policy.</p>
+        <p>A DQN agent with a replay buffer can still be learning online. Conversely, giving DQN a fixed dataset does not automatically make it a reliable offline learner: it can overvalue unsupported actions and cannot try them to correct the mistake. Offline methods such as <strong>Conservative Q-Learning (CQL)</strong> explicitly address this kind of problem. See the <a href="https://arxiv.org/abs/2005.01643">offline RL tutorial</a> and <a href="https://arxiv.org/abs/2006.04779">CQL paper</a>.</p>
+
+        <h3>Model-free versus model-based: do we use a model of consequences?</h3>
+        <p>Model-free methods learn values or policies without using an environment model for planning or generating imagined training experience. Model-based methods use such a model. Training a model-free agent <em>inside a simulator</em> does not by itself make the learning algorithm model-based: interacting with the simulator for data differs from using it to reason over hypothetical futures.</p>
+
+        <h3>Tabular versus deep: how is the knowledge represented?</h3>
+        <p>A table stores separate entries. A function approximator shares parameters across inputs. <strong>Deep RL</strong> uses deep neural networks for one or more components; it does not identify one particular learning rule. Q-learning can be tabular, while DQN uses a network. Policies and environment models can also use networks.</p>
+
+        <h3>Discrete versus continuous: which quantity are we discussing?</h3>
+        <p>A robot can observe continuous positions and choose among four discrete moves. Another can observe the same positions and output continuous torque. The action space affects how actions are selected; the observation or state space affects how situations are represented. Neither is the same as <em>continuing versus episodic</em>, which asks whether the task has natural endings.</p>
+
+        <h2 id="choosing">9. How to choose a method</h2>
+        <p>Choose based on the problem’s constraints, then compare candidates under the same evaluation budget. The table gives starting points, not a ranking.</p>
+        <div class="table-scroll" role="region" aria-label="Comparison of reinforcement learning methods" tabindex="0">
+          <table>
+            <caption>What determines the action, and what is the tradeoff?</caption>
+            <thead><tr><th scope="col">Method</th><th scope="col">How it chooses</th><th scope="col">Why consider it?</th><th scope="col">Main cost or limitation</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Tabular Q-learning / SARSA</th><td>Compare table entries; add exploration while learning.</td><td>Small, enumerable problems; transparent learning.</td><td>No automatic generalization to unseen states.</td></tr>
+              <tr><th scope="row">DQN family</th><td>Compare predicted Q-values for discrete actions.</td><td>Manageable action set; reuse experience.</td><td>Value errors can feed into targets; large action searches are awkward.</td></tr>
+              <tr><th scope="row">REINFORCE</th><td>Sample from a learned policy.</td><td>Understand policy gradients; simple episodic baseline.</td><td>Noisy returns and delayed feedback.</td></tr>
+              <tr><th scope="row">A2C / A3C</th><td>Actor selects; critic helps train it.</td><td>Direct actor–critic baseline with parallel experience collection.</td><td>Typically needs substantial fresh experience.</td></tr>
+              <tr><th scope="row">PPO / TRPO</th><td>Actor selects; constrain or discourage large updates.</td><td>Discrete or continuous actions; affordable fresh rollouts.</td><td>Limited old-data reuse; careful updates are not a success guarantee.</td></tr>
+              <tr><th scope="row">TD3</th><td>Deterministic actor outputs continuous actions.</td><td>Continuous control with replay.</td><td>Actor depends on accurate critics and useful exploration.</td></tr>
+              <tr><th scope="row">SAC</th><td>Stochastic actor; reward–entropy objective.</td><td>Continuous control with replay and sustained exploration.</td><td>More components and an entropy tradeoff to manage.</td></tr>
+              <tr><th scope="row">AlphaZero-style search</th><td>Network-guided MCTS; root visit counts determine the move.</td><td>Reliable, affordable simulation; time to deliberate.</td><td>Many hypothetical transitions per actual decision.</td></tr>
+              <tr><th scope="row">Learned-model methods</th><td>Plan in a learned model, or train an actor in imagination.</td><td>Use predicted experience to reduce real interaction needs.</td><td>Model errors can produce misleading plans or training data.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>I would ask these questions before picking an acronym:</p>
+        <ol>
+          <li><strong>Does an action affect later decisions?</strong> If each choice only has an immediate payoff and does not affect future opportunities, a bandit formulation may be enough. A <strong>contextual bandit</strong> also conditions the choice on current context. It avoids solving an unnecessary sequential problem.</li>
+          <li><strong>Can I afford to collect experience?</strong> Cheap parallel simulation makes PPO more plausible. Expensive interaction makes replay or model learning more attractive. A fixed historical dataset calls for offline-RL considerations.</li>
+          <li><strong>How hard is it to select an action?</strong> A few discrete options suit direct Q-value comparison. Continuous controls favor methods with actors. Enormous structured action spaces need more than simply choosing “discrete” in a library.</li>
+          <li><strong>Can I simulate alternatives at decision time?</strong> A reliable simulator and generous latency budget make search worth testing. A strict deadline can favor a single network evaluation.</li>
+          <li><strong>What does success cost?</strong> Measure <strong>sample efficiency</strong>—how many environment interactions are needed—separately from training compute, wall-clock time, and action latency. They are not interchangeable.</li>
+        </ol>
+        <p>Use held-out situations and multiple random seeds, and compare with a simple baseline. Keep evaluation conditions consistent: a greedy DQN policy, a sampled PPO policy, and an AlphaZero agent spending seconds on search have different decision procedures and compute costs.</p>
+        <p>Also check the formulation before blaming the algorithm. Missing state information, misleading rewards, unavailable actions, or confusing a time-limit cutoff with a genuine terminal state can derail any method. A time cutoff may still require bootstrapping; a true ending does not.</p>
+
+        <h2 id="other-directions">10. Other names you will encounter</h2>
+        <p>These ideas extend the map rather than replacing it:</p>
+        <ul>
+          <li><strong>Distributional RL</strong> predicts a distribution of returns instead of only their mean. This models variability in outcomes; it is not automatically a measure of uncertainty caused by limited knowledge. C51 and QR-DQN are examples.</li>
+          <li><strong>Imitation learning</strong> learns behavior from demonstrations. <strong>Behavior cloning</strong> treats demonstrated actions as supervised targets. <strong>Inverse RL</strong> tries to infer a reward explaining behavior. Neither term is a synonym for offline RL.</li>
+          <li><strong>Hierarchical RL</strong> organizes decisions across timescales: choosing “go to the door” can invoke a skill that takes many lower-level steps. An <strong>option</strong> formalizes a temporally extended action.</li>
+          <li><strong>Multi-agent RL</strong> studies interacting learners. Cooperation, competition, and changing opponents introduce complications beyond a single fixed environment. <strong>Self-play</strong> is a training setup where agents learn by playing versions of themselves.</li>
+          <li><strong>RLHF</strong>, reinforcement learning from human feedback, describes the source of feedback rather than one optimizer. Human preferences can train a reward model, which then guides policy learning. PPO is one possible optimizer. Preference-learning methods such as DPO use a different training objective and are not simply another name for PPO.</li>
+        </ul>
+        <p class="reference">Examples and primary sources: <a href="https://arxiv.org/abs/1707.06887">distributional RL</a>, <a href="https://ai.stanford.edu/~ang/papers/icml00-irl.pdf">inverse RL</a>, <a href="https://www.sciencedirect.com/science/article/pii/S0004370299000521">options</a>, <a href="https://arxiv.org/abs/1706.03741">learning from human preferences</a>, and <a href="https://arxiv.org/abs/2305.18290">DPO</a>.</p>
+
+        <h2 id="glossary">11. A glossary without the tangled names</h2>
+        <p>These are the equivalences worth remembering—and the ones to avoid assuming.</p>
+        <dl class="glossary">
+          <dt>Policy · actor · policy network</dt><dd>A policy is the decision rule. “Actor” names its role in actor–critic. A policy network is one way to represent it. A policy need not be a neural network.</dd>
+          <dt>Value · V · Q · critic</dt><dd>“Value function” is the umbrella. V evaluates a state; Q evaluates a state–action pair. A critic estimates values to help train a policy; it can estimate V or Q.</dd>
+          <dt>Reward · return · value · advantage</dt><dd>Reward: one piece of feedback. Return: accumulated future rewards, possibly discounted. Value: expected return. Advantage: how an action’s value compares with the policy’s state value.</dd>
+          <dt>Transition · trajectory · rollout · episode</dt><dd>A transition is one step, often stored as (state, action, reward, next state, terminal flag). A trajectory is a sequence. A rollout collects a sequence, possibly partial. An episode is a complete attempt between task boundaries.</dd>
+          <dt>Policy gradient · policy optimization · actor–critic</dt><dd>Policy optimization is the broader goal of improving a policy directly. Policy gradients use gradient estimates to do so. Actor–critic describes the combination of a policy with a learned evaluator. These labels overlap.</dd>
+          <dt>Model · world model · model-free</dt><dd>In this taxonomy, a model predicts environment consequences; “world model” emphasizes a learned one. Model-free does not mean “no neural network.” A reward model alone is not a complete dynamics model.</dd>
+          <dt>Prediction · control</dt><dd>Prediction evaluates behavior under a given policy. Control seeks a better policy. In RL, “control” does not require motors or continuous actions.</dd>
+          <dt>Exploration · exploitation · entropy</dt><dd>Exploration gathers information; exploitation uses current knowledge to pursue reward. Entropy measures a distribution’s spread. Randomness can help exploration, but is not the same as useful information gathering.</dd>
+          <dt>Learning rate · discount factor</dt><dd>The learning rate controls the size of an update. The discount factor controls the objective’s weighting of future rewards. They solve different problems.</dd>
+          <dt>Bootstrapping · replay · target network</dt><dd>Bootstrapping uses an estimate inside a learning target. Replay reuses stored experience. A target network supplies more slowly changing estimates. None is a synonym for another.</dd>
+          <dt>Sparse reward · dense reward · reward shaping</dt><dd>Sparse rewards arrive rarely; dense rewards provide more frequent feedback. Shaping adds feedback to aid learning. Unless carefully designed, it can change which behavior is optimal.</dd>
+          <dt>Model-free/model-based · on-policy/off-policy · online/offline</dt><dd>Three independent questions: do we use a model of consequences; whose behavior produced the data; and can training collect more interaction?</dd>
+        </dl>
+
+        <h2 id="remember">Back at the junction</h2>
+        <p>The robot is still choosing between left and right. A Q-learning agent compares learned action values. A policy-gradient agent uses a learned action rule. An actor–critic agent learns that rule with help from a value estimator. A planning agent investigates possible futures before committing.</p>
+        <p>What differs is the machinery producing the decision: the objects being learned, the experience used to update them, and the computation spent before acting. Once those pieces are explicit, the acronyms become easier to place—and choosing a method becomes a question about the problem rather than its popularity.</p>
+
+        <h2 id="further-reading">Further reading</h2>
+        <p>For a short refresher, begin with <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html">Spinning Up’s introduction</a>, followed by its <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro2.html">algorithm taxonomy</a> and <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html">policy-gradient explanation</a>. For a fuller foundation, use Sutton and Barto’s <a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/">Reinforcement Learning: An Introduction</a>. <a href="https://davidstarsilver.wordpress.com/teaching/">David Silver’s course</a> provides lecture slides and worked explanations. The papers linked alongside the methods are useful once the basic distinctions feel familiar.</p>
+        <div class="article-end"><a href="../">← Back to the technical blog</a></div>
+      </div></div>
+    </article>
+  </main>
+  <footer class="site-footer shell"><span>© 2026 Ori Fogler</span><div><a href="../../hagigey/" lang="he">הגיגי אמרי</a><a href="../../privacy.html">Privacy</a><a href="mailto:me@orifogler.com">Get in touch</a></div></footer>
+</body>
+</html>
