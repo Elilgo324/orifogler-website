@@ -29,7 +29,7 @@
   body { margin: 0 !important; color: #000 !important; background: #fff !important; font-size: 12pt; line-height: 1.55; }
   *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
   .site-header, .article-header, .site-nav, .breadcrumbs, .related, .back-link,
-  .site-footer, footer, .skip-link, .article-end, .print-actions, .print-button,
+  .site-footer, footer, .skip-link, .article-end, .article-toc, .print-actions, .print-button,
   .latest-actions, .latest-dialog-bar, .books-callout, .read-more, .read-link,
   #latest-fallback, .adsbygoogle, iframe { display: none !important; }
   .shell, .article-wrap, .article-content, .article-layout, .blog-main,
