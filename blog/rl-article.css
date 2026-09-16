@@ -24,12 +24,32 @@ tbody th { width: 22%; font-weight: 600; }
 .glossary { margin: 24px 0; }
 .glossary dt { font-weight: 600; margin: 24px 0 6px; padding-top: 20px; border-top: 1px solid var(--line); }
 .glossary dd { margin: 0; }
+.worked-example { margin: 28px 0; padding: 20px 22px; border: 1px solid #dce3df; background: #fafbf9; }
+.prose .worked-example h3 { margin-top: 0; }
+.worked-example p:last-child { margin-bottom: 0; }
+.table-scroll .compact-table { min-width: 0; table-layout: fixed; }
+.compact-table th, .compact-table td { padding: 10px 8px; overflow-wrap: anywhere; }
+.search-example { margin: 28px 0; padding: 20px 22px; border: 1px solid #dce3df; }
+.search-example figcaption { font-size: .9rem; line-height: 1.65; }
+.search-tree { margin: 24px 0 0; font-size: .85rem; text-align: center; }
+.search-root { width: 190px; margin: auto; padding: 12px; border: 1px solid #c6ceca; background: #fafbf9; }
+.search-root span, .search-branch span { display: block; font-size: .8rem; }
+.search-tree svg { display: block; width: 100%; height: 48px; color: #899990; }
+.search-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.search-branch { padding: 12px 6px; border: 1px solid #c6ceca; }
+.search-branch.selected { border: 2px solid #46665c; background: #f2f6f2; }
+.prose .real-move { margin: 20px 0 0; }
 @media (max-width: 560px) {
   .article-toc { padding: 20px; }
   .concept-map { grid-template-columns: 1fr; gap: 8px; }
   .concept-map > div { padding: 16px 20px; }
   .memory-note { padding: 16px 18px; }
   .equation { padding: 14px 10px; font-size: .8rem; }
+  .worked-example, .search-example { padding: 16px 12px; }
+  .search-example .table-scroll { margin: 20px -4px; max-width: calc(100% + 8px); }
+  .compact-table th, .compact-table td { padding: 8px 4px; }
+  .search-trace { font-size: .75rem; }
+  .search-branches { gap: 8px; }
 }
 @media print {
   @page { margin: 18mm; }
@@ -46,4 +66,6 @@ tbody th { width: 22%; font-weight: 600; }
   th, td { padding: 7px; overflow-wrap: anywhere; }
   thead { display: table-header-group; }
   .prose a { color: #000; }
+  .search-example { break-inside: avoid; }
+  .worked-example { background: none; }
 }
