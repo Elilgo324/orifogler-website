@@ -324,6 +324,7 @@ for (let index = 0; index < posts.length; index += 1) {
 
 const sitemapPages = [
   ["/", posts[0].published], ["/hagigey/", posts[0].published], ["/hagigey/archive.html", posts[0].published],
+  ["/blog/", "2026-09-16"], ["/blog/posts/dijkstras-algorithm.html", "2026-09-16"],
   ["/books.html", "2026-09-10"], ["/about.html", "2026-09-10"], ["/privacy.html", "2026-09-10"],
   ...posts.map((post) => [`/hagigey/posts/${post.id}.html`, post.published]),
 ];

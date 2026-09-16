@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Navigating the Maze: Dijkstra’s Algorithm for Finding Shortest Paths — Ori Fogler</title>
+  <meta name="description" content="A dive into Dijkstra’s shortest-path algorithm: its greedy strategy, priority queues, related algorithms, and a working Python implementation." />
+  <link rel="canonical" href="https://orifogler.com/blog/posts/dijkstras-algorithm.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Navigating the Maze: A Dive into Dijkstra’s Algorithm for Finding Shortest Paths" />
+  <meta property="og:description" content="How a greedy choice finds the shortest path, why it works, and how to implement it in Python." />
+  <meta property="og:url" content="https://orifogler.com/blog/posts/dijkstras-algorithm.html" />
+  <meta property="article:published_time" content="2023-12-30" />
+  <meta property="article:modified_time" content="2026-09-16" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../blog.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Navigating the Maze: A Dive into Dijkstra’s Algorithm for Finding Shortest Paths","description":"A dive into Dijkstra’s shortest-path algorithm: its greedy strategy, priority queues, related algorithms, and a working Python implementation.","datePublished":"2023-12-30","dateModified":"2026-09-16","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/dijkstras-algorithm.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"},"isBasedOn":"https://medium.com/@foglerori/navigating-the-maze-a-dive-into-dijkstras-algorithm-for-finding-shortest-paths-7ef3aaa89bd5"}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="../../">Ori Fogler</a>
+    <nav aria-label="Main navigation"><a href="../">Blog</a><a href="../../resume.html">Resume</a></nav>
+  </header>
+  <main id="content" class="shell">
+    <article>
+      <header class="article-heading">
+        <h1>Navigating the maze</h1>
+        <p class="article-subtitle">A dive into Dijkstra’s algorithm for finding shortest paths</p>
+        <p class="byline"><time datetime="2023-12-30">December 30, 2023</time></p>
+      </header>
+      <div class="article-layout">
+        <div class="prose">
+          <p>Imagine yourself in the heart of a bustling city, standing at a junction where numerous roads diverge in every direction. You have a destination in mind but are clueless about the optimal route to reach there within this labyrinth of streets and intersections.</p>
+          <p>This scenario is one example of the fundamental and natural problem of finding the shortest path in a graph, a challenge encountered not only by individuals navigating urban landscapes but also by computer scientists dealing with network optimization, logistics, and routing algorithms.</p>
+
+          <h2 id="algorithm">Unveiling Dijkstra’s algorithm</h2>
+          <p>Named after its creator, Dutch computer scientist Edsger W. Dijkstra, the algorithm serves as a guide in the quest for the shortest path. Its elegance lies in its simplicity and efficiency. Dijkstra’s algorithm solves the <strong>single-source shortest path problem</strong> in a weighted graph, where each edge has a non-negative weight.</p>
+          <p>Think of intersections as vertices and roads as edges. An edge’s weight might represent distance, travel time, or another additive cost. The goal is to minimize the sum of those weights along a route.</p>
+
+          <h2 id="steps">The algorithm unpacked</h2>
+          <ol>
+            <li><strong>Initialization.</strong> Assign a tentative distance to every vertex. Set the source vertex’s distance to zero and all others to infinity. Add the source to a priority queue.</li>
+            <li><strong>Exploration.</strong> While the queue is not empty, choose the vertex with the smallest tentative distance. If the entry is outdated, skip it. Otherwise, explore its neighbors and update their distances whenever a shorter route is found. Add each improved distance to the queue.</li>
+            <li><strong>Retrieval.</strong> When the queue is empty, the distance to every reachable vertex is known. Unreachable vertices remain at infinity. To retrieve the actual paths, also record each vertex’s predecessor whenever its distance improves.</li>
+          </ol>
+          <div class="callout"><p>The distance update is called <strong>relaxation</strong>: for an edge from <code>u</code> to <code>v</code>, check whether <code>distance[u] + weight(u, v)</code> is smaller than <code>distance[v]</code>.</p></div>
+
+          <h2 id="correctness">Greedy approach and optimality</h2>
+          <p>The key intuition behind Dijkstra’s correctness lies in its greedy strategy: always choosing the vertex with the smallest tentative distance. This approach aims to explore and update the shortest paths incrementally.</p>
+          <p>At each iteration, the algorithm expands outward from the source. When an unsettled vertex with the smallest tentative distance is removed from the queue, that distance becomes final. Any alternative route through another unsettled vertex must already cost at least as much, and adding non-negative edge weights cannot make it cheaper.</p>
+          <p>The distinction between <em>tentative</em> and <em>final</em> matters: discovering a vertex does not finalize its distance. A shorter route can still be found before that vertex is selected for processing.</p>
+          <div class="callout"><p><strong>All edge weights must be non-negative.</strong> Negative edges can invalidate the greedy choice: a route discovered later could reduce a distance that was already considered final.</p></div>
+
+          <h2 id="priority-queue">Efficient implementation: priority queue</h2>
+          <p>Integrating a priority queue or heap is a fundamental enhancement in Dijkstra’s algorithm. It prioritizes vertices by their tentative distances, enabling quick access to the vertex with the smallest distance. The algorithm can then explore the most promising vertices without scanning the entire graph at every step.</p>
+          <p>A binary heap is a practical choice. With a decrease-key operation, Dijkstra’s algorithm runs in <code>O((V + E) log V)</code> time, where <code>V</code> and <code>E</code> are the numbers of vertices and edges.</p>
+          <p>The Python implementation below uses a simpler alternative: it pushes a new entry whenever a distance improves and skips outdated entries when they are popped. For a simple graph, this also gives the usual <code>O((V + E) log V)</code> bound, though the queue can hold <code>O(E)</code> entries.</p>
+          <p>A Fibonacci heap supports more efficient amortized decrease-key operations and improves the theoretical bound to <code>O(E + V log V)</code>. Its extra complexity means a binary heap is often the simpler implementation choice.</p>
+
+          <h2 id="related">Exploring related algorithms</h2>
+          <h3>Breadth-first search (BFS)</h3>
+          <p>BFS explores a graph layer by layer, starting from a source vertex. It finds shortest paths in an unweighted graph, or when all edges have the same non-negative weight. In that setting, minimizing the number of edges also minimizes the path’s total cost.</p>
+          <h3>Bellman–Ford</h3>
+          <p>Unlike Dijkstra’s algorithm, Bellman–Ford handles negative edge weights. It repeatedly relaxes all edges for up to <code>V − 1</code> passes. A further pass can detect a negative-weight cycle reachable from the source; distances affected by such a cycle have no finite minimum.</p>
+          <h3>Floyd–Warshall</h3>
+          <p>Floyd–Warshall uses dynamic programming to find shortest paths between all pairs of vertices. Its matrix-based approach considers each vertex as a possible intermediate stop. It supports negative edges, but finite shortest paths require that no relevant negative-weight cycle exists. Its <code>O(V³)</code> running time makes it expensive for large graphs.</p>
+          <h3>Johnson’s algorithm</h3>
+          <p>Johnson’s algorithm combines Bellman–Ford and Dijkstra to find all-pairs shortest paths in graphs that may contain negative edges but no negative-weight cycles. It adds a new source with zero-weight edges to every vertex and uses Bellman–Ford to compute potentials. These potentials reweight the original edges to non-negative values while preserving the relative costs of paths with the same endpoints. Dijkstra can then run from each original vertex.</p>
+          <h3>A* search</h3>
+          <p>A* is an informed search algorithm, often used in pathfinding and AI applications. It combines the cost from the source to the current vertex with an estimated cost from that vertex to the target. This heuristic guides the search toward the goal. Optimality depends on the heuristic and implementation: a consistent heuristic supports graph search without reopening settled vertices; with an admissible but inconsistent heuristic, reopening may be necessary.</p>
+
+          <h2 id="python">Python implementation</h2>
+          <p>Here is a Python implementation using an adjacency list and the standard library’s <code>heapq</code> module. As in the original example, vertices are string labels, every vertex appears as a dictionary key, and all weights are non-negative.</p>
+          <div class="code-label">Python · Standard library</div>
+          <pre tabindex="0" aria-label="Python implementation of Dijkstra's algorithm"><code class="language-python">import heapq
+
+
+def dijkstra(graph, start):
+    # Initialize all distances to infinity, except the source.
+    distances = {vertex: float('inf') for vertex in graph}
+    distances[start] = 0
+    priority_queue = [(0, start)]
+
+    while priority_queue:
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+
+        # A better route was found after this entry was queued.
+        if current_distance &gt; distances[current_vertex]:
+            continue
+
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            if distance &lt; distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return distances
+
+
+# Each vertex maps to its neighbors and the edge weights.
+graph = {
+    'A': {'B': 3, 'C': 5},
+    'B': {'A': 3, 'C': 2, 'D': 6},
+    'C': {'A': 5, 'B': 2, 'D': 7},
+    'D': {'B': 6, 'C': 7}
+}
+
+start_vertex = 'A'
+shortest_paths = dijkstra(graph, start_vertex)
+print(f"Shortest paths from {start_vertex}: {shortest_paths}")</code></pre>
+          <div class="code-label">Output</div>
+          <pre tabindex="0" aria-label="Python example output"><code>Shortest paths from A: {'A': 0, 'B': 3, 'C': 5, 'D': 9}</code></pre>
+          <p>This function returns shortest <strong>distances</strong>, rather than the routes themselves. To reconstruct a route, store <code>predecessor[neighbor] = current_vertex</code> when a distance improves, then follow those predecessors backward from the destination.</p>
+
+          <figure class="graph-figure">
+            <svg viewBox="0 0 640 300" role="img" aria-labelledby="graph-title graph-description">
+              <title id="graph-title">The example graph, with shortest path A–B–D highlighted</title>
+              <desc id="graph-description">An undirected graph with edges A–B of weight 3, A–C of weight 5, B–C of weight 2, B–D of weight 6, and C–D of weight 7. The highlighted path A–B–D has total cost 9.</desc>
+              <g fill="none" stroke="#b7c7d0" stroke-width="3">
+                <path d="M90 150 L320 245 L550 150 M320 55 L320 245" />
+              </g>
+              <path d="M90 150 L320 55 L550 150" fill="none" stroke="#2b6f95" stroke-width="5" />
+              <g fill="#fff" stroke="#dfe4e5"><rect x="178" y="78" width="38" height="30" rx="7"/><rect x="425" y="78" width="38" height="30" rx="7"/><rect x="178" y="193" width="38" height="30" rx="7"/><rect x="425" y="193" width="38" height="30" rx="7"/><rect x="301" y="135" width="38" height="30" rx="7"/></g>
+              <g fill="#16324f" font-family="ui-monospace, monospace" font-size="19" text-anchor="middle"><text x="197" y="100">3</text><text x="444" y="100">6</text><text x="197" y="215">5</text><text x="444" y="215">7</text><text x="320" y="157">2</text></g>
+              <g fill="#edf4f7" stroke="#16324f" stroke-width="2"><circle cx="90" cy="150" r="27"/><circle cx="320" cy="55" r="27"/><circle cx="320" cy="245" r="27"/><circle cx="550" cy="150" r="27"/></g>
+              <g fill="#16324f" font-family="system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle"><text x="90" y="158">A</text><text x="320" y="63">B</text><text x="320" y="253">C</text><text x="550" y="158">D</text></g>
+            </svg>
+            <figcaption>The same graph as the Python example. The highlighted route from A to D goes through B: 3 + 6 = 9.</figcaption>
+          </figure>
+          <p>Starting at A, we first discover B at distance 3 and C at distance 5. Processing B gives D a tentative distance of 9. Going from B to C also costs 5, so C’s distance stays unchanged. Processing C offers a route to D costing 12, which is worse than 9. The final distance to D is therefore 9.</p>
+          <p>Replace <code>graph</code> with your own adjacency list to try other examples. Include an empty dictionary for any vertex with no outgoing edges.</p>
+          <p>For a library implementation, <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.weighted.single_source_dijkstra.html">NetworkX’s <code>single_source_dijkstra</code></a> returns both shortest distances and paths. It is useful when your application already uses NetworkX graph objects.</p>
+
+          <h2 id="conclusion">From intersections to algorithms</h2>
+          <p>Dijkstra’s algorithm is a cornerstone of graph theory and algorithm design. Its simplicity and efficiency make it a useful tool for finding routes through complex networks, whether those networks represent city streets, communication links, or decisions in an optimization problem.</p>
+          <p>The central idea is small but powerful: keep track of the best distances found so far, always process the closest unsettled vertex next, and use the non-negative edge weights to justify that choice.</p>
+          <p>So, the next time you find yourself at a crossroads, remember the algorithm that turns a maze of possibilities into a shortest path.</p>
+
+        <p class="source-note">Originally published on <a href="https://medium.com/@foglerori/navigating-the-maze-a-dive-into-dijkstras-algorithm-for-finding-shortest-paths-7ef3aaa89bd5">Medium</a>. Adapted for this site with clarifications and a worked example.</p>
+          <div class="article-end"><a class="read-link" href="../">← Back to the technical blog</a></div>
+        </div>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer shell"><span>© 2026 Ori Fogler</span><div><a href="../../hagigey/" lang="he">הגיגי אמרי</a><a href="../../privacy.html">Privacy</a><a href="mailto:me@orifogler.com">Get in touch</a></div></footer>
+</body>
+</html>
