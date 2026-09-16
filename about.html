@@ -12,31 +12,59 @@
   <meta property="og:url" content="https://orifogler.com/about.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <style>
-    :root{color-scheme:light;--ink:#182622;--muted:#5f6e68;--green:#173d39;--paper:#fffefb;--canvas:#f7f3eb;--gold:#c99542;--line:rgba(23,61,57,.16)}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--canvas);font-family:"Assistant","Segoe UI",Arial,sans-serif;line-height:1.8}.shell{width:min(980px,calc(100% - 40px));margin:auto}.top{color:#fff;background:var(--green)}nav{display:flex;gap:22px;padding:18px 0;font-weight:700}nav a{color:inherit;text-decoration:none}.hero{padding:70px 0 88px}.eyebrow{margin:0 0 8px;color:#e4bf78;font-size:.82rem;font-weight:700}.hero h1{margin:0;font-family:"Frank Ruhl Libre",Georgia,serif;font-size:clamp(3rem,8vw,5.6rem);line-height:1}.hero p{max-width:660px;margin:20px 0 0;color:#dbe5e2;font-size:1.18rem}.content{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:52px;padding:64px 0 90px}.story{padding:38px 42px;border:1px solid var(--line);background:var(--paper)}h2{margin:0 0 15px;font-family:"Frank Ruhl Libre",Georgia,serif;font-size:2rem}.story p{margin:0 0 1.2em;font-size:1.06rem}.facts{padding:28px;border-top:4px solid var(--gold);background:#edf2ef}.facts h2{font-size:1.35rem}.facts ul{margin:0;padding:0;list-style:none}.facts li{padding:12px 0;border-bottom:1px solid var(--line)}.facts li:last-child{border:0}.facts a{color:var(--green);font-weight:700}footer{padding:32px 0;border-top:1px solid var(--line);color:var(--muted);background:var(--paper)}footer .shell{display:flex;flex-wrap:wrap;gap:12px 24px}footer span{margin-inline-end:auto}@media(max-width:760px){.content{grid-template-columns:1fr}.story{padding:28px}.hero{padding:48px 0 60px}nav{gap:15px;font-size:.9rem}footer span{width:100%}}
+    :root { color-scheme: light; --ink: #252525; --muted: #707070; --line: #e9e9e9; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+    .shell { width: min(700px, calc(100% - 40px)); margin-inline: auto; }
+    a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    a:hover { color: #555; }
+    :focus-visible { outline: 2px solid #555; outline-offset: 4px; }
+    .skip-link { position: absolute; inset-block-start: 8px; inset-inline-start: 8px; padding: 8px 16px; background: #fff; transform: translateY(-160%); }
+    .skip-link:focus { transform: none; }
+    nav { display: flex; flex-wrap: wrap; gap: 22px; padding-block: 32px; color: var(--muted); font-size: .875rem; }
+    nav a { text-decoration: none; }
+    nav a[aria-current] { color: var(--ink); }
+    .hero { padding-block: 40px 28px; }
+    h1, h2 { font-weight: 600; line-height: 1.4; }
+    h1 { margin: 0; font-size: 2rem; }
+    .hero p { margin: 12px 0 0; color: var(--muted); font-size: 1.05rem; }
+    .content { padding-bottom: 56px; }
+    h2 { margin: 28px 0 12px; font-size: 1.25rem; }
+    .story h2:first-child { margin-top: 0; }
+    .story p { margin: 0 0 1.4em; }
+    .links { margin-top: 32px; }
+    .links h2 { font-size: 1rem; }
+    .links ul { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 0; padding: 0; list-style: none; font-size: .875rem; }
+    footer { color: var(--muted); font-size: .75rem; }
+    footer .shell { display: flex; flex-wrap: wrap; gap: 12px 20px; padding-block: 24px 36px; border-top: 1px solid var(--line); }
+    footer span { margin-inline-end: auto; }
+    @media (max-width: 560px) {
+      nav { gap: 18px; padding-block: 24px; }
+      .hero { padding-block: 24px; }
+      h1 { font-size: 1.8rem; }
+    }
   </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Ori Fogler","alternateName":"אורי פוגלר","url":"https://orifogler.com/about.html","jobTitle":"Senior Algorithms Researcher","sameAs":["https://www.linkedin.com/in/foglero/"]}</script>
 </head>
 <body>
+  <a class="skip-link" href="#content">דילוג לתוכן</a>
   <header class="top"><div class="shell">
     <nav aria-label="ניווט ראשי"><a href="index.html">ראשי</a><a href="hagigey/">הגיגי אמרי</a><a href="books.html">ספרים</a><a href="about.html" aria-current="page">אודות</a></nav>
-    <div class="hero"><p class="eyebrow">אודות הכותב</p><h1>אורי פוגלר</h1><p>חוקר אלגוריתמים וכותב. מחבר הבלוג ״הגיגי אמרי״ ושני ספרים של מאמרי תורה והגיגים.</p></div>
+    <div class="hero"><h1>אורי פוגלר</h1><p>חוקר אלגוריתמים וכותב.</p></div>
   </div></header>
-  <main class="shell content">
+  <main id="content" class="shell content">
     <article class="story">
-      <h2>על הכתיבה</h2>
-      <p>אני כותב מאמרים מקוריים על פרשת השבוע, סוגיות תלמודיות והלכה. הכתיבה מתחילה בדרך כלל בשאלה שעולה מן המקורות וממשיכה בניסיון לחבר בין הפסוקים, דברי חז״ל והמפרשים לכדי מהלך בהיר ועצמאי.</p>
-      <p>הבלוג ״הגיגי אמרי״ מרכז מאות מאמרים שפרסמתי לאורך השנים. שני הספרים, ״אבי וישעי״ ו״אלי תשוקתי״, אוספים ומרחיבים את הכתיבה לפי סדר פרשיות השבוע ומועדי השנה. כל המאמרים והספרים זמינים כאן לקריאה חופשית.</p>
-      <h2>על העבודה המקצועית</h2>
-      <p>במקביל לכתיבה אני חוקר אלגוריתמים, ומתמחה באופטימיזציה בקנה מידה גדול, תכנון מסלולים ומערכות החלטה בזמן אמת. הניסיון המקצועי שלי כולל מחקר ופיתוח ב‑Via Transportation, ביחידת אופק 324 ובאוניברסיטת בר־אילן.</p>
-      <p>האתר הזה הוא הבית האישי של שני העולמות: עבודה באלגוריתמים מצד אחד, ולימוד וכתיבה תורנית מצד אחר.</p>
+      <p>אני חוקר אלגוריתמים ב־Via, ועוסק באופטימיזציה, תכנון מסלולים ומערכות החלטה בזמן אמת.</p>
+      <p>כותב על פרשת השבוע, תלמוד והלכה בבלוג ״הגיגי אמרי״ ובספרים ״אבי וישעי״ ו״אלי תשוקתי״. המאמרים והספרים זמינים באתר לקריאה חופשית.</p>
     </article>
-    <aside class="facts" aria-labelledby="links-title"><h2 id="links-title">קישורים</h2><ul>
-      <li><a href="hagigey/">לכל מאמרי הבלוג</a></li>
-      <li><a href="books.html">לספרים המלאים</a></li>
-      <li><a href="resume.html">קורות חיים מקצועיים</a></li>
-      <li><a href="mailto:me@orifogler.com">יצירת קשר בדוא״ל</a></li>
+    <section class="links" aria-labelledby="links-title"><h2 id="links-title">קישורים</h2><ul>
+      <li><a href="hagigey/">הגיגי אמרי</a></li>
+      <li><a href="blog/">בלוג טכני</a></li>
+      <li><a href="books.html">ספרים</a></li>
+      <li><a href="resume.html">קורות חיים</a></li>
+      <li><a href="mailto:me@orifogler.com">דוא״ל</a></li>
       <li><a href="https://www.linkedin.com/in/foglero/">LinkedIn</a></li>
-    </ul></aside>
+    </ul></section>
   </main>
   <footer><div class="shell"><span>© 2026 אורי פוגלר</span><a href="privacy.html">מדיניות פרטיות</a><a href="mailto:me@orifogler.com">יצירת קשר</a></div></footer>
 </body>
