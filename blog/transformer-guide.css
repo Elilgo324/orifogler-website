@@ -52,7 +52,13 @@
 .transformer-guide .cache-new span { margin-top: 5px; font-size: .9rem; }
 .transformer-guide .glossary dt { margin: 24px 0 6px; padding-top: 18px; border-top: 1px solid var(--line); font-weight: 600; }
 .transformer-guide .glossary dd { margin: 0; }
+.transformer-guide #kv-cache-architecture { scroll-margin-top: 24px; }
+.transformer-guide .kv-architecture { padding: 18px; border: 1px solid #dce3df; }
+.transformer-guide .kv-drawing { max-width: 100%; overflow-x: auto; }
+.transformer-guide .kv-drawing img { display: block; width: 100%; min-width: 580px; height: auto; }
 @media (max-width: 560px) {
+  .transformer-guide .kv-architecture { padding: 12px; }
+  .transformer-guide .kv-architecture::before { content: "Scroll the drawing horizontally to see all connections →"; display: block; margin-bottom: 12px; color: #52675e; font-size: .78rem; }
   .transformer-guide .article-toc { grid-template-columns: 1fr; padding: 20px; gap: 22px; font-size: .9rem; }
   .transformer-guide .article-toc strong { margin-bottom: 8px; }
   .transformer-guide .part-heading { margin-top: 48px; }
@@ -73,6 +79,10 @@
   .transformer-guide .block-step { padding: 16px; }
 }
 @media print {
+  .transformer-guide .kv-architecture { padding: 3mm; }
+  .transformer-guide .kv-architecture::before { display: none; }
+  .transformer-guide .kv-drawing { overflow: visible; }
+  .transformer-guide .kv-drawing img { min-width: 0; }
   .transformer-guide .part-heading { margin: 9mm 0 5mm; padding-top: 5mm; break-after: avoid; }
   .transformer-guide .part-heading h2 { margin-top: 0; }
   .transformer-guide h4 { break-after: avoid; }
