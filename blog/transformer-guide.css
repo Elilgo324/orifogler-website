@@ -1,0 +1,92 @@
+.transformer-guide .article-kicker { margin: 0 0 14px; color: var(--muted); font-size: .78rem; }
+.transformer-guide .article-heading h1 { max-width: 650px; font-size: clamp(2rem, 5vw, 2.65rem); line-height: 1.15; }
+.transformer-guide .article-toc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; padding: 24px; margin: 32px 0 48px; border: 1px solid var(--line); background: #f7f8f5; font-size: .8rem; line-height: 1.65; }
+.transformer-guide .article-toc a { display: block; margin-bottom: 9px; text-decoration: none; }
+.transformer-guide .article-toc a:hover { text-decoration: underline; }
+.transformer-guide .article-toc strong { display: block; margin-bottom: 12px; }
+.transformer-guide .part-heading { margin: 64px 0 32px; padding-top: 28px; border-top: 2px solid #46665c; scroll-margin-top: 24px; }
+.transformer-guide .part-heading .part-label { margin: 0 0 10px; color: #46665c; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.transformer-guide .part-heading h2 { margin: 0 0 12px; font-size: 1.8rem; }
+.transformer-guide .part-heading > p:last-child { color: var(--muted); }
+.transformer-guide .prose h3 { margin-top: 42px; font-size: 1.3rem; scroll-margin-top: 24px; }
+.transformer-guide .prose h4 { margin: 30px 0 12px; font-size: 1.05rem; line-height: 1.4; font-weight: 600; }
+.transformer-guide .lesson { margin: 28px 0; padding: 18px 22px; border-left: 3px solid #46665c; background: #f5f8f5; }
+.transformer-guide .lesson p:last-child, .transformer-guide .worked-example p:last-child { margin-bottom: 0; }
+.transformer-guide figure { margin: 28px 0; }
+.transformer-guide figcaption { margin-top: 12px; color: var(--muted); font-size: .8rem; line-height: 1.6; }
+.transformer-guide .sequence-flow { display: flex; gap: 14px; align-items: center; justify-content: center; }
+.transformer-guide .sequence-flow span { flex: 1; max-width: 150px; padding: 16px 8px; background: #fafbf9; border: 1px solid #dce3df; text-align: center; }
+.transformer-guide .sequence-flow small, .transformer-guide .cache-row small { color: #596b62; font-size: .8rem; }
+.transformer-guide .sequence-flow b { color: #718176; font-weight: 400; }
+.transformer-guide .pipeline ol, .transformer-guide .tool-loop ol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; padding: 0; margin: 0; list-style: none; counter-reset: flow; }
+.transformer-guide .pipeline li, .transformer-guide .tool-loop li { padding: 14px 10px; margin: 0; border: 1px solid #dce3df; background: #fafbf9; font-size: .78rem; line-height: 1.55; counter-increment: flow; }
+.transformer-guide .pipeline li::before, .transformer-guide .tool-loop li::before { content: counter(flow); display: block; margin-bottom: 8px; color: #46665c; font: .75rem ui-monospace, monospace; }
+.transformer-guide .pipeline strong, .transformer-guide .tool-loop strong { display: block; margin-bottom: 8px; }
+.transformer-guide .pipeline span, .transformer-guide .tool-loop span { display: block; color: #59635d; }
+.transformer-guide .tool-loop ol { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.transformer-guide .term-list { display: grid; grid-template-columns: 105px 1fr; gap: 12px 16px; margin: 24px 0; padding: 20px; border-block: 1px solid var(--line); }
+.transformer-guide .term-list dt { font-weight: 600; }
+.transformer-guide .term-list dd { margin: 0; }
+.transformer-guide .worked-example { margin: 28px 0; padding: 22px; border: 1px solid #dce3df; background: #fafbf9; }
+.transformer-guide .worked-example h4 { margin-top: 0; }
+.transformer-guide .equation { padding: 18px; margin: 24px 0; border: 1px solid #dce3df; background: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .86rem; line-height: 1.8; text-align: center; overflow-wrap: anywhere; }
+.transformer-guide .table-scroll { max-width: 100%; overflow-x: auto; margin: 26px 0; }
+.transformer-guide table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: .83rem; line-height: 1.6; }
+.transformer-guide th, .transformer-guide td { padding: 13px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid #dce3df; }
+.transformer-guide thead th { background: #f2f5f1; font-weight: 600; }
+.transformer-guide tbody th { width: 23%; font-weight: 600; }
+.transformer-guide tbody th small { font-weight: 400; }
+.transformer-guide .attention-table { min-width: 460px; }
+.transformer-guide .attention-table tbody th { width: auto; }
+.transformer-guide .compact-table { min-width: 0; }
+.transformer-guide .cache-table { min-width: 480px; }
+.transformer-guide .block-step { padding: 18px 20px; margin-bottom: 10px; border: 1px solid #dce3df; background: #fafbf9; }
+.transformer-guide .block-step strong, .transformer-guide .block-step code { display: block; }
+.transformer-guide .block-step code { margin-top: 8px; background: transparent; padding: 0; }
+.transformer-guide .cache-figure { padding: 20px; border: 1px solid #dce3df; }
+.transformer-guide .cache-row { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 10px; align-items: center; }
+.transformer-guide .cache-row > span:not(.cache-label) { padding: 10px 6px; background: #f1f4f0; text-align: center; border: 1px solid #dce3df; }
+.transformer-guide .cache-label { color: #596b62; font-size: .8rem; }
+.transformer-guide .cache-new { margin-top: 14px; padding: 16px; border: 1px solid #46665c; background: #fafbf9; }
+.transformer-guide .cache-new strong, .transformer-guide .cache-new span { display: block; }
+.transformer-guide .cache-new span { margin-top: 5px; font-size: .9rem; }
+.transformer-guide .glossary dt { margin: 24px 0 6px; padding-top: 18px; border-top: 1px solid var(--line); font-weight: 600; }
+.transformer-guide .glossary dd { margin: 0; }
+@media (max-width: 560px) {
+  .transformer-guide .article-toc { grid-template-columns: 1fr; padding: 20px; gap: 22px; font-size: .9rem; }
+  .transformer-guide .article-toc strong { margin-bottom: 8px; }
+  .transformer-guide .part-heading { margin-top: 48px; }
+  .transformer-guide .part-heading h2 { font-size: 1.6rem; }
+  .transformer-guide .pipeline ol, .transformer-guide .tool-loop ol { grid-template-columns: 1fr; }
+  .transformer-guide .pipeline li, .transformer-guide .tool-loop li { position: relative; padding: 12px 14px 12px 44px; font-size: .85rem; }
+  .transformer-guide .pipeline li::before, .transformer-guide .tool-loop li::before { position: absolute; left: 16px; top: 17px; }
+  .transformer-guide .pipeline strong, .transformer-guide .tool-loop strong { margin-bottom: 3px; }
+  .transformer-guide .term-list { grid-template-columns: 1fr; gap: 5px; padding: 16px 0; }
+  .transformer-guide .term-list dd { margin-bottom: 12px; }
+  .transformer-guide .lesson { padding: 16px; }
+  .transformer-guide .worked-example { padding: 16px 12px; }
+  .transformer-guide .equation { padding: 14px 10px; font-size: .78rem; }
+  .transformer-guide .sequence-flow { gap: 7px; }
+  .transformer-guide .cache-figure { padding: 14px; }
+  .transformer-guide .cache-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .transformer-guide .cache-label { grid-column: 1 / -1; }
+  .transformer-guide .block-step { padding: 16px; }
+}
+@media print {
+  .transformer-guide .part-heading { margin: 9mm 0 5mm; padding-top: 5mm; break-after: avoid; }
+  .transformer-guide .part-heading h2 { margin-top: 0; }
+  .transformer-guide h4 { break-after: avoid; }
+  .transformer-guide .table-scroll { overflow: visible; margin: 5mm 0; }
+  .transformer-guide table { min-width: 0 !important; font-size: 9pt; }
+  .transformer-guide th, .transformer-guide td { padding: 2.5mm 2mm; }
+  .transformer-guide thead { display: table-header-group; }
+  .transformer-guide tr { break-inside: avoid; }
+  .transformer-guide .worked-example { padding: 4mm; }
+  .transformer-guide .lesson, .transformer-guide .equation { break-inside: avoid; padding: 3mm; }
+  .transformer-guide .pipeline ol { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .transformer-guide .tool-loop ol { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .transformer-guide .pipeline li, .transformer-guide .tool-loop li { position: static; padding: 3mm; font-size: 9pt; }
+  .transformer-guide .pipeline li::before, .transformer-guide .tool-loop li::before { position: static; }
+  .transformer-guide .glossary dt { break-after: avoid; }
+  .transformer-guide .glossary dd { break-inside: avoid; }
+}

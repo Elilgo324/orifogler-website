@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>From Language Models to AI Assistants: Understanding Transformers — Ori Fogler</title>
+  <meta name="description" content="An intuitive history and guide to transformers: attention, training, generation, KV caching, reasoning, retrieval, and the systems around modern AI models." />
+  <link rel="canonical" href="https://orifogler.com/blog/posts/transformers-to-ai-assistants.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="From Language Models to AI Assistants: Understanding Transformers" />
+  <meta property="og:description" content="How we got here, what happens inside one prediction, and how models become useful systems." />
+  <meta property="og:url" content="https://orifogler.com/blog/posts/transformers-to-ai-assistants.html" />
+  <meta property="article:published_time" content="2026-09-17" />
+  <meta property="article:modified_time" content="2026-09-17" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../blog.css" />
+  <link rel="stylesheet" href="../transformer-guide.css" />
+  <link rel="stylesheet" href="../../assets/blog-print.css" />
+  <script src="../../assets/blog-print.js" defer></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"From Language Models to AI Assistants: Understanding Transformers","description":"An intuitive history and guide to transformers, attention, training, KV caching, reasoning, and AI systems.","datePublished":"2026-09-17","dateModified":"2026-09-17","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/transformers-to-ai-assistants.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="../../">Ori Fogler</a>
+    <nav aria-label="Main navigation"><a href="../">Blog</a><a href="../../resume.html">Resume</a></nav>
+  </header>
+  <main id="content" class="shell transformer-guide">
+    <article>
+      <header class="article-heading">
+        <p class="article-kicker">Machine learning · History, mechanics, and practice</p>
+        <h1>From Language Models to AI Assistants</h1>
+        <p class="article-subtitle">An intuitive guide to transformers: why they emerged, how they work, and what surrounds them.</p>
+        <p class="byline">Ori Fogler · <time datetime="2026-09-17">September 17, 2026</time> · <span id="reading-time">About 35 minutes</span></p>
+        <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>Print article</span></button></div>
+      </header>
+      <div class="article-layout"><div class="prose">
+        <p>You type a question. An answer appears, a little at a time. Between those two events are several different inventions: a way to represent language, an architecture for combining context, a training process, and software that may retrieve documents or run tools.</p>
+        <p>Understanding the whole system starts with separating those pieces. A <strong>transformer</strong> is an architecture. A <strong>language model</strong> assigns probabilities to sequences of tokens. An <strong>AI assistant</strong> is an application built around a model and other components. The names are connected, but they are not interchangeable.</p>
+        <p>This guide follows three questions: what problems led us here, what happens during one prediction, and how that prediction becomes part of a useful system. We will spend most of our time on causal, decoder-only language models, then place other designs alongside them.</p>
+        <p>The examples use small, invented numbers so the calculations are visible. They are illustrations, not measurements from a particular model. A little familiarity with vectors helps; the arithmetic will stay small.</p>
+        <nav class="article-toc" aria-label="Guide contents">
+          <div><strong><a href="#history">I · How we got here</a></strong><a href="#counts">Counts and learned representations</a><a href="#recurrence">Recurrent memory and attention</a><a href="#transformer-history">Transformers and pretraining</a></div>
+          <div><strong><a href="#inside">II · Inside one model</a></strong><a href="#tokens">Tokens and embeddings</a><a href="#attention">Attention, with numbers</a><a href="#blocks">Blocks, positions, and architecture</a><a href="#training">Training and next-token prediction</a><a href="#generation">Generation and KV caching</a></div>
+          <div><strong><a href="#systems">III · From model to system</a></strong><a href="#post-training">Post-training and reasoning</a><a href="#adaptation">Adaptation, retrieval, and tools</a><a href="#modern-designs">Modern designs and efficiency</a><a href="#evaluation">Limits and evaluation</a><a href="#glossary">A vocabulary that stays consistent</a></div>
+        </nav>
+
+        <header class="part-heading" id="history"><p class="part-label">Part I</p><h2>How we got here</h2><p>Each idea answered a practical limitation. These developments overlapped; adoption did not happen in one clean sequence.</p></header>
+        <h3 id="counts">1. Counting phrases—and the problem of combinations</h3>
+        <p>Consider the unfinished sentence <em>The cat sat</em>. What might come next? One approach is to look through a corpus and count what followed similar phrases.</p>
+        <p>An <strong>n-gram language model</strong> predicts from a fixed, short history. A trigram model uses the previous two words: after <em>cat sat</em>, how often did <em>on</em> appear? Smoothing and backoff techniques give sensible probabilities when counts are scarce. These models were useful components in speech recognition and statistical translation systems.</p>
+        <p>The difficulty is the number of possible combinations. Even a large collection cannot contain every useful phrase. A model may have seen <em>dog sat on</em> many times while rarely seeing <em>cat sat on</em>. Treating these contexts as separate entries makes it hard to share what they have in common. A short window also misses clues farther away.</p>
+        <p>Neural language models offered a way to share information through learned representations. An <strong>embedding</strong> represents a word or token with a vector of numbers. A network can learn patterns that apply across related vectors, so a new combination need not be completely unfamiliar. Bengio and colleagues’ <a href="https://www.jmlr.org/papers/v3/bengio03a.html">2003 neural probabilistic language model</a> is an influential example, not the beginning of all neural-network research.</p>
+        <p>This changed the question from “have we counted this exact phrase?” to “what can the learned representation tell us about it?” Early feed-forward neural language models still commonly used fixed context windows. Better representations did not, by themselves, solve sequence memory.</p>
+
+        <h3 id="recurrence">2. Carrying information forward</h3>
+        <p>A <strong>recurrent neural network (RNN)</strong> processes a sequence step by step. At each position, it combines the new input with a hidden state carried from the previous position. That state is a learned numerical summary, not a literal copy of the words.</p>
+        <figure class="sequence-figure" aria-label="A recurrent network passes its hidden state through successive positions">
+          <div class="sequence-flow"><span>The<br /><small>state 1</small></span><b aria-hidden="true">→</b><span>cat<br /><small>state 2</small></span><b aria-hidden="true">→</b><span>sat<br /><small>state 3</small></span></div>
+          <figcaption>Each recurrent state depends on the previous one. Information must be carried forward through these updates.</figcaption>
+        </figure>
+        <p>This allows a model to use a variable-length history. But basic RNNs struggle to learn some long dependencies: gradients can shrink or grow as they pass through many steps. <strong>Long short-term memory (LSTM)</strong>, introduced in 1997, and the later <strong>gated recurrent unit (GRU)</strong> use gates to control what information is retained or updated. They improved the handling of memory; they did not make the sequential dependency disappear.</p>
+        <p>For training, that dependency matters. Before computing the state after <em>sat</em>, a recurrent layer needs the state after <em>cat</em>. Hardware can parallelize many operations and examples, but this chain limits parallel work across positions within that layer.</p>
+        <p>Translation added another pressure. In a basic <strong>encoder–decoder</strong> system, one network reads a source sentence and another generates the translation. Early versions compressed the source into a fixed-length representation. The decoder had to produce the whole translation from that summary.</p>
+        <p>Attention gave the decoder a different option: retain representations at multiple source positions and consult a weighted mixture of them for each output step. The model could draw on different source words as it translated. This is the motivation in <a href="https://arxiv.org/abs/1409.0473">Bahdanau and colleagues’ attention-based translation work</a>, posted in 2014 and presented at ICLR 2015.</p>
+        <p class="source-note">Historical anchors: <a href="https://doi.org/10.1162/neco.1997.9.8.1735">LSTM (1997)</a>, <a href="https://arxiv.org/abs/1406.1078">RNN encoder–decoder and gated units (2014)</a>, and <a href="https://arxiv.org/abs/1409.3215">sequence-to-sequence learning (2014)</a>.</p>
+        <div class="lesson"><p><strong>Attention predates the transformer.</strong> It first became influential in systems that still used recurrence. The transformer reorganized the architecture around attention.</p></div>
+
+        <h3 id="transformer-history">3. The transformer—and a second change in how models were used</h3>
+        <p>The <a href="https://arxiv.org/abs/1706.03762">2017 transformer paper</a> presented an encoder–decoder architecture for sequence transduction, demonstrated on translation. It used attention and position-wise feed-forward networks without recurrent layers.</p>
+        <p>Within an attention layer, positions can directly draw information from other permitted positions. Training no longer requires the same position-by-position recurrent state updates. This fits parallel hardware well. The tradeoff is that standard full attention considers pairs of positions: its attention work grows quadratically with sequence length.</p>
+        <p>That architectural shift overlapped with a change in workflow: pretrain a reusable model on broad data, then adapt it to tasks. Pretraining was not invented by transformers. For example, <a href="https://arxiv.org/abs/1801.06146">ULMFiT (2018)</a> demonstrated effective language-model fine-tuning using a recurrent architecture.</p>
+        <p><a href="https://arxiv.org/abs/1810.04805">BERT (2018)</a> helped establish bidirectional transformer pretraining for language understanding. GPT-style models emphasized predicting the next token from preceding context. The <a href="https://arxiv.org/abs/2005.14165">GPT-3 paper (2020)</a> demonstrated broad task performance from instructions and examples supplied in the prompt, without a separate gradient update for each task.</p>
+        <p>In practice, this helped shift development from building a separate trained system for each task toward adapting or prompting a shared model. Specialized systems remained useful. Architecture, data, hardware, optimization, and product design all contributed; no single paper explains the whole industry transition.</p>
+        <p>Now we can open the model and see what the architectural change actually means.</p>
+
+        <header class="part-heading" id="inside"><p class="part-label">Part II</p><h2>Inside one model</h2><p>Follow one prediction, learn how its parameters are trained, then generate another token without repeating unnecessary work.</p></header>
+        <h3 id="tokens">4. From text to a sequence of vectors</h3>
+        <p>Our running prompt is <strong>The cat sat</strong>. To keep the diagrams readable, pretend each word is one token. Actual tokenizers may split words into pieces, include spaces in tokens, or operate with byte-level units. A token is a unit in the model’s vocabulary; it is not necessarily a word.</p>
+        <p>The <strong>tokenizer</strong> converts text to token IDs. These IDs are vocabulary indices. A larger ID does not mean a more important word. An embedding table uses each ID to select a learned vector.</p>
+        <figure class="pipeline" aria-label="Text becomes token IDs, then vectors, then contextual representations and next-token scores">
+          <ol><li><strong>Text</strong><span>The cat sat</span></li><li><strong>Token IDs</strong><span>Indices in a vocabulary</span></li><li><strong>Embeddings</strong><span>One vector per position</span></li><li><strong>Transformer blocks</strong><span>Repeated contextual updates</span></li><li><strong>Output scores</strong><span>One score per vocabulary token</span></li></ol>
+          <figcaption>A vector is a list of numbers. A matrix lets the model transform many such lists efficiently.</figcaption>
+        </figure>
+        <p>Two distinctions will matter throughout the guide. <strong>Parameters</strong> are the learned numbers defining the computation, including embedding entries and transformation matrices. They are often collectively called <strong>weights</strong>. <strong>Activations</strong> are the intermediate numbers produced when those parameters process a particular input.</p>
+        <p>During ordinary inference, the weights stay fixed while the activations change with the prompt. During training, an optimizer updates the weights. Providing a new prompt changes the computation’s inputs; it does not normally retrain the model.</p>
+        <p>The initial token embedding for <em>cat</em> is a learned lookup. Its representation after several layers also depends on the context it can attend to. “Embedding” sometimes refers to either kind of vector; here we will call the latter a <strong>contextual representation</strong>. Its coordinates are learned features, not a human-written dictionary of meanings.</p>
+
+        <h3 id="attention">5. Attention: deciding what information to combine</h3>
+        <p>To predict what follows <em>The cat sat</em>, the final position needs useful information about the preceding words. Attention gives it a learned way to combine information across positions.</p>
+        <p>Each position’s current representation is transformed into three objects:</p>
+        <dl class="term-list">
+          <dt>Query (Q)</dt><dd>A vector used to score which positions are useful to this position’s update.</dd>
+          <dt>Key (K)</dt><dd>A vector compared with a query to produce a compatibility score.</dd>
+          <dt>Value (V)</dt><dd>The information vector contributed when a position receives attention weight.</dd>
+        </dl>
+        <p>“What am I looking for?”, “what can I match?”, and “what can I contribute?” are useful memory aids. These are numerical roles, not literal questions or conscious intentions. Q, K, and V are learned projections of representations; nobody manually assigns a token a semantic key.</p>
+        <div class="worked-example" id="attention-example">
+          <h4>One small attention calculation</h4>
+          <p>Consider one head at the last position, <em>sat</em>. For this toy calculation, its query is the scalar <code>q = 1</code>. Keys are also scalars; values have two coordinates.</p>
+          <div class="table-scroll" role="region" aria-label="Worked attention scores and values" tabindex="0"><table class="attention-table">
+            <thead><tr><th scope="col">Position</th><th scope="col">Key</th><th scope="col">Score q × k</th><th scope="col">Attention weight</th><th scope="col">Value</th></tr></thead>
+            <tbody><tr><th scope="row">The</th><td>0</td><td>0</td><td>≈ 0.09</td><td>(0, 1)</td></tr><tr><th scope="row">cat</th><td>2</td><td>2</td><td>≈ 0.67</td><td>(2, 0)</td></tr><tr><th scope="row">sat</th><td>1</td><td>1</td><td>≈ 0.24</td><td>(1, 1)</td></tr></tbody>
+          </table></div>
+          <p><strong>First, compare.</strong> Multiplying the query by each key gives scores <code>0, 2, 1</code>. With vector queries and keys, this comparison uses a dot product.</p>
+          <p><strong>Then, normalize.</strong> <strong>Softmax</strong> exponentiates the scores and divides by their sum: <code>exp(score) / sum(exp(scores))</code>. That produces nonnegative weights summing to 1. The scores above give approximately <code>0.09, 0.67, 0.24</code>.</p>
+          <p><strong>Finally, combine.</strong> Multiply each value vector by its weight and add:</p>
+          <div class="equation">0.09 × (0, 1) + 0.67 × (2, 0) + 0.24 × (1, 1) ≈ (1.58, 0.33)</div>
+          <p>The result is a vector used to update the representation at <em>sat</em>. It is not the next word. In scaled dot-product attention, scores are divided by the square root of the key dimension before softmax. Our toy key dimension is 1, so that scaling changes nothing.</p>
+        </div>
+        <p>A <strong>head</strong> is one set of these query, key, and value projections. <strong>Multi-head attention</strong> performs several such computations and combines their results. Different heads can capture different patterns, but there is no guarantee that each learns one tidy human concept such as “grammar” or “subject.”</p>
+        <p><strong>Self-attention</strong> draws queries, keys, and values from the same sequence. <strong>Cross-attention</strong> uses queries from one stream and keys and values from another, as in a decoder consulting an encoded source sentence.</p>
+        <p>An attention weight measures a contribution inside this calculation. It is not, by itself, a complete explanation of why the whole model produced an answer. Later transformations, other heads, and other layers also matter.</p>
+        <div class="lesson"><p><strong>Two different distributions:</strong> attention weights are over input positions. Final output probabilities are over vocabulary tokens. A 67% attention weight on <em>cat</em> does not mean a 67% chance of generating <em>cat</em>.</p></div>
+
+        <h3 id="blocks">6. Building a transformer from those parts</h3>
+        <p>Attention answers one question: how should information be combined across positions? A working language model also needs order, restrictions on what each position can see, and transformations that turn the combined information into useful features.</p>
+        <h4>Order and the causal mask</h4>
+        <p><em>The cat chased the dog</em> and <em>The dog chased the cat</em> contain the same words. Their order matters. Transformers therefore incorporate position information. The original design added positional encodings to embeddings. <strong>Rotary position embeddings (RoPE)</strong>, used in many later designs, rotate query and key coordinates according to position, making their comparisons sensitive to relative offsets. Position methods differ; the common purpose is to make order available to the computation. <a href="https://arxiv.org/abs/2104.09864">The RoFormer paper</a> describes RoPE.</p>
+        <p>A next-token model must also avoid looking ahead. A <strong>causal mask</strong> allows each position to attend only to itself and earlier positions. In <em>The cat sat</em>, the representation at <em>The</em> cannot use <em>cat</em> or <em>sat</em>; the representation at <em>sat</em> can use all three. During training, later tokens are present in the example, but the mask prevents using them to predict themselves.</p>
+        <h4>One block, repeated many times</h4>
+        <p>A typical decoder block alternates attention with a small neural network applied independently at each position. This second component is called a <strong>feed-forward network (FFN)</strong> or <strong>multilayer perceptron (MLP)</strong>. Here those names refer to the same part. It uses learned transformations and nonlinear functions to turn a position’s current features into new ones.</p>
+        <figure class="block-figure">
+          <div class="block-step"><strong>1 · Mix information across positions</strong><code>x ← x + Attention(Norm(x))</code></div>
+          <div class="block-step"><strong>2 · Transform features at each position</strong><code>x ← x + MLP(Norm(x))</code></div>
+          <figcaption>A common <em>pre-norm</em> block, with position handling and the causal mask left implicit. Repeat the block with each layer’s learned parameters. The original transformer placed normalization differently; this is a representative layout, not the only one.</figcaption>
+        </figure>
+        <p>The <code>+</code> is a <strong>residual connection</strong>, also called a skip connection. A sublayer contributes an update to a representation carried forward, instead of having to replace it completely. This supports information flow and makes deep networks easier to optimize.</p>
+        <p><strong>Normalization</strong> controls the scale of the numbers entering or leaving a sublayer. LayerNorm and RMSNorm are common variants; their formulas differ. Neither means “turn the vector into probabilities.” That was softmax’s role in attention. The <a href="https://arxiv.org/abs/1607.06450">LayerNorm</a> and <a href="https://arxiv.org/abs/1910.07467">RMSNorm</a> papers explain their training motivations.</p>
+        <p>Across many blocks, the model repeatedly combines context and transforms features. The vectors carried through the residual connections are often called the <strong>residual stream</strong>. “Hidden state” is a broader name for an internal representation; in a transformer it need not mean the single recurrent memory we discussed earlier.</p>
+        <h4>Encoder, decoder, or both?</h4>
+        <div class="table-scroll" role="region" aria-label="Three transformer architecture families" tabindex="0"><table>
+          <thead><tr><th scope="col">Architecture</th><th scope="col">Who can see what?</th><th scope="col">A natural use</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Encoder-only<br /><small>BERT-style</small></th><td>Bidirectional attention across the input. BERT’s pretraining predicts masked tokens using surrounding context.</td><td>Representing a complete input for classification, retrieval, or labeling.</td></tr>
+            <tr><th scope="row">Decoder-only<br /><small>GPT-style</small></th><td>Causal self-attention: each position sees the preceding prefix and itself.</td><td>Continuing text, including instructions, answers, and code.</td></tr>
+            <tr><th scope="row">Encoder–decoder<br /><small>Original transformer, T5</small></th><td>An encoder reads the source; a causal decoder cross-attends to those source representations.</td><td>Mapping an input sequence to an output, such as translation.</td></tr>
+          </tbody>
+        </table></div>
+        <p>These are useful design tendencies, not hard restrictions on tasks. “Decoder-only” is a historical architecture name: it does not imply that a separate, invisible encoder must exist. Our running example uses a decoder-only model.</p>
+
+        <h3 id="training">7. From a representation to a prediction—and a learning signal</h3>
+        <p>After the final block and normalization, the representation at <em>sat</em> is projected into one score for every vocabulary token. These scores are called <strong>logits</strong>. The projection is often called the <strong>language-model head</strong> or <strong>unembedding</strong>. Softmax converts the logits to a next-token probability distribution.</p>
+        <p>Suppose our toy model assigns <strong>on: 60%</strong>, <strong>beside: 25%</strong>, and <strong>all other tokens together: 15%</strong>. These are output probabilities. They are different from the earlier attention weights over <em>The</em>, <em>cat</em>, and <em>sat</em>.</p>
+        <p>During training, the corpus supplies the actual continuation. If the example is <em>The cat sat on the mat</em>, then the target after <em>The cat sat</em> is <em>on</em>. A standard loss is the negative logarithm of the probability assigned to that target:</p>
+        <div class="equation">loss = −log P(on | The cat sat)</div>
+        <p>Using natural logarithms, a probability of 0.60 gives a loss of about 0.51; a probability of 0.30 gives about 1.20. Assigning more probability to the observed target lowers this loss. This is <strong>cross-entropy loss</strong> for a single target token.</p>
+        <p><strong>Backpropagation</strong> calculates how the loss changes with the parameters. An optimizer uses those gradients to adjust the weights, usually over batches of many examples. This can update embeddings, attention projections, MLPs, and the output projection together. Nobody manually labels a head “find the subject.” Useful internal behavior can emerge because it helps reduce the training objective.</p>
+        <h4>Why training can process positions in parallel</h4>
+        <p>The training sentence already exists. The model does not have to generate <em>cat</em> before learning to predict <em>sat</em>. It can receive the actual preceding tokens at every position, a practice called <strong>teacher forcing</strong>.</p>
+        <div class="table-scroll" role="region" aria-label="Next-token training targets" tabindex="0"><table class="compact-table">
+          <thead><tr><th scope="col">Context available at a position</th><th scope="col">Target at that position</th></tr></thead>
+          <tbody><tr><td>The</td><td>cat</td></tr><tr><td>The cat</td><td>sat</td></tr><tr><td>The cat sat</td><td>on</td></tr><tr><td>The cat sat on</td><td>the</td></tr></tbody>
+        </table></div>
+        <p>These are conceptual views of the positions in one sequence, not a requirement to run four separate forward passes. Causal masking allows their representations and losses to be computed together within each layer. Layers still depend on previous layers, and training still takes many optimization steps.</p>
+        <p>This is <strong>self-supervised learning</strong>: the data supplies its own targets. It does not mean the model learns without an objective or supervision signal. Predicting text rewards useful patterns, but the objective does not explicitly require every generated statement to be true.</p>
+        <div class="lesson"><p><strong>Training changes the recipe; inference follows it.</strong> Training updates parameters using loss and gradients. Ordinary inference uses the resulting parameters to compute predictions for new inputs.</p></div>
+
+        <h3 id="generation">8. Generating another token—and why KV caching exists</h3>
+        <p>At inference time, the true continuation is unknown. The model produces a distribution, and a decoding rule chooses a token from it. <strong>Greedy decoding</strong> chooses the highest-probability token. <strong>Sampling</strong> draws a token according to a distribution, so less likely options can also be selected.</p>
+        <p><strong>Temperature</strong> adjusts the distribution before sampling: lower positive temperatures concentrate probability on high-scoring options; higher temperatures spread it out. <strong>Top-p sampling</strong> restricts sampling to a high-probability set whose cumulative probability reaches a chosen threshold. These control output selection, not factual confidence.</p>
+        <p>Suppose we select <em>on</em>. The sequence becomes <em>The cat sat on</em>. The model now predicts what follows this longer prefix, perhaps <em>the</em>, and repeats. This is <strong>autoregressive generation</strong>: generated output becomes input for subsequent predictions. Generation ends at a stopping condition, such as an end token or an output budget.</p>
+        <h4>Prefill and decode are two phases of inference</h4>
+        <p><strong>Prefill</strong> processes the known prompt. Its positions can be processed together within each layer, much as in training, but without updating weights. The final prompt position supplies the distribution for the first generated token.</p>
+        <p><strong>Decode</strong> then processes newly selected tokens to predict subsequent ones. In ordinary autoregressive decoding, the next input depends on the previous choice, so these generation steps are sequential.</p>
+        <p>A naive implementation could run the whole growing prefix through the model again at every step. But the representation of <em>cat</em> in a causal model cannot depend on a future <em>on</em>. For a fixed model, prefix, and position scheme, appending a token leaves the earlier computations reusable.</p>
+        <h4>The cache stores the parts future tokens need</h4>
+        <p>At each attention layer, save the earlier tokens’ <strong>keys and values</strong>. Together, these saved activations form the <strong>KV cache</strong>. For the new token, compute its query, key, and value. Compare its query with the available keys, then combine the corresponding values. Its new key and value become part of the cache for later steps.</p>
+        <figure class="cache-figure">
+          <div class="cache-row"><span class="cache-label">Already saved</span><span>The<br /><small>K, V</small></span><span>cat<br /><small>K, V</small></span><span>sat<br /><small>K, V</small></span></div>
+          <div class="cache-new"><strong>New token: on</strong><span>Compute Q, K, V. Its Q reads the saved K, V and its own K, V.</span></div>
+          <figcaption>This happens separately at each layer. The cache contains numerical activations, not just the words shown here.</figcaption>
+        </figure>
+        <p><strong>Why not cache queries too?</strong> A query is used to calculate the update at its own position. Those old updates have already been computed. Future positions bring their own queries; they need the earlier keys and values.</p>
+        <p>The learned matrices that produce K and V are <em>weights</em>. The K and V vectors stored for this particular conversation are <em>activations</em>. Reusing those vectors saves computation; it does not teach the model new facts. Hugging Face’s <a href="https://huggingface.co/docs/transformers/en/cache_explanation">cache explanation</a> describes this mechanism in implementation terms.</p>
+        <div class="table-scroll" role="region" aria-label="Prefill and two decoding steps" tabindex="0"><table class="cache-table">
+          <thead><tr><th scope="col">Pass</th><th scope="col">New input processed</th><th scope="col">Cached positions afterward</th><th scope="col">Next token selected</th></tr></thead>
+          <tbody><tr><th scope="row">Prefill</th><td>The cat sat</td><td>3</td><td>on</td></tr><tr><th scope="row">Decode 1</th><td>on</td><td>4</td><td>the</td></tr><tr><th scope="row">Decode 2</th><td>the</td><td>5</td><td>mat</td></tr></tbody>
+        </table></div>
+        <p>Notice the timing: selecting <em>on</em> does not yet create its keys and values. Processing <em>on</em> in the following pass does. The cache grows with the processed sequence.</p>
+        <h4>What caching saves—and what it costs</h4>
+        <p>Caching avoids recalculating the old prefix’s layer computations. It does not eliminate attention to the prefix. With full attention, each new token still reads information across the cached history, so its attention work grows with the context length.</p>
+        <p>The saved computation costs memory. For a conventional full KV cache, storage is approximately:</p>
+        <div class="equation">2 × layers × KV heads × head dimension<br />× cached tokens × bytes per number</div>
+        <p>The 2 is for keys and values. For one sequence with 32 layers, 8 KV heads, a head dimension of 128, 8,192 cached tokens, and 2 bytes per number, this is <strong>1 GiB</strong> of cache alone. Model weights and other runtime memory are additional. Longer conversations and more simultaneous requests increase this pressure; later we will see why sharing KV heads can help.</p>
+        <div class="lesson"><p><strong>Three different kinds of “memory”:</strong> learned weights retain the effects of training; the context is the information available for the current computation; a KV cache reuses computations for a processed prefix. A product’s persistent memory is usually a separate storage-and-retrieval feature.</p></div>
+        <p>We have now followed the complete loop: text becomes vectors, blocks combine context and transform features, the output head produces token probabilities, a decoding rule chooses a token, and the next pass processes that token using cached work. The remaining question is how this mechanism becomes a useful assistant.</p>
+        <header class="part-heading" id="systems"><p class="part-label">Part III</p><h2>From model to useful system</h2><p>The architecture explains a prediction. Data, additional training, retrieval, tools, and serving choices explain much of what the user experiences.</p></header>
+        <h3 id="post-training">9. Learning language is a foundation, not the entire job</h3>
+        <h4>Pretraining: where broad capabilities begin</h4>
+        <p><strong>Pretraining</strong> establishes a reusable model from broad data. For our causal language model, the basic objective is next-token prediction. Learning to predict varied text can develop useful representations of syntax, facts, styles, code, and problem-solving patterns. How well those capabilities generalize depends on the training process and data.</p>
+        <p>Scale has several dimensions: the number of parameters, the amount and quality of data, and the computation spent training. These are related, but “more parameters” is not a complete recipe. The <a href="https://arxiv.org/abs/2203.15556">Chinchilla study (2022)</a> investigated how to balance model size and training tokens under a fixed compute budget. Data composition, filtering, and duplication also matter; repeating low-quality material is not equivalent to adding useful coverage.</p>
+        <p><strong>Scaling laws</strong> describe empirical relationships between resources and measured performance under particular conditions. They guide resource allocation. They are not guarantees that every capability, benchmark, or deployment will improve at a predictable rate.</p>
+        <h4>Post-training: making a continuation model behave like an assistant</h4>
+        <p>A pretrained model learns to continue many kinds of text. If prompted with a question, it might answer, continue a list of questions, or imitate an unhelpful exchange. <strong>Post-training</strong> is an umbrella for additional training that shapes behavior and capabilities after pretraining.</p>
+        <p><strong>Supervised fine-tuning (SFT)</strong> trains on demonstrations of desired behavior, often instruction–response examples. In a common setup, the loss rewards predicting the demonstration’s response tokens given the instruction and preceding response tokens. The basic next-token machinery remains; the data and loss placement focus it on useful responses.</p>
+        <p>Demonstrations show one acceptable answer. Preferences provide another signal: given two answers, which is better?</p>
+        <div class="table-scroll" role="region" aria-label="Three post-training approaches" tabindex="0"><table>
+          <thead><tr><th scope="col">Approach</th><th scope="col">Learning signal</th><th scope="col">What distinguishes it?</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">SFT</th><td>Examples of desired responses.</td><td>Train the model to predict those response tokens.</td></tr>
+            <tr><th scope="row">Reward-model RLHF</th><td>Human preferences train a reward model; its scores guide reinforcement learning.</td><td>The language model generates responses and is updated toward higher reward, often with a penalty for drifting too far from a reference model.</td></tr>
+            <tr><th scope="row">DPO</th><td>Preferred and rejected response pairs.</td><td>Directly optimize a preference loss on the language model, using a reference model in the standard formulation, without a separately trained reward model or an RL rollout loop.</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>RLHF</strong> means reinforcement learning from human feedback. The <a href="https://arxiv.org/abs/2203.02155">InstructGPT work (2022)</a> is a prominent example of the demonstration → reward model → RL pipeline. <strong>Direct preference optimization (DPO)</strong> offers a different training procedure for preference data; see the <a href="https://arxiv.org/abs/2305.18290">DPO paper</a>. These are not mandatory stages every model uses in this order.</p>
+        <p>Here, the language model acts as an RL <em>policy</em>: it assigns probabilities to next-token actions. PPO is one way to update that policy, not an alternative transformer architecture. For the RL concepts, see <a href="reinforcement-learning.html">Policies, Values, and Planning</a>.</p>
+        <p>A reward or preference is an imperfect measure of what we want. A model can learn to sound convincing, exploit a scoring weakness, or agree with a user when disagreement would be more accurate. Better scores require checking what the scoring process actually rewards.</p>
+        <h4>Reasoning: separate training from computation at answer time</h4>
+        <p>Suppose a question requires three calculations. Generating intermediate steps can place useful results into the context for later tokens. <strong>Chain of thought</strong> refers to such generated intermediate reasoning. The <a href="https://arxiv.org/abs/2201.11903">2022 chain-of-thought prompting study</a> showed benefits from providing worked reasoning examples for certain tasks and sufficiently large models.</p>
+        <p>But prompting for steps and training a model to solve problems are different interventions. <strong>Reinforcement learning with verifiable rewards (RLVR)</strong> can use signals such as whether a final mathematical answer matches a checker or whether code passes tests. The <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1 work</a> provides one documented example of reasoning-focused RL. Checkable does not mean perfect: weak tests and flawed checkers can still reward bad solutions.</p>
+        <p><strong>Test-time compute</strong>, also called <strong>inference-time compute</strong>, is computation spent solving a new request. It can mean generating a longer reasoning sequence, producing several candidates and checking them, or searching through possible solutions. These are distinct procedures. A model labeled “reasoning” does not necessarily run an explicit search tree.</p>
+        <p>More computation can improve results on some tasks, at the cost of latency and resources. It can also elaborate an error. A readable explanation should not be treated as a guaranteed account of why an answer was produced: <a href="https://arxiv.org/abs/2305.04388">research on chain-of-thought faithfulness</a> has demonstrated explanations that omit factors influencing the answer. The model’s actual computation includes all the numerical operations we have just explored.</p>
+        <div class="lesson"><p><strong>Three questions keep “reasoning” clear:</strong> how was the model trained, what intermediate content does it generate, and how does the surrounding system spend computation to check or improve an answer?</p></div>
+
+        <h3 id="adaptation">10. Add information, change behavior, or give the model a tool?</h3>
+        <p>Imagine building an assistant that answers questions about an organization’s changing handbook. Several techniques might help, but they solve different problems.</p>
+        <h4>Prompting and in-context learning</h4>
+        <p>A prompt can include instructions, reference material, and examples of the desired output. <strong>Few-shot prompting</strong> supplies a few demonstrations in the context. The model can use those demonstrations while answering, a form of <strong>in-context learning</strong>. Despite the word “learning,” ordinary prompting does not update the weights. Remove the examples from a later request and they are no longer available in that request’s context.</p>
+        <h4>Retrieval-augmented generation: put relevant material in reach</h4>
+        <p><strong>Retrieval-augmented generation (RAG)</strong> retrieves external material and makes it available to generation. For the handbook assistant, the application might find relevant sections, include them with the question, and ask for an answer grounded in those sections. Changing the handbook can then change the information supplied without retraining the language model. The <a href="https://arxiv.org/abs/2005.11401">2020 RAG paper</a> is an influential research formulation; deployed retrieval pipelines take many forms.</p>
+        <p>Retrieval may use keywords, vector similarity, or both. A retrieval <strong>embedding model</strong> represents a query and passages as vectors whose similarity helps find candidates. This is a different use of “embedding” from looking up the initial vector for one token. A passage embedding typically summarizes a whole passage through a trained model.</p>
+        <p>Finding a relevant passage does not ensure the generated answer follows it. The system can retrieve the wrong section, miss an exception, or cite a passage that does not support the claim. Evaluate retrieval and answer grounding separately.</p>
+        <h4>Fine-tuning, LoRA, and distillation</h4>
+        <p><strong>Fine-tuning</strong> continues training from an existing model. It is useful when examples can teach a recurring task, output format, style, or behavior that prompting alone does not deliver reliably. It can also affect factual knowledge, but it is not a dependable database update mechanism for frequently changing documents.</p>
+        <p><strong>Low-rank adaptation (LoRA)</strong> is a way to fine-tune efficiently. It freezes base weights and learns small, low-rank updates to selected transformations. Think of learning a constrained adjustment to a large matrix instead of optimizing every entry. It reduces the number of trainable parameters and associated training memory, while still requiring the base model. LoRA specifies <em>how parameters are adapted</em>, not what task or loss to use. See the <a href="https://arxiv.org/abs/2106.09685">LoRA paper</a>.</p>
+        <p><strong>Distillation</strong> trains a student to reproduce useful behavior from a teacher, using signals such as output probabilities or generated examples. The student is often smaller or cheaper to run. It does not receive a perfect copy of everything the teacher knows; the training signals and coverage limit what transfers. The <a href="https://arxiv.org/abs/1503.02531">distillation paper by Hinton and colleagues</a> explains the teacher–student idea.</p>
+        <div class="table-scroll" role="region" aria-label="Choosing how to adapt an AI system" tabindex="0"><table>
+          <thead><tr><th scope="col">Need</th><th scope="col">A reasonable first approach</th><th scope="col">What changes?</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Explain the task or desired format</th><td>Prompting, with examples if useful</td><td>Current context</td></tr>
+            <tr><th scope="row">Use relevant, changing documents</th><td>Retrieval / RAG</td><td>External information supplied to generation</td></tr>
+            <tr><th scope="row">Learn consistent behavior from many examples</th><td>Fine-tuning, possibly with LoRA</td><td>Parameters or adapter parameters</td></tr>
+            <tr><th scope="row">Transfer behavior to a cheaper model</th><td>Distillation</td><td>The student’s parameters</td></tr>
+            <tr><th scope="row">Calculate, inspect, or act in another system</th><td>Tool use</td><td>Available operations and observations</td></tr>
+          </tbody>
+        </table></div>
+        <p>These approaches can be combined. The choice begins with the missing capability: information, learned behavior, or access to an operation.</p>
+        <h4>Tools and agents: the model participates in a software loop</h4>
+        <p>A model can generate a structured request such as “call this calculator with these arguments.” The surrounding application interprets that request, checks it, executes the tool, and returns the result as new context. The model can then use the result to continue. Writing a tool call and actually executing it are separate events.</p>
+        <figure class="tool-loop"><ol><li><strong>Model proposes</strong><span>A tool and its arguments</span></li><li><strong>Application executes</strong><span>The permitted operation</span></li><li><strong>Result returns</strong><span>New evidence in context</span></li><li><strong>Model continues</strong><span>Answer, another call, or stop</span></li></ol><figcaption>The loop belongs to the application. The model supplies decisions within it.</figcaption></figure>
+        <p><strong>Agent</strong> has no single universally enforced definition. Here it means a system where the model helps choose successive actions toward a goal, using observations from earlier actions. A fixed workflow may also call a model several times without giving it much control over the sequence. The <a href="https://arxiv.org/abs/2210.03629">ReAct paper</a> is an influential example of combining generated reasoning and actions.</p>
+        <p>External results also create a boundary: a retrieved page may contain instructions, but it is still external content. <strong>Indirect prompt injection</strong> attempts to redirect a model through instructions embedded in material it reads; <a href="https://arxiv.org/abs/2302.12173">Greshake and colleagues</a> demonstrated this in integrated applications. Distinguishing evidence from authorized commands and constraining tool permissions are system concerns, not problems solved by attention alone.</p>
+        <p>Similarly, an assistant’s “memory across conversations” often means software saves information and later retrieves it into context. That persistent store is separate from both the model’s weights and the KV cache.</p>
+
+        <h3 id="modern-designs">11. Modern variants: identify the bottleneck each one addresses</h3>
+        <p>Once the main mechanism is clear, new architecture and serving terms become easier to place. Ask what each changes: model capacity, supported inputs, arithmetic, memory movement, or the generation procedure.</p>
+        <h4>Mixture of experts: more capacity without activating everything</h4>
+        <p>In a common <strong>mixture-of-experts (MoE)</strong> transformer, some MLP sublayers contain several expert networks. A learned router selects a small subset for each token. This creates a distinction between <strong>total parameters</strong> and <strong>active parameters per token</strong>.</p>
+        <p>The experts are usually components within a model, not a panel of complete chatbots debating an answer. Sparse routing can provide more parameter capacity for a given amount of per-token computation, while adding memory, load-balancing, and communication challenges. Total parameter count alone therefore makes a poor cost comparison between dense and sparse models. The <a href="https://arxiv.org/abs/2412.19437">DeepSeek-V3 report</a> documents one large MoE design.</p>
+        <h4>Multimodality: sequences can represent more than text</h4>
+        <p>A <strong>multimodal</strong> model handles more than one type of input or output, such as text, images, audio, or video. An image can be divided into patches and encoded as vectors. Audio can be represented through frames or learned units. Training teaches the system how those representations relate to language and other tasks.</p>
+        <p>One common design connects a visual encoder to a language model through a learned projection; other designs integrate modalities differently. An image is not necessarily converted into an English caption before the model uses it. The <a href="https://arxiv.org/abs/2502.13923">Qwen2.5-VL report</a> gives a concrete vision–language architecture.</p>
+        <p>Understanding an image and generating one are also different tasks. <strong>Diffusion models</strong> learn a process that reverses progressive corruption, often generating an image by repeatedly denoising a representation starting from noise. That differs from our left-to-right text loop. A transformer can be the neural network inside a diffusion model: “transformer” names an architecture; “diffusion” names a generative approach. See <a href="https://arxiv.org/abs/2006.11239">denoising diffusion models</a> and <a href="https://arxiv.org/abs/2212.09748">Diffusion Transformers</a>.</p>
+        <h4>Efficiency: several techniques, several different savings</h4>
+        <div class="table-scroll" role="region" aria-label="What common efficiency techniques actually save" tabindex="0"><table>
+          <thead><tr><th scope="col">Technique</th><th scope="col">Main idea</th><th scope="col">Keep this distinction</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">KV caching</th><td>Reuse earlier keys and values while generating.</td><td>Saves repeated computation; stores more activations as context grows.</td></tr>
+            <tr><th scope="row">Grouped-query attention (GQA)</th><td>Several query heads share a smaller set of key/value heads.</td><td>Reduces KV storage and bandwidth. It changes the attention design.</td></tr>
+            <tr><th scope="row">FlashAttention</th><td>Reorganize attention computation to reduce costly memory transfers and avoid storing the full attention matrix.</td><td>Computes exact attention up to numerical effects; full attention’s arithmetic remains quadratic in sequence length.</td></tr>
+            <tr><th scope="row">Quantization</th><td>Represent weights and/or activations using fewer bits.</td><td>Can reduce memory and transfer costs; quality and speed depend on the method and hardware.</td></tr>
+            <tr><th scope="row">Batching</th><td>Process work from multiple sequences together to use hardware efficiently.</td><td>Higher throughput does not necessarily mean a lower response time for each user.</td></tr>
+            <tr><th scope="row">Speculative decoding</th><td>A cheaper process proposes several tokens; the target model verifies them together.</td><td>Exact acceptance-and-correction algorithms preserve the target sampling distribution. Speedup depends on proposal quality and overhead.</td></tr>
+          </tbody>
+        </table></div>
+        <p class="source-note">Primary sources: <a href="https://arxiv.org/abs/2305.13245">GQA</a>, <a href="https://arxiv.org/abs/2205.14135">FlashAttention</a>, <a href="https://arxiv.org/abs/2208.07339">LLM.int8() quantization</a>, and <a href="https://arxiv.org/abs/2211.17192">speculative decoding</a>.</p>
+        <p>These improvements can coexist. An MoE model may also use GQA, quantized weights, and speculative decoding. They are not competing names for the same optimization.</p>
+        <h4>Long contexts and alternatives to full attention</h4>
+        <p>A larger <strong>context window</strong> allows more information to be supplied. It does not guarantee that every relevant detail will influence the answer reliably. <a href="https://arxiv.org/abs/2307.03172">Lost in the Middle</a> demonstrated sensitivity to the position of relevant information in the models and tasks it tested. Long-context performance needs its own evaluation.</p>
+        <p>Architectures can also reduce or replace full attention. Sliding-window attention limits which previous positions a layer can directly consult. State-space models such as <a href="https://arxiv.org/abs/2312.00752">Mamba</a> carry information through a compact state instead of retaining a full attention cache over all previous positions. Hybrid designs combine mechanisms.</p>
+        <p>These choices trade off computation, memory, and how past information remains accessible. Efficient state updates are attractive for long sequences; compressing history into a state creates a different information path from directly attending to stored positions. The transformer is a major design family, not a synonym for all modern AI.</p>
+
+        <h3 id="evaluation">12. What a convincing answer does—and does not—demonstrate</h3>
+        <p>A high next-token probability means a token fits the model’s learned conditional distribution. It is not a calibrated probability that the answer is factually correct. Fluency, confident wording, and a plausible citation can all accompany an error.</p>
+        <p><strong>Hallucination</strong> commonly refers to generated content that is false, unsupported, or inconsistent with the supplied evidence. The term covers several failures, so an evaluation should say which one it measures. A model inventing a source and a model misreading a retrieved source may need different fixes.</p>
+        <p>For a real application, evaluate the complete system on representative examples held apart from development. A useful score might measure correct answers, supported claims, successful tool outcomes, or task completion. Keep simpler baselines: a change is valuable when it improves the outcome you care about under a comparable budget.</p>
+        <p>Benchmark scores are evidence within a test’s scope. Training-data contamination, repeated tuning on the test set, and narrow coverage can make that evidence less informative. A system can perform well on a benchmark and still fail on your documents, language, tools, or unusual cases.</p>
+        <p>Measure resource costs alongside quality. <strong>Time to first token</strong> includes the wait before generation begins, often affected by prompt processing and queueing. <strong>Time per output token</strong> measures generation speed after that. Throughput, peak memory, and total response cost answer different questions. A technique can improve one while worsening another.</p>
+        <p>When something fails, locate the stage. Did retrieval omit the relevant passage? Did the model ignore it? Was the tool call wrong? Did the tool itself return bad information? Clear boundaries make improvements more targeted than treating the assistant as one indivisible intelligence.</p>
+
+        <h3 id="glossary">A vocabulary that stays consistent</h3>
+        <p>Some terms are synonyms in this guide. Others sound related but refer to different things.</p>
+        <dl class="glossary">
+          <dt>Parameters / weights</dt><dd>Learned numbers defining the model. A <strong>checkpoint</strong> is a saved training or model state; depending on the format, it can also include configuration and optimizer state.</dd>
+          <dt>Activations / hidden representations</dt><dd>Numbers produced while processing an input. The <strong>residual stream</strong> is a particular sequence of representations carried through the blocks.</dd>
+          <dt>Token / token ID / embedding</dt><dd>A vocabulary unit, its index, and a vector representation. Contextual and retrieval embeddings are also vectors, but they are computed for different purposes.</dd>
+          <dt>Attention head / language-model head</dt><dd>An attention head performs a Q/K/V computation. The language-model head maps final representations to vocabulary scores. “Head” is overloaded.</dd>
+          <dt>Q, K, V</dt><dd>Query, key, and value vectors in attention. Their projection matrices are learned weights; the vectors are input-dependent activations. These Q and V names do not mean the action-value and state-value functions of reinforcement learning.</dd>
+          <dt>FFN / MLP</dt><dd>Here, two names for the feed-forward component applied at each position inside a transformer block.</dd>
+          <dt>Logits / probabilities</dt><dd>Raw output scores versus their normalized distribution after softmax. Attention and vocabulary prediction each use distributions over different objects.</dd>
+          <dt>Context / context window / KV cache</dt><dd>Available input information, its supported length limit, and cached intermediate computations for a processed prefix. None is automatically persistent memory across conversations.</dd>
+          <dt>Pretraining / fine-tuning / post-training</dt><dd>Broad initial training; continued adaptation of an existing model; and the umbrella for later training stages. SFT is one kind of fine-tuning and is commonly used in post-training.</dd>
+          <dt>Inference / prefill / decode</dt><dd>Using the model; processing the prompt; and processing generated tokens to continue the sequence. “Decoding” can also name the token-selection procedure, as in greedy decoding.</dd>
+          <dt>Language model / LLM / foundation model</dt><dd>A language model assigns probabilities to token sequences. An <strong>LLM</strong> is a large language model, with no universal size boundary. <strong>Foundation model</strong> is broader: a model trained for adaptation across tasks, potentially beyond language.</dd>
+          <dt>Transformer / assistant / agent</dt><dd>An architecture; an application that helps a user; and, in this guide, a system where the model helps choose successive actions. These describe different levels of the system.</dd>
+        </dl>
+        <h3 id="reading">Where to read next</h3>
+        <p>The links throughout the guide point to primary papers and implementation documentation. For a focused second pass, read the <a href="https://arxiv.org/abs/1706.03762">original transformer paper</a> for the architecture, the <a href="https://huggingface.co/docs/transformers/en/cache_explanation">cache documentation</a> for inference, and <a href="https://arxiv.org/abs/2203.02155">InstructGPT</a> for the separation between pretraining and assistant post-training. The <a href="https://arxiv.org/abs/1910.10683">T5 study</a> provides a broader view of transfer learning and encoder–decoder models.</p>
+        <p>The most useful habit is to place each new term at the right level. Is it an architecture, a training objective, a source of information, a generation procedure, or a system around the model? Once that question is answered, the mechanism and its tradeoffs become much easier to understand.</p>
+        <div class="article-end"><a href="../">← Back to the technical blog</a></div>
+      </div></div>
+    </article>
+  </main>
+  <footer class="site-footer shell"><span>© 2026 Ori Fogler</span><div><a href="../../hagigey/" lang="he">הגיגי אמרי</a><a href="../../privacy.html">Privacy</a><a href="mailto:me@orifogler.com">Get in touch</a></div></footer>
+</body>
+</html>
