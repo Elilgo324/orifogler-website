@@ -32,7 +32,7 @@
         <p class="article-kicker">Machine learning · A practical guide</p>
         <h1>Understanding PyTorch</h1>
         <p class="article-subtitle">From tensors to a model that learns: one example, one update at a time.</p>
-        <p class="byline">Ori Fogler · <time datetime="2026-09-18">September 18, 2026</time> · <span id="reading-time">About 25 minutes</span></p>
+        <p class="byline">Ori Fogler · <time datetime="2026-09-18">September 18, 2026</time> · <span id="reading-time">About 30 minutes</span></p>
         <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>Print article</span></button></div>
       </header>
       <div class="article-layout"><div class="prose">
@@ -50,6 +50,7 @@
           <li><a href="#data">Datasets, batches, and honest evaluation</a></li>
           <li><a href="#training-loop">The complete training loop</a></li>
           <li><a href="#neural-network">Growing into a neural network</a></li>
+          <li><a href="#transformer-example">The same loop, with a transformer</a></li>
           <li><a href="#inference">Inference, devices, and saving</a></li>
           <li><a href="#debugging">Common mistakes and a vocabulary map</a></li>
         </ol></nav>
@@ -268,7 +269,80 @@ custom_model = Calibrator()
 predictions = custom_model(x_train[:20])</code></pre>
         <p><code>__init__</code> creates and registers the components. <code>forward</code> describes their computation. Calling <code>custom_model(...)</code> runs that forward method through PyTorch’s module machinery. You normally write the forward computation, not a manual backward method: autograd differentiates supported operations. The <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html">Module reference</a> explains this structure.</p>
 
-        <h2 id="inference">10. Inference, devices, and saving</h2>
+        <h2 id="transformer-example">10. The same training loop, with a transformer</h2>
+        <p>We can now connect this workflow to a language model. The sensor predicts a number from a reading. Our tiny transformer will predict the next character at each position in a sequence. The model and loss change; the forward → loss → backward → optimizer step pattern stays the same.</p>
+        <p>This is a separate, self-contained example within the guide. It performs one update so we can inspect the machinery. It does not train a useful text generator.</p>
+        <h3>Turn text into input–target pairs</h3>
+        <p>Use characters as tokens to keep preparation visible. For <code>"hello"</code>, the input is <code>"hell"</code> and the target is <code>"ello"</code>. The four positions ask the model to predict <em>e after h</em>, <em>l after he</em>, <em>l after hel</em>, and <em>o after hell</em>.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-transformer-data">import torch
+from torch import nn
+
+torch.manual_seed(7)
+text = &quot;hello&quot;
+vocabulary = sorted(set(text))
+char_to_id = {char: i for i, char in enumerate(vocabulary)}
+ids = torch.tensor([[char_to_id[c] for c in text]])
+inputs = ids[:, :-1]   # &quot;hell&quot;: shape [1, 4]
+targets = ids[:, 1:]   # &quot;ello&quot;: shape [1, 4]
+vocab_size = len(vocabulary)</code></pre>
+        <p>Here <code>vocab_size</code> is 4: the distinct characters are <code>e, h, l, o</code>. IDs are integer indices, not measurements. Both tensors have shape <code>[batch, sequence] = [1, 4]</code>. The shifted targets let us train all four predictions in one forward pass.</p>
+        <h3>Build a small model from existing components</h3>
+        <p>An embedding maps each character ID to 32 learned numbers. A second embedding supplies position information. One transformer block combines context and transforms features, then an output layer produces one score per possible next character.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-transformer-model">class TinyTransformer(nn.Module):
+    def __init__(self, vocab_size, max_length=4):
+        super().__init__()
+        self.token_embedding = nn.Embedding(vocab_size, 32)
+        self.position_embedding = nn.Embedding(max_length, 32)
+        self.block = nn.TransformerEncoderLayer(
+            d_model=32,
+            nhead=4,
+            dim_feedforward=64,
+            dropout=0.0,
+            batch_first=True,
+            norm_first=True,
+        )
+        self.final_norm = nn.LayerNorm(32)
+        self.output = nn.Linear(32, vocab_size)
+
+    def forward(self, token_ids):
+        length = token_ids.shape[1]
+        positions = torch.arange(length, device=token_ids.device)
+        hidden = (
+            self.token_embedding(token_ids)
+            + self.position_embedding(positions)
+        )
+        blocked = torch.triu(
+            torch.ones(length, length, dtype=torch.bool,
+                       device=token_ids.device),
+            diagonal=1,
+        )
+        hidden = self.block(hidden, src_mask=blocked)
+        return self.output(self.final_norm(hidden))</code></pre>
+        <p><code>batch_first=True</code> keeps tensors ordered as <code>[batch, sequence, features]</code>. The block uses four attention heads, a feed-forward hidden width of 64, and normalization before its attention and feed-forward sublayers. Dropout is disabled to keep this example deterministic for a fixed initialization. The built-in block includes attention, a feed-forward network, residual connections, and normalization; we do not implement those internals here. See the <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.TransformerEncoderLayer.html">layer reference</a>.</p>
+        <p><strong>Why a class called “EncoderLayer”?</strong> It provides self-attention and a feed-forward block without cross-attention. Supplying a causal mask lets us use it as the block of this small causal language model. The class name does not force the input to be read bidirectionally.</p>
+        <p><code>blocked</code> is a Boolean matrix with <code>True</code> above the diagonal. For this API, <code>True</code> blocks an attention connection. Each position can read itself and earlier positions, never later ones. Without this mask, the model could peek at the very next character it is supposed to predict. These are the <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Transformer.html">transformer API’s mask semantics</a>.</p>
+        <div class="shape-example"><strong>Follow the shapes</strong><p>Character IDs: <code>[1, 4]</code><br />Token vectors + position vectors: <code>[1, 4, 32]</code><br />After the transformer block: <code>[1, 4, 32]</code><br />Vocabulary scores (logits): <code>[1, 4, 4]</code></p></div>
+        <p>In the final shape, the middle 4 counts input positions; the last 4 counts vocabulary choices. Their equality is incidental. Position vectors have shape <code>[4, 32]</code> and broadcast across the batch. This toy model supports at most four input positions because we created four positional embeddings.</p>
+        <h3>Take one familiar training step</h3>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-transformer-step">transformer = TinyTransformer(vocab_size)
+transformer_optimizer = torch.optim.SGD(
+    transformer.parameters(), lr=0.1
+)
+transformer.train()
+transformer_optimizer.zero_grad(set_to_none=True)
+logits = transformer(inputs)   # [1, 4, 4]
+token_loss = nn.CrossEntropyLoss()(
+    logits.reshape(-1, vocab_size),  # [4, 4]
+    targets.reshape(-1),            # [4]
+)
+token_loss.backward()
+transformer_optimizer.step()</code></pre>
+        <p>We reshape the logits from <code>[batch, sequence, vocabulary]</code> into <code>[batch × sequence, vocabulary]</code>, and the targets into <code>[batch × sequence]</code>. This aligns each position’s scores with its next-character target. Cross-entropy then averages the four prediction losses. Pass the raw logits; the loss handles the required normalization.</p>
+        <p>Gradients now flow through the output layer, transformer block, and both embedding tables. The optimizer still updates registered parameters in the same way. We use separate names so this example leaves the sensor model intact for the inference and saving examples below.</p>
+        <div class="lesson"><p><strong>The transferable idea:</strong> a more complex model changes the computation being differentiated. It does not change the basic responsibilities of the training loop.</p></div>
+        <p><a href="../code/pytorch_transformer_step.py" download>Download the complete one-step transformer example</a> and run <code>python pytorch_transformer_step.py</code>. For the concepts behind attention and causal prediction, see <a href="transformers-to-ai-assistants.html#attention">the transformer guide</a>. Training on a corpus, generating text, and evaluating a language model belong to a fuller experiment.</p>
+
+        <h2 id="inference">11. Inference, devices, and saving</h2>
         <h3>Evaluation mode and gradient tracking are separate switches</h3>
         <p><code>model.eval()</code> selects evaluation behavior. For example, dropout stops randomly dropping activations, and standard batch-normalization layers use their stored running statistics. Our linear layer has neither, so its calculation is unchanged. Including the call makes the example’s intent explicit.</p>
         <p><code>torch.inference_mode()</code> disables gradient recording and additional autograd bookkeeping inside its context. It does not select evaluation behavior. That is why prediction code commonly uses both:</p>
@@ -299,7 +373,7 @@ with torch.inference_mode():
         <p>The architecture must match the saved state. A checkpoint for <code>Calibrator</code> would be loaded into a new <code>Calibrator()</code>, not into <code>nn.Linear(1, 1)</code>. <code>map_location</code> chooses where tensors are loaded; <code>weights_only=True</code> explicitly selects restricted loading for this weights file.</p>
         <p>Saving only model state is enough for this prediction example. To resume training faithfully, a broader checkpoint may need optimizer state, progress, scheduler and random-number-generator state, and relevant data/preprocessing configuration. See PyTorch’s <a href="https://docs.pytorch.org/tutorials/beginner/basics/saveloadrun_tutorial.html">saving and loading guide</a>.</p>
 
-        <h2 id="debugging">11. Common mistakes, explained by responsibility</h2>
+        <h2 id="debugging">12. Common mistakes, explained by responsibility</h2>
         <p>When a training run behaves strangely, first inspect the boundary between each step.</p>
         <dl class="glossary">
           <dt>The shapes look almost right</dt><dd>For our regression, a prediction shaped <code>[20, 1]</code> and a target shaped <code>[20]</code> can broadcast into a <code>[20, 20]</code> error tensor. That compares examples against the wrong targets. Check both shapes before the loss. <a href="https://docs.pytorch.org/docs/stable/notes/broadcasting.html">Broadcasting</a> is a useful feature that can make a shape mistake surprisingly executable.</dd>
