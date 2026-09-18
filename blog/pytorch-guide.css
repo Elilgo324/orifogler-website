@@ -1,0 +1,43 @@
+.pytorch-guide .article-kicker { margin: 0 0 14px; color: var(--muted); font-size: .78rem; }
+.pytorch-guide .article-heading h1 { font-size: clamp(2rem, 5vw, 2.65rem); line-height: 1.15; }
+.pytorch-guide .article-toc { padding: 22px 24px; margin: 32px 0 44px; background: #f7f8f5; border: 1px solid var(--line); font-size: .9rem; }
+.pytorch-guide .article-toc ol { margin: 0; }
+.pytorch-guide .article-toc li { margin-bottom: 7px; }
+.pytorch-guide .article-toc a { text-decoration: none; }
+.pytorch-guide .article-toc a:hover { text-decoration: underline; }
+.pytorch-guide .prose h2 { margin-top: 48px; font-size: 1.45rem; }
+.pytorch-guide .prose h3 { margin-top: 30px; font-size: 1.1rem; }
+.pytorch-guide .lesson, .pytorch-guide .shape-example, .pytorch-guide .download-note { padding: 18px 22px; margin: 28px 0; border-left: 3px solid #46665c; background: #f5f8f5; }
+.pytorch-guide .lesson p:last-child, .pytorch-guide .shape-example p:last-child, .pytorch-guide .download-note p:last-child { margin-bottom: 0; }
+.pytorch-guide .shape-example > strong { display: block; margin-bottom: 10px; }
+.pytorch-guide .equation { padding: 18px; margin: 24px 0; border: 1px solid #dce3df; font: .86rem/1.8 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: center; overflow-wrap: anywhere; }
+.pytorch-guide .table-scroll { overflow-x: auto; max-width: 100%; margin: 24px 0; }
+.pytorch-guide table { width: 100%; min-width: 460px; border-collapse: collapse; font-size: .85rem; line-height: 1.6; }
+.pytorch-guide th, .pytorch-guide td { padding: 12px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid #dce3df; }
+.pytorch-guide thead th { background: #f2f5f1; font-weight: 600; }
+.pytorch-guide tbody th { width: 30%; font-weight: 600; }
+.pytorch-guide .loop-table td:first-child { width: 40%; }
+.pytorch-guide .prose pre { max-width: 100%; border: 1px solid #e4e8e3; border-radius: 3px; }
+.pytorch-guide .prose pre code { font-size: .81rem; }
+.pytorch-guide .output { background: #f5f8f5; }
+.pytorch-guide .result-figure { margin: 28px 0; }
+.pytorch-guide .result-figure img { display: block; width: 100%; height: auto; }
+.pytorch-guide figcaption { margin-top: 12px; font-size: .8rem; color: var(--muted); line-height: 1.6; }
+.pytorch-guide .glossary dt { margin: 24px 0 8px; padding-top: 18px; border-top: 1px solid var(--line); font-weight: 600; }
+.pytorch-guide .glossary dd { margin: 0; }
+@media (max-width: 560px) {
+  .pytorch-guide .article-toc { padding: 18px; }
+  .pytorch-guide .lesson, .pytorch-guide .shape-example, .pytorch-guide .download-note { padding: 16px; }
+  .pytorch-guide .equation { padding: 12px; font-size: .78rem; }
+  .pytorch-guide .prose pre { padding: 14px 12px; }
+}
+@media print {
+  .pytorch-guide .table-scroll { overflow: visible; }
+  .pytorch-guide table { min-width: 0; font-size: 9pt; }
+  .pytorch-guide thead { display: table-header-group; }
+  .pytorch-guide tr { break-inside: avoid; }
+  .pytorch-guide th, .pytorch-guide td { padding: 2.5mm 2mm; }
+  .pytorch-guide .prose pre { break-inside: auto; page-break-inside: auto; }
+  .pytorch-guide .lesson, .pytorch-guide .shape-example, .pytorch-guide .equation, .pytorch-guide .download-note { break-inside: avoid; }
+  .pytorch-guide .glossary dt { break-after: avoid; }
+}

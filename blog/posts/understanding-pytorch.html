@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Understanding PyTorch: From Tensors to a Model That Learns — Ori Fogler</title>
+  <meta name="description" content="Learn PyTorch through one worked example: tensors, autograd, training loops, neural networks, validation, and inference—with tested, runnable code." />
+  <link rel="canonical" href="https://orifogler.com/blog/posts/understanding-pytorch.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Understanding PyTorch: From Tensors to a Model That Learns" />
+  <meta property="og:description" content="One readable example connecting tensors, gradients, optimizers, and a model that learns." />
+  <meta property="og:url" content="https://orifogler.com/blog/posts/understanding-pytorch.html" />
+  <meta property="article:published_time" content="2026-09-18" />
+  <meta property="article:modified_time" content="2026-09-18" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../blog.css" />
+  <link rel="stylesheet" href="../pytorch-guide.css" />
+  <link rel="stylesheet" href="../../assets/blog-print.css" />
+  <script src="../../assets/blog-print.js" defer></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Understanding PyTorch: From Tensors to a Model That Learns","description":"An intuitive guide to PyTorch: tensors, autograd, training, validation, and inference, with runnable code.","datePublished":"2026-09-18","dateModified":"2026-09-18","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/understanding-pytorch.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="../../">Ori Fogler</a>
+    <nav aria-label="Main navigation"><a href="../">Blog</a><a href="../../resume.html">Resume</a></nav>
+  </header>
+  <main id="content" class="shell pytorch-guide">
+    <article>
+      <header class="article-heading">
+        <p class="article-kicker">Machine learning · A practical guide</p>
+        <h1>Understanding PyTorch</h1>
+        <p class="article-subtitle">From tensors to a model that learns: one example, one update at a time.</p>
+        <p class="byline">Ori Fogler · <time datetime="2026-09-18">September 18, 2026</time> · <span id="reading-time">About 25 minutes</span></p>
+        <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>Print article</span></button></div>
+      </header>
+      <div class="article-layout"><div class="prose">
+        <p>A training loop can look surprisingly small: make a prediction, calculate a loss, call <code>backward()</code>, and take an optimizer step. The difficult part is understanding what each line owns. Which numbers are data? Which numbers are learned? What changes when we call <code>backward()</code>?</p>
+        <p>We will answer those questions by teaching a model to calibrate a sensor. First we will follow one update with numbers small enough to calculate by hand. Then we will assemble a runnable program and extend the model into a small neural network.</p>
+        <p>You need basic Python, but no previous PyTorch experience. All examples run on a CPU. The code was checked with Python 3.12.4 and PyTorch 2.14.0. If you need to install PyTorch, use the <a href="https://pytorch.org/get-started/locally/">official installation selector</a> for your system.</p>
+        <div class="lesson"><p><strong>The thread to follow:</strong> predict → measure error → compute gradients → update parameters. PyTorch provides the machinery for these steps. We still choose the model, the data, and what counts as a useful result.</p></div>
+        <nav class="article-toc" aria-label="Article contents"><ol>
+          <li><a href="#why-pytorch">What PyTorch provides</a></li>
+          <li><a href="#tensors">Tensors: numbers with a shape</a></li>
+          <li><a href="#prediction">A prediction and a loss</a></li>
+          <li><a href="#gradients">Autograd: finding how to improve</a></li>
+          <li><a href="#optimizer">The optimizer actually changes the weights</a></li>
+          <li><a href="#modules">Packaging the model with torch.nn</a></li>
+          <li><a href="#data">Datasets, batches, and honest evaluation</a></li>
+          <li><a href="#training-loop">The complete training loop</a></li>
+          <li><a href="#neural-network">Growing into a neural network</a></li>
+          <li><a href="#inference">Inference, devices, and saving</a></li>
+          <li><a href="#debugging">Common mistakes and a vocabulary map</a></li>
+        </ol></nav>
+
+        <h2 id="why-pytorch">1. What PyTorch provides</h2>
+        <p>A neural network is a parameterized computation: inputs go in, learned numbers help transform them, and predictions come out. Training adjusts those learned numbers. Python can express the calculation, but writing efficient array operations and all their derivatives by hand becomes cumbersome as the model grows.</p>
+        <p>PyTorch brings three pieces together: <strong>tensors</strong> for numerical computation, <strong>automatic differentiation</strong> for computing derivatives, and <strong>model-building and optimization tools</strong>. Its Python package is imported as <code>torch</code>. PyTorch is the framework’s name; <code>torch</code> is the name you see in code.</p>
+        <p>A NumPy array and a PyTorch tensor can both hold a table of numbers. PyTorch additionally integrates those computations with gradient tracking and accelerator execution. A tensor does not automatically live on a GPU or require gradients; both are choices.</p>
+        <p>PyTorch is especially useful when you want to define a neural network or customize its training. For a conventional regression, random forest, or preprocessing pipeline, <a href="https://scikit-learn.org/stable/getting_started.html">scikit-learn</a> may offer a shorter path. <a href="https://keras.io/getting_started/about/">Keras</a> offers a higher-level deep-learning interface and can use PyTorch as a backend. Our reason for using PyTorch here is that the learning process stays visible.</p>
+
+        <h2 id="tensors">2. Tensors: numbers with a shape</h2>
+        <p>Suppose a sensor gives raw readings, and a trusted reference instrument gives calibrated readings. A paired measurement is one <strong>example</strong>. The raw reading is the <strong>input feature</strong>; the reference reading is the <strong>target</strong>, also called a label.</p>
+        <p>For our first calculation, we have two perfect measurements: raw 1 should become 3, and raw 2 should become 5.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-tensors">import torch
+
+x = torch.tensor([[1.0], [2.0]])
+y = torch.tensor([[3.0], [5.0]])
+
+print(x.shape)   # torch.Size([2, 1])
+print(x.dtype)   # torch.float32
+print(x.device)  # cpu</code></pre>
+        <p>A <strong>tensor</strong> is an array with a specified number of dimensions. A scalar has shape <code>[]</code>; a vector of two numbers has shape <code>[2]</code>; our two-row, one-column table has shape <code>[2, 1]</code>. The shape tells you how to interpret the organization of the numbers.</p>
+        <div class="shape-example"><strong>[2, 1] = [examples, features]</strong><p>Two sensor measurements, with one input feature per measurement. Later, a batch of 20 measurements will have shape <code>[20, 1]</code>.</p></div>
+        <p>The nested brackets deliberately preserve a feature dimension. <code>[[1.0], [2.0]]</code> and <code>[1.0, 2.0]</code> contain the same values but have different shapes. Many bugs come from treating them as interchangeable.</p>
+        <p><strong>dtype</strong> describes how individual numbers are represented. We use floating-point values for this regression example. <strong>device</strong> says where a tensor resides, such as CPU or a supported GPU. The comments above assume PyTorch’s standard defaults. See the <a href="https://docs.pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html">tensor introduction</a> for the basic operations.</p>
+        <p>PyTorch can apply an operation to an entire tensor. Multiplying <code>x * 2</code> multiplies every element. The operator <code>*</code> is element-wise multiplication; <code>@</code> is matrix multiplication. We only need element-wise arithmetic until we introduce layers.</p>
+
+        <h2 id="prediction">3. A prediction and a loss</h2>
+        <p>Choose a model simple enough to inspect:</p>
+        <div class="equation">prediction = w × raw_reading + b</div>
+        <p>The weight <code>w</code> controls the slope; the bias <code>b</code> shifts the result. Both are <strong>parameters</strong>: numbers training is allowed to change. The input readings are data. Feeding in another reading should change the prediction, without changing the parameters by itself.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-forward">w = torch.tensor(1.0, requires_grad=True)
+b = torch.tensor(0.0, requires_grad=True)
+
+predictions = x * w + b
+loss = ((predictions - y) ** 2).mean()
+
+print(predictions.detach().tolist())  # [[1.0], [2.0]]
+print(loss.item())                    # 6.5</code></pre>
+        <p><code>requires_grad=True</code> asks PyTorch to track the information needed to differentiate this computation with respect to these tensors. It does not make their values update automatically. We do not need gradients with respect to <code>x</code> or <code>y</code> to train these parameters.</p>
+        <p>Computing the predictions is the <strong>forward pass</strong>. The <strong>loss</strong> turns prediction errors into a number we aim to reduce. Here it is mean squared error, or <strong>MSE</strong>: square each error and average.</p>
+        <div class="table-scroll" role="region" aria-label="The first prediction and its errors" tabindex="0"><table>
+          <thead><tr><th scope="col">Input</th><th scope="col">Target</th><th scope="col">Prediction</th><th scope="col">Error</th><th scope="col">Squared error</th></tr></thead>
+          <tbody><tr><td>1</td><td>3</td><td>1</td><td>−2</td><td>4</td></tr><tr><td>2</td><td>5</td><td>2</td><td>−3</td><td>9</td></tr></tbody>
+        </table></div>
+        <p>The loss is <code>(4 + 9) / 2 = 6.5</code>. Squaring prevents positive and negative errors from canceling and gives larger errors more influence. This is a design choice, not a universal definition of “good.”</p>
+        <p><code>loss.item()</code> extracts a Python number from a one-element tensor, useful for logging. <code>detach()</code> returns a tensor disconnected from gradient history; here we use it to display predictions. Keep the original tensor <code>loss</code> for differentiation. A Python float cannot carry the computation graph.</p>
+
+        <h2 id="gradients">4. Autograd: finding how to improve</h2>
+        <p>The loss tells us how wrong the current predictions are. A <strong>gradient</strong> tells us how sensitive that loss is to a small change in each parameter, with the other parameters held fixed.</p>
+        <p>For this model, the two gradient components are:</p>
+        <div class="equation">∂loss/∂w = mean(2 × error × x) = −8<br />∂loss/∂b = mean(2 × error) = −5</div>
+        <p>You do not need the calculus to follow the interpretation: near the current values, increasing either parameter would decrease the loss. The negative signs tell us that direction. The magnitudes describe local sensitivity, not an instruction to jump directly to the best parameter values.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-backward">loss.backward()
+
+print(w.grad.item())  # -8.0
+print(b.grad.item())  # -5.0
+print(w.item())       # 1.0 -- unchanged
+print(b.item())       # 0.0 -- unchanged</code></pre>
+        <p><strong>Autograd</strong> is PyTorch’s automatic differentiation machinery. In ordinary eager execution, the forward computation builds a graph of tracked operations. <strong>Backpropagation</strong> traverses that computation in reverse, applying the chain rule to calculate gradients. These names are related: autograd is the machinery; backpropagation is the reverse calculation used here.</p>
+        <p>It does not try a thousand nearby weights to estimate a direction. It combines derivatives of the operations that actually ran. For our scalar loss, <code>backward()</code> places gradients in the <code>.grad</code> fields of these trainable leaf tensors. See the official <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html">autograd introduction</a>.</p>
+        <div class="lesson"><p><strong><code>backward()</code> computes gradients. It does not update the weights.</strong> After this call, our predictions would still be 1 and 2 if we ran the same model again.</p></div>
+
+        <h2 id="optimizer">5. The optimizer actually changes the weights</h2>
+        <p>An <strong>optimizer</strong> applies an update rule to selected parameters. With basic stochastic gradient descent, or <strong>SGD</strong>, the rule is:</p>
+        <div class="equation">new parameter = old parameter − learning rate × gradient</div>
+        <p>Use a learning rate of 0.1. Then <code>w = 1 − 0.1 × (−8) = 1.8</code>, and <code>b = 0 − 0.1 × (−5) = 0.5</code>.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-step">optimizer = torch.optim.SGD([w, b], lr=0.1)
+optimizer.step()
+
+with torch.no_grad():
+    updated = x * w + b
+    updated_loss = ((updated - y) ** 2).mean()
+
+print(updated.tolist())       # approximately [[2.3], [4.1]]
+print(updated_loss.item())    # approximately 0.65</code></pre>
+        <p>The predictions moved closer to their targets and the loss fell from 6.5 to 0.65. One update has helped; it has not yet recovered the generating relationship <code>y = 2x + 1</code>. The <code>no_grad()</code> context avoids recording a gradient graph for this measurement.</p>
+        <p>The <strong>learning rate</strong> controls the update size. Too large a step can overshoot and increase the loss; too small a step can make progress slow. Unlike <code>w</code> and <code>b</code>, the learning rate is a <strong>hyperparameter</strong>: a setting we choose rather than a parameter this training loop learns.</p>
+        <p>SGD’s stochastic name comes from estimating gradients using sampled examples or batches. The same optimizer can also take a full-dataset gradient step. More elaborate optimizers such as Adam maintain extra running statistics to adapt updates. They use the same division of responsibility: the loss defines the objective, autograd computes derivatives, and the optimizer applies its update rule. Our arithmetic uses <a href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html">SGD</a> with no momentum or weight decay.</p>
+        <h3>Why clear gradients before the next batch?</h3>
+        <p>PyTorch <strong>accumulates</strong> gradients into <code>.grad</code>. Another backward pass can add to what is already there. This supports deliberate accumulation across batches, but it means an ordinary training step must clear old gradients.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-manual-loop">for step in range(100):
+    optimizer.zero_grad(set_to_none=True)
+    predictions = x * w + b
+    loss = ((predictions - y) ** 2).mean()
+    loss.backward()
+    optimizer.step()</code></pre>
+        <p><code>zero_grad(set_to_none=True)</code> resets the stored gradients to <code>None</code>, ready for the next backward pass. It does not reset the parameters. The forward calculation also runs again: an old loss tensor does not turn into a new loss when the weights change.</p>
+        <p>The snippets so far form one continuous example when run in order. The program below starts a fresh model and a larger dataset.</p>
+
+        <h2 id="modules">6. Packaging the model with torch.nn</h2>
+        <p>Managing two tensors ourselves is easy. Managing hundreds of layers and their parameters needs a structure. <code>torch.nn</code> provides neural-network components; <code>nn.Module</code> is their base abstraction.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-linear">from torch import nn
+
+model = nn.Linear(in_features=1, out_features=1)
+predictions = model(x)
+
+print(model.weight.shape)  # torch.Size([1, 1])
+print(model.bias.shape)    # torch.Size([1])
+print(predictions.shape)   # torch.Size([2, 1])</code></pre>
+        <p><code>nn.Linear(1, 1)</code> implements the same <code>w × x + b</code> relationship, starting with its own initialized parameters. It does not know the correct calibration yet. The name “linear” is conventional; with a bias, the mathematical operation is affine.</p>
+        <p>For a batch with several input features and outputs, the layer computes <code>X @ W.T + b</code>. PyTorch stores the weight matrix as <code>[out_features, in_features]</code>. Here those dimensions are both 1. The first dimension of <code>x</code>, our batch dimension, remains intact. See <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html">the Linear reference</a>.</p>
+        <p>A module registers its parameters so that <code>model.parameters()</code> can find them. This is why an optimizer can receive the model’s parameters without us listing every weight. A custom trainable tensor is usually wrapped in <code>nn.Parameter</code> and assigned to the module; merely assigning an ordinary tensor does not register it as a parameter.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-model-tools">loss_fn = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.05)</code></pre>
+        <p><code>nn.MSELoss()</code> packages the squared-error calculation; its default reduction is a mean over all output elements. It is appropriate for our continuous target. For multiclass classification, a common choice is <code>nn.CrossEntropyLoss()</code>, which accepts raw logits and, in the class-index case, integer targets. Do not add softmax before that loss. The required shapes and target types depend on the loss: see <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.MSELoss.html">MSELoss</a> and <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html">CrossEntropyLoss</a>.</p>
+
+        <h2 id="data">7. Datasets, batches, and honest evaluation</h2>
+        <p>Two measurements let us see the arithmetic. Now create 201 synthetic measurements over a range, with a little noise. The underlying calibration is still <code>2x + 1</code>, but the observed reference values are no longer exact. We know the rule because we generated the example; the model only receives input–target pairs.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-data">torch.manual_seed(7)
+
+x = torch.linspace(-2, 2, 201).reshape(-1, 1)
+y = 2 * x + 1 + 0.15 * torch.randn_like(x)
+
+order = torch.randperm(len(x))
+train_ids = order[:140]
+val_ids = order[140:180]
+test_ids = order[180:]
+x_train, y_train = x[train_ids], y[train_ids]
+x_val, y_val = x[val_ids], y[val_ids]
+x_test, y_test = x[test_ids], y[test_ids]</code></pre>
+        <p><code>linspace</code> creates evenly spaced inputs, <code>reshape(-1, 1)</code> puts them into one column, and <code>randn_like</code> generates standard-normal noise of the same shape. The seed makes this run repeatable in the checked environment; it is not a promise of identical results across every release or device.</p>
+        <p>The split has a purpose. <strong>Training data</strong> supplies gradient updates. <strong>Validation data</strong> helps assess settings and model choices. <strong>Test data</strong> is held aside for a final assessment after those choices. Repeatedly changing your model based on the test score turns that test set into another development signal.</p>
+        <p>This random split is suitable for our synthetic setup. For time-dependent or grouped observations, split according to the way future data will arrive. And if you learn preprocessing statistics, such as a feature’s mean and standard deviation, learn them from the training split rather than the full dataset.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-loader">from torch.utils.data import DataLoader, TensorDataset
+
+train_data = TensorDataset(x_train, y_train)
+train_loader = DataLoader(
+    train_data, batch_size=20, shuffle=True
+)</code></pre>
+        <p>A <strong>Dataset</strong> represents examples. <code>TensorDataset</code> pairs corresponding rows of tensors we already have. A <strong>DataLoader</strong> handles iteration and groups examples into batches. Here every batch contains 20 input–target pairs, and training order is shuffled on each pass. The <a href="https://docs.pytorch.org/docs/stable/data.html">data-loading documentation</a> covers larger and custom datasets.</p>
+        <p>A <strong>batch</strong> is the group used for one gradient calculation. A <strong>step</strong> here means one optimizer update. An <strong>epoch</strong> is a full pass through the training examples. With 140 training examples and batches of 20, this program takes seven steps per epoch.</p>
+
+        <h2 id="training-loop">8. The complete training loop</h2>
+        <p>Start a fresh linear model after generating the data. The lower learning rate here is a separate choice for this larger experiment.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-train">model = nn.Linear(1, 1)
+loss_fn = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.05)
+
+
+def mse_on(inputs, targets):
+    model.eval()
+    with torch.inference_mode():
+        return loss_fn(model(inputs), targets).item()
+
+
+initial_val_mse = mse_on(x_val, y_val)
+history = []
+for epoch in range(100):
+    model.train()
+    for xb, yb in train_loader:
+        optimizer.zero_grad(set_to_none=True)
+        predictions = model(xb)
+        loss = loss_fn(predictions, yb)
+        loss.backward()
+        optimizer.step()
+
+    train_mse = mse_on(x_train, y_train)
+    val_mse = mse_on(x_val, y_val)
+    history.append((train_mse, val_mse))
+
+test_mse = mse_on(x_test, y_test)</code></pre>
+        <p>The inner loop is the learning mechanism. The outer loop repeats passes through the data. Evaluation happens after each epoch, using the current model without updating its weights. The saved <code>history</code> contains plain numbers, not graphs needed for backpropagation.</p>
+        <div class="table-scroll" role="region" aria-label="Responsibilities of the training-loop lines" tabindex="0"><table class="loop-table">
+          <thead><tr><th scope="col">Line</th><th scope="col">What it changes or produces</th></tr></thead>
+          <tbody><tr><td><code>model.train()</code></td><td>Selects training behavior for layers that have different training and evaluation behavior.</td></tr><tr><td><code>optimizer.zero_grad(...)</code></td><td>Clears previously stored parameter gradients.</td></tr><tr><td><code>model(xb)</code></td><td>Computes predictions from this batch and current parameters.</td></tr><tr><td><code>loss_fn(predictions, yb)</code></td><td>Computes a scalar error objective.</td></tr><tr><td><code>loss.backward()</code></td><td>Computes and accumulates gradients.</td></tr><tr><td><code>optimizer.step()</code></td><td>Updates the parameters managed by this optimizer.</td></tr></tbody>
+        </table></div>
+        <p>At each step, the input, target, and prediction shapes are all <code>[20, 1]</code>. The mean loss has shape <code>[]</code>: one scalar. Each of our two trainable parameter tensors receives a gradient of its own shape.</p>
+        <h3>What did it actually learn?</h3>
+        <p>The standalone script produced these results in the checked CPU run:</p>
+        <pre class="output"><code>Initial validation MSE: 12.3506
+Final training MSE:     0.0207
+Final validation MSE:   0.0117
+Final test MSE:         0.0217
+Weight: 2.0003
+Bias:   0.9957
+Prediction for x=1.5: 3.9961</code></pre>
+        <p>The learned slope and offset are close to the generating rule, 2 and 1. The noise prevents an exact fit to every observation. Validation happens to have lower error than training in this run; different finite samples can have different difficulty.</p>
+        <figure class="result-figure"><img src="../assets/pytorch-sensor-fit.svg" width="700" height="430" alt="Noisy held-out sensor readings follow the line y equals 2x plus 1. The trained model closely follows that relationship across the observed input range." /><figcaption>Measured predictions from the downloadable example, shown against the 21 held-out test observations. This is a teaching experiment on synthetic data, not evidence of performance on real sensors.</figcaption></figure>
+        <p><strong>Overfitting</strong> happens when a model learns patterns peculiar to the training sample that do not transfer well. Training error may keep falling while validation error worsens. This simple linear example is not an overfitting demonstration; it establishes the habit of measuring performance on data used for different purposes.</p>
+        <p>More epochs and more parameters are possible changes, not automatic improvements. Keep a simple baseline and compare validation performance. A good fit inside this input range also does not establish reliable behavior far outside it.</p>
+        <div class="download-note"><p><strong>Run the complete example:</strong> <a href="../code/pytorch_sensor.py" download>download pytorch_sensor.py</a>, then run <code>python pytorch_sensor.py</code>. It includes imports, data generation, training, evaluation, and saving/loading. It requires only PyTorch and writes <code>sensor_weights.pt</code> in the directory where you run it.</p></div>
+
+        <h2 id="neural-network">9. Growing into a neural network</h2>
+        <p>A straight line is a sensible model for our invented linear sensor. Suppose calibration instead bends with the raw reading. A linear model cannot represent that curve, however long it trains. That is a limitation of the model family.</p>
+        <p>One possible extension is a hidden layer followed by a nonlinear activation:</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-network">network = nn.Sequential(
+    nn.Linear(1, 16),
+    nn.Tanh(),
+    nn.Linear(16, 1),
+)
+
+print(network(x_train[:20]).shape)  # torch.Size([20, 1])
+network_optimizer = torch.optim.SGD(
+    network.parameters(), lr=0.05
+)</code></pre>
+        <p><code>Sequential</code> sends each layer’s output to the next. The first layer transforms one input feature into 16 learned features. <code>Tanh</code> applies a nonlinear transformation to each value. The last layer combines those features into one prediction.</p>
+        <div class="equation">[20, 1] → Linear → [20, 16]<br />→ Tanh → [20, 16] → Linear → [20, 1]</div>
+        <p>The hidden values are <strong>activations</strong>: intermediate results that depend on the input and current weights. They are not additional parameters. The network has 49 parameters: 16 weights and 16 biases in its first layer, then 16 weights and one bias in its final layer.</p>
+        <p>Why include a nonlinear activation? Composing affine transformations without any nonlinearity still gives one affine transformation. Adding more such layers alone would not give us the curved relationship we wanted. <code>Tanh</code> changes the class of functions the network can represent.</p>
+        <p>This block creates a new, untrained network. To train it, use <code>network(xb)</code> and <code>network_optimizer</code> in the same loss/backward/update loop. Evaluate it on validation data before preferring it over the linear model. Nothing about adding a hidden layer guarantees better predictions.</p>
+        <h3>When you need a custom forward pass</h3>
+        <p><code>Sequential</code> is convenient for a simple chain. If the computation needs branches, multiple inputs, or reused components, define a module explicitly. This class expresses the same architecture:</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-custom">class Calibrator(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.hidden = nn.Linear(1, 16)
+        self.output = nn.Linear(16, 1)
+
+    def forward(self, inputs):
+        features = torch.tanh(self.hidden(inputs))
+        return self.output(features)
+
+
+custom_model = Calibrator()
+predictions = custom_model(x_train[:20])</code></pre>
+        <p><code>__init__</code> creates and registers the components. <code>forward</code> describes their computation. Calling <code>custom_model(...)</code> runs that forward method through PyTorch’s module machinery. You normally write the forward computation, not a manual backward method: autograd differentiates supported operations. The <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html">Module reference</a> explains this structure.</p>
+
+        <h2 id="inference">10. Inference, devices, and saving</h2>
+        <h3>Evaluation mode and gradient tracking are separate switches</h3>
+        <p><code>model.eval()</code> selects evaluation behavior. For example, dropout stops randomly dropping activations, and standard batch-normalization layers use their stored running statistics. Our linear layer has neither, so its calculation is unchanged. Including the call makes the example’s intent explicit.</p>
+        <p><code>torch.inference_mode()</code> disables gradient recording and additional autograd bookkeeping inside its context. It does not select evaluation behavior. That is why prediction code commonly uses both:</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-inference">model.eval()
+with torch.inference_mode():
+    prediction = model(torch.tensor([[1.5]]))
+
+print(prediction.item())</code></pre>
+        <p><code>torch.no_grad()</code> also disables gradient recording and is useful when the results may later participate in gradient-tracked computations. Inference mode is more restrictive; use it for outputs you will not feed back into autograd training. Neither context permanently freezes model parameters. Conversely, <code>model.train()</code> does not turn gradient recording back on inside an inference-mode context. See <a href="https://docs.pytorch.org/docs/stable/notes/autograd.html">autograd’s mode distinctions</a> and <a href="https://docs.pytorch.org/docs/stable/generated/torch.autograd.grad_mode.inference_mode.html">inference mode</a>.</p>
+        <h3>A GPU changes where computation happens</h3>
+        <p>Our small dataset does not need a GPU. For larger workloads, moving the model and its input tensors to a supported accelerator can help. For example, CUDA execution uses a device such as <code>"cuda"</code>; supported Apple hardware can use <code>"mps"</code>.</p>
+        <p>The important rule is consistency: move the model to the chosen device before constructing its optimizer, and move each input and target batch to that device. When evaluating, move those tensors too. <code>model.to(device)</code> moves a module’s parameters and buffers; for a standalone tensor, use the returned value, as in <code>xb = xb.to(device)</code>. Moving only the model leaves a device mismatch.</p>
+        <h3>Save learned values, then recreate the architecture</h3>
+        <p>For our trained linear model, save its <strong>state dictionary</strong>: a mapping from names to parameter tensors and registered persistent buffers. This preserves learned state, not the Python definition of the architecture.</p>
+        <pre tabindex="0" aria-label="Python code example; scroll horizontally if needed"><code class="language-python" id="code-save">torch.save(model.state_dict(), "sensor_weights.pt")
+
+restored = nn.Linear(1, 1)
+restored.load_state_dict(
+    torch.load(
+        "sensor_weights.pt",
+        weights_only=True,
+        map_location="cpu",
+    )
+)
+restored.eval()
+with torch.inference_mode():
+    prediction = restored(torch.tensor([[1.5]]))</code></pre>
+        <p>The architecture must match the saved state. A checkpoint for <code>Calibrator</code> would be loaded into a new <code>Calibrator()</code>, not into <code>nn.Linear(1, 1)</code>. <code>map_location</code> chooses where tensors are loaded; <code>weights_only=True</code> explicitly selects restricted loading for this weights file.</p>
+        <p>Saving only model state is enough for this prediction example. To resume training faithfully, a broader checkpoint may need optimizer state, progress, scheduler and random-number-generator state, and relevant data/preprocessing configuration. See PyTorch’s <a href="https://docs.pytorch.org/tutorials/beginner/basics/saveloadrun_tutorial.html">saving and loading guide</a>.</p>
+
+        <h2 id="debugging">11. Common mistakes, explained by responsibility</h2>
+        <p>When a training run behaves strangely, first inspect the boundary between each step.</p>
+        <dl class="glossary">
+          <dt>The shapes look almost right</dt><dd>For our regression, a prediction shaped <code>[20, 1]</code> and a target shaped <code>[20]</code> can broadcast into a <code>[20, 20]</code> error tensor. That compares examples against the wrong targets. Check both shapes before the loss. <a href="https://docs.pytorch.org/docs/stable/notes/broadcasting.html">Broadcasting</a> is a useful feature that can make a shape mistake surprisingly executable.</dd>
+          <dt>The loss is a Python number before backward</dt><dd>Calling <code>.item()</code> too early removes the tensor needed for differentiation. Keep <code>loss</code> as a tensor for <code>loss.backward()</code>; extract a number separately for logging.</dd>
+          <dt>Gradients exist, but the model is not improving</dt><dd>Check that <code>optimizer.step()</code> runs and that the optimizer owns the current model’s parameters. Replacing the model without recreating the optimizer can leave it updating the old model.</dd>
+          <dt>Gradients grow in a surprising way</dt><dd>Check whether old gradients are being accumulated unintentionally. Clear them once per intended update unless you are deliberately accumulating multiple batches.</dd>
+          <dt>Training error improves, but new examples do not</dt><dd>Inspect validation performance, split quality, preprocessing, and whether the data resembles deployment. Autograd can correctly optimize a poorly chosen objective.</dd>
+        </dl>
+        <h3>Keep these names straight</h3>
+        <div class="table-scroll" role="region" aria-label="PyTorch vocabulary map" tabindex="0"><table>
+          <thead><tr><th scope="col">Term</th><th scope="col">Meaning in this article</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Parameter / weight</th><td>A learned model value. “Weights” often collectively includes biases too.</td></tr>
+            <tr><th scope="row">Hyperparameter</th><td>A chosen setting, such as learning rate, batch size, or hidden-layer width.</td></tr>
+            <tr><th scope="row">Activation / intermediate representation</th><td>A value computed for an input. An <em>activation function</em>, such as Tanh, is an operation producing such values.</td></tr>
+            <tr><th scope="row">Loss / objective</th><td>The quantity optimized during training. A reporting metric can measure something different.</td></tr>
+            <tr><th scope="row">Gradient</th><td>Local sensitivity of the loss to parameters. It is used by an update rule; it is not an updated weight.</td></tr>
+            <tr><th scope="row">Autograd / backpropagation</th><td>The differentiation machinery / the reverse calculation used here to compute gradients.</td></tr>
+            <tr><th scope="row">Forward / backward / step</th><td>Compute predictions / compute gradients / apply a parameter update.</td></tr>
+            <tr><th scope="row">Batch / epoch</th><td>A group of examples processed together / one full pass through the training set.</td></tr>
+            <tr><th scope="row">Training / inference</th><td>Learning parameter values / using the model to compute outputs.</td></tr>
+          </tbody>
+        </table></div>
+        <p>A larger neural network adds more operations and parameters, but the responsibilities remain recognizable. The model computes, the loss evaluates, autograd differentiates, and the optimizer updates. Understanding those boundaries makes the next PyTorch program much easier to read.</p>
+        <p class="source-note">Further reading: PyTorch’s <a href="https://docs.pytorch.org/tutorials/beginner/basics/">Learn the Basics</a> series and <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html">optimization tutorial</a>. For the model concepts behind larger systems, read <a href="transformers-to-ai-assistants.html">From Language Models to AI Assistants</a>.</p>
+        <div class="article-end"><a href="../">← Back to the technical blog</a></div>
+      </div></div>
+    </article>
+  </main>
+  <footer class="site-footer shell"><span>© 2026 Ori Fogler</span><div><a href="../../hagigey/" lang="he">הגיגי אמרי</a><a href="../../privacy.html">Privacy</a><a href="mailto:me@orifogler.com">Get in touch</a></div></footer>
+</body>
+</html>
