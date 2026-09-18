@@ -1,0 +1,13 @@
+.article-kicker { color: #707070; font-size: .78rem; letter-spacing: .04em; }
+.finding { border-left: 3px solid #146b8a; background: #f5f8f9; padding: 20px 24px; margin: 28px 0; }
+.finding p { margin: 0; }
+.graph-figure img { display: block; width: 100%; height: auto; }
+.equation { padding: 20px; margin: 24px 0; background: #f5f8f9; text-align: center; font-size: 1.05rem; overflow-wrap: anywhere; }
+.table-scroll { overflow-x: auto; margin: 24px 0; }
+.table-scroll table { width: 100%; border-collapse: collapse; font-size: .84rem; font-variant-numeric: tabular-nums; }
+.table-scroll th, .table-scroll td { padding: 9px 10px; border-bottom: 1px solid #e9e9e9; text-align: right; white-space: nowrap; }
+.table-scroll th:first-child, .table-scroll td:first-child { text-align: left; }
+.table-scroll th { background: #f5f8f9; font-weight: 600; }
+.accuracy-grid .graph-figure { margin-block: 24px; }
+@media (max-width: 560px) { .finding { padding: 16px; } .table-scroll table { font-size: .75rem; } .table-scroll th, .table-scroll td { padding: 8px 7px; } }
+@media print { .graph-figure, .table-scroll, .equation { break-inside: avoid; } }
