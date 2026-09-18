@@ -20,3 +20,14 @@
 .table-scroll caption { text-align: left; font-size: .8rem; color: #707070; padding-bottom: 10px; }
 .table-scroll tbody th { background: transparent; font-weight: 400; }
 #recommendation, #lessons { scroll-margin-top: 24px; }
+
+.city-map-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 28px 0 12px; align-items: start; }
+.city-map { margin: 0; min-width: 0; }
+.city-map figcaption { font-size: .85rem; font-weight: 600; margin-bottom: 10px; }
+.city-map img { display: block; width: 100%; height: auto; }
+.map-caption { color: #707070; font-size: .8rem; line-height: 1.65; }
+#road-map-details { scroll-margin-top: 24px; }
+@media (max-width: 560px) { .city-map-grid { grid-template-columns: 1fr; gap: 24px; } .city-map figcaption { font-size: 1rem; } }
+@media print { .city-map-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); break-inside: avoid; } }
+@media (min-width: 1000px) { .city-map-grid { width: min(1000px, calc(100vw - 80px)); margin-left: 50%; transform: translateX(-50%); } }
+@media print { .city-map-grid { width: 100%; margin-left: 0; transform: none; } }
