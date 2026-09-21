@@ -10,13 +10,13 @@
   <meta property="og:title" content="Policies, Values, and Planning: Understanding Reinforcement Learning" />
   <meta property="og:description" content="One running example, a clear vocabulary, and the reasons to choose one RL method over another." />
   <meta property="og:url" content="https://orifogler.com/blog/posts/reinforcement-learning.html" />
-  <meta property="article:published_time" content="2026-09-16" />
-  <meta property="article:modified_time" content="2026-09-17" />
+  <meta property="article:published_time" content="2026-08-12" />
+  <meta property="article:modified_time" content="2026-09-21" />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../blog.css" />
   <link rel="stylesheet" href="../rl-article.css" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Policies, Values, and Planning: Understanding Reinforcement Learning","description":"A readable guide to RL terminology, methods, and the tradeoffs behind choosing them.","datePublished":"2026-09-16","dateModified":"2026-09-17","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/reinforcement-learning.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Policies, Values, and Planning: Understanding Reinforcement Learning","description":"A readable guide to RL terminology, methods, and the tradeoffs behind choosing them.","datePublished":"2026-08-12","dateModified":"2026-09-21","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/reinforcement-learning.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
   <link rel="stylesheet" href="../../assets/blog-print.css" />
   <script src="../../assets/blog-print.js" defer></script>
 </head>
@@ -32,7 +32,7 @@
         <p class="article-kicker">Machine learning · A practical field guide</p>
         <h1>Policies, Values, and Planning: Understanding Reinforcement Learning</h1>
         <p class="article-subtitle">What the methods learn, how they choose, and why you might prefer one over another.</p>
-        <p class="byline">Ori Fogler · <time datetime="2026-09-16">September 16, 2026</time> · Updated <time datetime="2026-09-17">September 17</time> · <span id="reading-time">About 30 minutes</span></p>
+        <p class="byline">Ori Fogler · <time datetime="2026-08-12">August 12, 2026</time> · Updated <time datetime="2026-09-21">September 21</time> · <span id="reading-time">About 30 minutes</span></p>
         <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>Print article</span></button></div>
       </header>
       <div class="article-layout"><div class="prose">

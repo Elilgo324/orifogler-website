@@ -10,15 +10,15 @@
   <meta property="og:title" content="From Language Models to AI Assistants: Understanding Transformers" />
   <meta property="og:description" content="How we got here, what happens inside one prediction, and how models become useful systems." />
   <meta property="og:url" content="https://orifogler.com/blog/posts/transformers-to-ai-assistants.html" />
-  <meta property="article:published_time" content="2026-09-17" />
-  <meta property="article:modified_time" content="2026-09-17" />
+  <meta property="article:published_time" content="2026-08-26" />
+  <meta property="article:modified_time" content="2026-09-21" />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="../blog.css" />
   <link rel="stylesheet" href="../transformer-guide.css" />
   <link rel="stylesheet" href="../../assets/blog-print.css" />
   <script src="../../assets/blog-print.js" defer></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"From Language Models to AI Assistants: Understanding Transformers","description":"An intuitive history and guide to transformers, attention, training, KV caching, reasoning, and AI systems.","datePublished":"2026-09-17","dateModified":"2026-09-17","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/transformers-to-ai-assistants.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"From Language Models to AI Assistants: Understanding Transformers","description":"An intuitive history and guide to transformers, attention, training, KV caching, reasoning, and AI systems.","datePublished":"2026-08-26","dateModified":"2026-09-21","inLanguage":"en","mainEntityOfPage":"https://orifogler.com/blog/posts/transformers-to-ai-assistants.html","isPartOf":{"@type":"Blog","name":"Ori Fogler — Technical Blog","url":"https://orifogler.com/blog/"},"author":{"@type":"Person","name":"Ori Fogler","url":"https://orifogler.com/"}}</script>
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
@@ -32,7 +32,7 @@
         <p class="article-kicker">Machine learning · History, mechanics, and practice</p>
         <h1>From Language Models to AI Assistants</h1>
         <p class="article-subtitle">An intuitive guide to transformers: why they emerged, how they work, and what surrounds them.</p>
-        <p class="byline">Ori Fogler · <time datetime="2026-09-17">September 17, 2026</time> · <span id="reading-time">About 35 minutes</span></p>
+        <p class="byline">Ori Fogler · <time datetime="2026-08-26">August 26, 2026</time> · <span id="reading-time">About 35 minutes</span></p>
         <div class="print-actions"><button class="print-button" type="button" data-print hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6zM18 12h.01"/></svg><span>Print article</span></button></div>
       </header>
       <div class="article-layout"><div class="prose">
