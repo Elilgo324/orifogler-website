@@ -4,4 +4,8 @@
 .booking-research figcaption { margin-top: 14px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
 .booking-research .compact-table th:first-child { width: 28%; }
 .booking-research .prose li { margin-bottom: 12px; }
-@media print { .booking-research figure { break-inside: avoid; } }
+.booking-research .method-note { margin: 28px 0; border: 1px solid #dce3df; border-radius: 3px; background: #fafbf9; }
+.booking-research .method-note summary { padding: 16px 20px; cursor: pointer; font-weight: 600; line-height: 1.5; }
+.booking-research .method-note summary:focus-visible { outline: 2px solid #46665c; outline-offset: 3px; }
+.booking-research .method-note > div { padding: 0 20px 4px; font-size: .92rem; }
+@media print { .booking-research figure { break-inside: avoid; } .booking-research .method-note { background: none; } .booking-research .method-note summary { break-after: avoid; } }
