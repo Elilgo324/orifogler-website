@@ -1,0 +1,7 @@
+
+.booking-research figure { margin: 34px 0; }
+.booking-research figure img { display: block; width: 100%; height: auto; }
+.booking-research figcaption { margin-top: 14px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+.booking-research .compact-table th:first-child { width: 28%; }
+.booking-research .prose li { margin-bottom: 12px; }
+@media print { .booking-research figure { break-inside: avoid; } }
