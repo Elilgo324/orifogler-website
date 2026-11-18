@@ -476,8 +476,8 @@
   var $barWrap = $bar.parentNode;
 
   function setProgress(units) {
-    // Units: 4 pre-screens, 9 phrases, 4 stated, 1 comment = 18.
-    var pct = Math.max(0, Math.min(100, Math.round(units / 18 * 100)));
+    // Units 2..18: 2 pre-screens, 9 phrases, 4 stated, 1 comment.
+    var pct = Math.max(0, Math.min(100, Math.round((units - 2) / 16 * 100)));
     $bar.style.width = pct + "%";
     $barWrap.setAttribute("aria-valuenow", String(pct));
     $barWrap.setAttribute("aria-label", T.progress);
@@ -503,54 +503,6 @@
   /* ------------------------------------------------------------------ */
   /* Screens                                                             */
   /* ------------------------------------------------------------------ */
-  function screenWelcome() {
-    setProgress(0);
-    show(
-      '<section class="card">' +
-      "<h1>" + T.welcome_h + "</h1>" +
-      "<p>" + T.welcome_lead + "</p>" +
-      listHtml(T.welcome_points) +
-      '<label class="choice consent"><input type="checkbox" id="consent"><span>' + T.consent + "</span></label>" +
-      '<button class="btn" id="go" disabled>' + T.start + "</button>" +
-      "</section>"
-    );
-    var c = document.getElementById("consent"), g = document.getElementById("go");
-    c.addEventListener("change", function () { g.disabled = !c.checked; });
-    g.addEventListener("click", function () {
-      if (!c.checked) return;
-      S.started_at = new Date().toISOString();
-      RT.active = true;
-      screenBackground();
-    });
-  }
-
-  function screenBackground() {
-    setProgress(1);
-    var levelKey = LANG === "he" ? "hebrew" : "english";
-    show(
-      '<section class="card">' +
-      "<h2>" + T.bg_h + "</h2>" +
-      '<p class="muted">' + T.bg_lead + "</p>" +
-      '<div class="field"><div class="q">' + T.age_q + "</div>" + radioGroup("age", T.age_opts) + "</div>" +
-      '<div class="field"><div class="q">' + T.level_q + "</div>" + radioGroup("level", T.level_opts) + "</div>" +
-      '<div class="field"><div class="q">' + T.drive_q + "</div>" + radioGroup("drive", T.drive_opts) + "</div>" +
-      '<div class="err" id="err" role="alert"></div>' +
-      '<button class="btn" id="next">' + T.next + "</button>" +
-      "</section>"
-    );
-    document.getElementById("next").addEventListener("click", function () {
-      var level = checkedVal("level");
-      if (!level) { document.getElementById("err").textContent = T.need_level; return; }
-      S.background = {
-        age_group: checkedVal("age"),
-        language_level: level,
-        language_level_of: levelKey,
-        drives_regularly: checkedVal("drive")
-      };
-      screenInstructions();
-    });
-  }
-
   function screenInstructions() {
     setProgress(2);
     show(
@@ -558,10 +510,11 @@
       "<h2>" + T.instr_h + "</h2>" +
       "<p>" + (DOMAIN === "route" ? T.instr_route : T.instr_flight) + "</p>" +
       listHtml(T.instr_points) +
+      '<p class="muted">' + T.welcome_points[0] + " " + T.welcome_points[1] + "</p>" +
       '<button class="btn" id="next">' + T.example_btn + "</button>" +
       "</section>"
     );
-    document.getElementById("next").addEventListener("click", screenExample);
+    document.getElementById("next").addEventListener("click", function () { RT.active = true; screenExample(); });
   }
 
   // Builds the trial card HTML. levelIdx: index into levels; returns {html, prefFirst}
@@ -811,7 +764,8 @@
     }
   });
 
-  screenWelcome();
+  S.started_at = new Date().toISOString();
+  screenInstructions();
 })();
 </script>
 </body>
