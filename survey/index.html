@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>סקר קצר: העדפות רכות</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232563eb'/%3E%3Cpath d='M16 34l12 12 20-26' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #e2e8f0;
+    --accent: #2563eb;
+    --accent-strong: #1d4ed8;
+    --accent-soft: #e0e7ff;
+    --ok: #15803d;
+    --err: #b91c1c;
+    --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    --radius: 18px;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  body {
+    background: radial-gradient(circle at top, #eef2ff 0%, var(--bg) 45%, #f3f6fb 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 14px 48px;
+    line-height: 1.55;
+    font-size: 17px;
+  }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 0 -14px 18px;
+    padding: 10px 14px;
+    background: rgba(246, 247, 251, 0.92);
+    backdrop-filter: blur(6px);
+  }
+  .bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar > div {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), #60a5fa);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+  main { max-width: 640px; margin: 0 auto; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 16px;
+  }
+  h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.01em; }
+  h2 { font-size: 20px; line-height: 1.35; }
+  h1:focus, h2:focus { outline: none; }
+  p, li { font-size: 17px; }
+  ul { padding-inline-start: 22px; display: grid; gap: 8px; }
+  .muted { color: var(--muted); font-size: 15px; }
+  .badge {
+    justify-self: start;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .quote-label { font-weight: 600; color: var(--muted); font-size: 15px; }
+  .quote {
+    background: #eef2ff;
+    border-inline-start: 5px solid var(--accent);
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .opts { display: grid; gap: 12px; }
+  button {
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible,
+  .choice:focus-within {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+  }
+  .opt {
+    width: 100%;
+    min-height: 88px;
+    text-align: start;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: grid;
+    gap: 4px;
+    color: var(--text);
+  }
+  .opt:active { border-color: var(--accent); background: #f5f8ff; }
+  @media (hover: hover) { .opt:hover { border-color: var(--accent); background: #f5f8ff; } }
+  .opt .lbl { font-size: 17px; color: var(--muted); }
+  .opt .cost { font-size: 24px; font-weight: 700; }
+  .btn {
+    min-height: 52px;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    background: var(--accent);
+    color: #fff;
+    width: 100%;
+  }
+  .btn:hover { background: var(--accent-strong); }
+  .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+  .btn.secondary { background: #fff; color: var(--accent-strong); border: 2px solid var(--accent); }
+  .field { display: grid; gap: 10px; }
+  .field > .q { font-weight: 700; }
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 17px;
+  }
+  .choice input { width: 24px; height: 24px; flex: none; accent-color: var(--accent); }
+  .choice:has(input:checked) { border-color: var(--accent); background: #f5f8ff; }
+  .consent { background: #f8fafc; }
+  input[type="number"], textarea {
+    width: 100%;
+    border: 2px solid var(--border);
+    background: #fbfcff;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 18px;
+    color: var(--text);
+  }
+  textarea { min-height: 130px; resize: vertical; }
+  .unit-row { display: flex; align-items: center; gap: 10px; }
+  .unit-row input { max-width: 160px; }
+  .err { color: var(--err); font-weight: 600; font-size: 16px; min-height: 1.2em; }
+  .ok { color: var(--ok); }
+  .status-box { border-radius: 14px; padding: 16px; font-weight: 600; }
+  .status-box.ok { background: #dcfce7; color: #14532d; }
+  .status-box.fail { background: #fee2e2; color: #7f1d1d; }
+  .note { background: #fef9c3; border-radius: 12px; padding: 12px 14px; font-size: 16px; }
+  .center { text-align: center; }
+  .hidden { display: none !important; }
+  .json { font-family: ui-monospace, Consolas, monospace; font-size: 13px; direction: ltr; text-align: left; min-height: 220px; }
+  .trans { text-align: center; padding: 48px 18px; }
+  @media (min-width: 700px) { .card { padding: 28px; } body { font-size: 18px; } }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress"><div id="bar-fill"></div></div></div>
+<main id="screen" aria-live="polite"></main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------ */
+  /* TEXT: all interface strings (he / en). Light HTML (bdi) is allowed. */
+  /* ------------------------------------------------------------------ */
+  var TEXT = {
+    he: {
+      title: "סקר קצר: העדפות רכות",
+      progress: "התקדמות",
+      welcome_h: "סקר קצר: העדפות רכות",
+      welcome_lead: "זהו מחקר אקדמי על האופן שבו אנשים מבינים בקשות רכות.",
+      welcome_points: [
+        "הסקר אורך כ-<bdi>7</bdi> דקות.",
+        "הסקר אנונימי. לא נאסף שם ולא נאסף אימייל.",
+        "אין תשובות נכונות או שגויות.",
+        "ההשתתפות היא מרצון. אפשר להפסיק בכל רגע.",
+        "לשאלות: <bdi dir=\"ltr\">me@orifogler.com</bdi>"
+      ],
+      consent: "אני בן/בת <bdi>18</bdi> ומעלה ומסכים/ה להשתתף",
+      start: "להתחלה",
+      bg_h: "כמה שאלות רקע",
+      bg_lead: "השאלות הללו הן אופציונליות, חוץ משאלת רמת העברית.",
+      age_q: "קבוצת גיל",
+      age_opts: [["18-24", "<bdi>18-24</bdi>"], ["25-34", "<bdi>25-34</bdi>"], ["35-44", "<bdi>35-44</bdi>"], ["45-54", "<bdi>45-54</bdi>"], ["55+", "<bdi>55+</bdi>"]],
+      level_q: "מהי רמת העברית שלכם? (חובה)",
+      level_opts: [["native", "שפת אם"], ["fluent", "שוטפת"], ["not_fluent", "לא שוטפת"]],
+      drive_q: "האם אתם נוהגים באופן קבוע?",
+      drive_opts: [["yes", "כן"], ["no", "לא"]],
+      next: "המשך",
+      need_level: "יש לבחור רמת שפה כדי להמשיך.",
+      instr_h: "איך זה עובד",
+      instr_route: "בסקר הזה תתכננו נסיעה עבור חבר/ה. החבר/ה אומר/ת משפט על ההעדפה שלו/ה. אחר כך תבחרו בין שני מסלולים.",
+      instr_flight: "בסקר הזה תזמינו טיסה עבור חבר/ה. החבר/ה אומר/ת משפט על ההעדפה שלו/ה. אחר כך תבחרו בין שתי טיסות. שתי הטיסות נוחתות באותו יום.",
+      instr_points: [
+        "המשפט של החבר/ה משתנה מדי פעם. שימו לב למילים.",
+        "העלות של האפשרויות משתנה בין שאלות.",
+        "בחרו את האפשרות שנראית לכם נכונה עבור החבר/ה.",
+        "אין תשובות נכונות או שגויות.",
+        "אי אפשר לחזור אחורה בשלב הבחירות."
+      ],
+      example_btn: "לדוגמה",
+      example_h: "דוגמה (לא נרשמת)",
+      example_note: "זו רק דוגמה. התשובה שלכם לא נרשמת. בחרו אחת מהאפשרויות כדי לנסות.",
+      example_done: "מצוין. כך נראות השאלות. עכשיו מתחילים באמת.",
+      example_go: "להתחלת השאלות",
+      new_phrase: "משפט חדש",
+      friend_said: "החבר/ה שלך אמר/ה:",
+      which_q: "איזו אפשרות תבחרו עבורם?",
+      ctx_route: "תכננו נסיעה עבור החבר/ה. שני המסלולים מגיעים ליעד.",
+      ctx_flight: "הזמינו טיסה עבור החבר/ה. שתי הטיסות נוחתות באותו יום.",
+      stated_h: "עכשיו שאלה ישירה",
+      stated_q_route: "החבר/ה שלך אמר/ה: “{phrase}” מהי העלות הנוספת הגדולה ביותר, בדקות נסיעה, שהחבר/ה יסכימו לקבל לפני שיוותרו על ההעדפה?",
+      stated_q_flight: "החבר/ה שלך אמר/ה: “{phrase}” מהי העלות הנוספת הגדולה ביותר, ב-₪, שהחבר/ה יסכימו לקבל לפני שיוותרו על ההעדפה?",
+      stated_ref_route: "לשם השוואה: המסלול דרך הכביש המהיר אורך <bdi>40 דק׳</bdi>.",
+      stated_ref_flight: "לשם השוואה: הטיסה עם עצירת ביניים עולה <bdi>1,000 ₪</bdi>.",
+      unit_route: "דקות נוספות",
+      unit_flight: "₪ נוספים",
+      or_label: "או בחרו אחת מהאפשרויות:",
+      no_limit: "אין גבול. תמיד לפעול לפי ההעדפה.",
+      zero: "אפס. לא מוכנים לשום עלות נוספת.",
+      stated_err: "יש למלא מספר או לבחור אחת משתי האפשרויות.",
+      comment_h: "הערות (אופציונלי)",
+      comment_lead: "יש משהו שתרצו להוסיף על הסקר? אפשר גם לדלג.",
+      comment_label: "הערה חופשית",
+      submit: "שליחה",
+      sending: "שולחים…",
+      thanks_h: "תודה רבה!",
+      ok_msg: "התשובות נשלחו בהצלחה. תודה על ההשתתפות.",
+      fail_msg: "לא הצלחנו לשלוח כרגע. התשובות שמורות במכשיר. אפשר לנסות שוב.",
+      retry: "ניסיון חוזר",
+      email_msg: "אם השליחה ממשיכה להיכשל, העתיקו את הטקסט ושלחו אותו במייל אל <bdi dir=\"ltr\">me@orifogler.com</bdi>.",
+      copy: "העתקה",
+      copied: "הועתק",
+      debug_msg: "מצב בדיקה: שום דבר לא נשלח. זה הקובץ הסופי:",
+      domain_route: "route"
+    },
+    en: {
+      title: "Short Survey: Soft Preferences",
+      progress: "Progress",
+      welcome_h: "Short Survey: Soft Preferences",
+      welcome_lead: "This is academic research on how people understand soft requests.",
+      welcome_points: [
+        "The survey takes about <bdi>7</bdi> minutes.",
+        "The survey is anonymous. We do not collect your name or email.",
+        "There are no right or wrong answers.",
+        "Participation is voluntary. You can stop at any time.",
+        "Questions: <bdi dir=\"ltr\">me@orifogler.com</bdi>"
+      ],
+      consent: "I am <bdi>18</bdi> or older and agree to participate",
+      start: "Start",
+      bg_h: "A few background questions",
+      bg_lead: "These questions are optional, except the English level question.",
+      age_q: "Age group",
+      age_opts: [["18-24", "<bdi>18-24</bdi>"], ["25-34", "<bdi>25-34</bdi>"], ["35-44", "<bdi>35-44</bdi>"], ["45-54", "<bdi>45-54</bdi>"], ["55+", "<bdi>55+</bdi>"]],
+      level_q: "What is your level of English? (required)",
+      level_opts: [["native", "Native"], ["fluent", "Fluent"], ["not_fluent", "Not fluent"]],
+      drive_q: "Do you drive regularly?",
+      drive_opts: [["yes", "Yes"], ["no", "No"]],
+      next: "Continue",
+      need_level: "Please choose a language level to continue.",
+      instr_h: "How it works",
+      instr_route: "In this survey you plan a drive for a friend. The friend says a sentence about their preference. Then you choose between two routes.",
+      instr_flight: "In this survey you book a flight for a friend. The friend says a sentence about their preference. Then you choose between two flights. Both flights arrive on the same day.",
+      instr_points: [
+        "The friend's sentence changes from time to time. Read the words.",
+        "The cost of the options changes between questions.",
+        "Choose the option that seems right for the friend.",
+        "There are no right or wrong answers.",
+        "You cannot go back during the choice questions."
+      ],
+      example_btn: "See an example",
+      example_h: "Example (not recorded)",
+      example_note: "This is only an example. Your answer is not recorded. Pick an option to try it.",
+      example_done: "Good. This is how the questions look. Now we start for real.",
+      example_go: "Start the questions",
+      new_phrase: "New sentence",
+      friend_said: "Your friend said:",
+      which_q: "Which option do you choose for them?",
+      ctx_route: "Plan a drive for your friend. Both routes arrive at the destination.",
+      ctx_flight: "Book a flight for your friend. Both flights arrive on the same day.",
+      stated_h: "Now a direct question",
+      stated_q_route: "Your friend said: “{phrase}” What is the largest extra cost, in minutes of driving, that your friend would accept before giving up on the preference?",
+      stated_q_flight: "Your friend said: “{phrase}” What is the largest extra cost, in ₪, that your friend would accept before giving up on the preference?",
+      stated_ref_route: "For reference: the route via the highway takes <bdi>40 min</bdi>.",
+      stated_ref_flight: "For reference: the flight with a stopover costs <bdi>₪1,000</bdi>.",
+      unit_route: "extra minutes",
+      unit_flight: "extra ₪",
+      or_label: "Or choose one of these:",
+      no_limit: "No limit. Always follow the preference.",
+      zero: "Zero. Not willing to accept any extra cost.",
+      stated_err: "Enter a number or choose one of the two options.",
+      comment_h: "Comments (optional)",
+      comment_lead: "Is there anything you want to add about the survey? You can also skip.",
+      comment_label: "Free comment",
+      submit: "Submit",
+      sending: "Sending…",
+      thanks_h: "Thank you!",
+      ok_msg: "Your answers were sent. Thank you for taking part.",
+      fail_msg: "We could not send your answers now. They are saved on your device. You can try again.",
+      retry: "Try again",
+      email_msg: "If sending keeps failing, copy the text and email it to <bdi dir=\"ltr\">me@orifogler.com</bdi>.",
+      copy: "Copy",
+      copied: "Copied",
+      debug_msg: "Debug mode: nothing was sent. This is the final data:",
+      domain_route: "route"
+    }
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* ITEMS: phrases and domain wording (he / en). Edit wording here.     */
+  /* ------------------------------------------------------------------ */
+  var ITEMS = {
+    levels: [5, 10, 20, 35, 50, 75, 100, 150, 200, 300, 500],
+    base: { route: 40, flight: 1000 },
+    values: {
+      route: [42, 44, 48, 54, 60, 70, 80, 100, 120, 160, 240],
+      flight: [1050, 1100, 1200, 1350, 1500, 1750, 2000, 2500, 3000, 4000, 6000]
+    },
+    options: {
+      route: {
+        base: { he: "דרך הכביש המהיר", en: "Via the highway" },
+        pref: { he: "בלי הכביש המהיר", en: "Without the highway" }
+      },
+      flight: {
+        base: { he: "טיסה עם עצירת ביניים", en: "Flight with a stopover" },
+        pref: { he: "טיסה ישירה", en: "Direct flight" }
+      }
+    },
+    phrases: [
+      { id: "none",
+        route: { he: "אין לי העדפה מיוחדת לגבי המסלול.", en: "I have no particular preference about the route." },
+        flight: { he: "אין לי העדפה מיוחדת לגבי סוג הטיסה.", en: "I have no particular preference about the type of flight." } },
+      { id: "slightly",
+        route: { he: "אני קצת מעדיף/ה להימנע מהכביש המהיר.", en: "I slightly prefer to avoid the highway." },
+        flight: { he: "אני קצת מעדיף/ה להימנע מטיסה עם עצירת ביניים.", en: "I slightly prefer to avoid a flight with a stopover." } },
+      { id: "nice",
+        route: { he: "יהיה נחמד להימנע מהכביש המהיר.", en: "It would be nice to avoid the highway." },
+        flight: { he: "יהיה נחמד להימנע מטיסה עם עצירת ביניים.", en: "It would be nice to avoid a flight with a stopover." } },
+      { id: "if_possible",
+        route: { he: "אם אפשר, עדיף להימנע מהכביש המהיר.", en: "Avoid the highway if possible." },
+        flight: { he: "אם אפשר, עדיף להימנע מטיסה עם עצירת ביניים.", en: "Avoid a flight with a stopover if possible." } },
+      { id: "prefer",
+        route: { he: "אני מעדיף/ה להימנע מהכביש המהיר.", en: "I prefer to avoid the highway." },
+        flight: { he: "אני מעדיף/ה להימנע מטיסה עם עצירת ביניים.", en: "I prefer to avoid a flight with a stopover." } },
+      { id: "please",
+        route: { he: "בבקשה להימנע מהכביש המהיר.", en: "Please avoid the highway." },
+        flight: { he: "בבקשה להימנע מטיסה עם עצירת ביניים.", en: "Please avoid a flight with a stopover." } },
+      { id: "strongly",
+        route: { he: "אני מאוד מעדיף/ה להימנע מהכביש המהיר.", en: "I strongly prefer to avoid the highway." },
+        flight: { he: "אני מאוד מעדיף/ה להימנע מטיסה עם עצירת ביניים.", en: "I strongly prefer to avoid a flight with a stopover." } },
+      { id: "must",
+        route: { he: "חייבים להימנע מהכביש המהיר.", en: "We must avoid the highway." },
+        flight: { he: "חייבים להימנע מטיסה עם עצירת ביניים.", en: "We must avoid a flight with a stopover." } },
+      { id: "explicit20",
+        route: { he: "להימנע מהכביש המהיר, אלא אם זה מוסיף יותר מ-20% לזמן הנסיעה.", en: "Avoid the highway unless it adds more than 20% to the travel time." },
+        flight: { he: "להימנע מטיסה עם עצירת ביניים, אלא אם זה מוסיף יותר מ-20% למחיר.", en: "Avoid a flight with a stopover unless it adds more than 20% to the price." } }
+    ],
+    statedIds: ["slightly", "if_possible", "prefer", "must"]
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* Setup                                                               */
+  /* ------------------------------------------------------------------ */
+  var params = new URLSearchParams(location.search);
+  var LANG = params.get("lang") === "en" ? "en" : "he";
+  var DEBUG = params.get("debug") === "1";
+  var T = TEXT[LANG];
+  var DOMAIN = params.get("domain");
+  if (DOMAIN !== "route" && DOMAIN !== "flight") DOMAIN = Math.random() < 0.5 ? "route" : "flight";
+
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "he" ? "rtl" : "ltr";
+  document.title = T.title;
+  var STORE_KEY = "softpref_pilot1_payload";
+
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function randomId(n) {
+    var chars = "abcdefghijkmnpqrstuvwxyz23456789", s = "";
+    var arr = null;
+    try { arr = new Uint8Array(n); crypto.getRandomValues(arr); } catch (e) { arr = null; }
+    for (var i = 0; i < n; i++) s += chars.charAt((arr ? arr[i] : Math.floor(Math.random() * 256)) % chars.length);
+    return s;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  // Escape text and wrap numbers (with % sign) in <bdi> so they render correctly in RTL.
+  function safeNums(s) {
+    return esc(s).replace(/\d+(?:[.,]\d+)?%?/g, function (m) { return "<bdi>" + m + "</bdi>"; });
+  }
+  function phraseObj(id) {
+    for (var i = 0; i < ITEMS.phrases.length; i++) if (ITEMS.phrases[i].id === id) return ITEMS.phrases[i];
+    return null;
+  }
+  function phraseText(id) { return phraseObj(id)[DOMAIN][LANG]; }
+  function fmtNum(n) { return Number(n).toLocaleString("en-US"); }
+
+  function fmtMinutes(m) {
+    var base = m + (LANG === "he" ? " דק׳" : " min");
+    if (m <= 60) return "<bdi>" + base + "</bdi>";
+    var h = Math.floor(m / 60), r = m % 60, long;
+    if (LANG === "he") {
+      var hs = h === 1 ? "שעה" : h === 2 ? "שעתיים" : h + " שעות";
+      long = r ? hs + " ו-" + r + " דק׳" : hs;
+    } else {
+      long = h + " h" + (r ? " " + r + " min" : "");
+    }
+    return "<bdi>" + base + "</bdi> (<bdi>" + long + "</bdi>)";
+  }
+  function fmtCost(v) {
+    if (DOMAIN === "route") return fmtMinutes(v);
+    return LANG === "he" ? "<bdi>" + fmtNum(v) + " ₪</bdi>" : "<bdi>₪" + fmtNum(v) + "</bdi>";
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* State                                                               */
+  /* ------------------------------------------------------------------ */
+  var S = {
+    version: "pilot-1",
+    lang: LANG,
+    domain: DOMAIN,
+    started_at: null,
+    finished_at: null,
+    user_agent_mobile: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || ""),
+    background: {},
+    phrase_order: shuffle(ITEMS.phrases.map(function (p) { return p.id; })),
+    results: {},
+    trials: [],
+    stated: {},
+    comment: "",
+    participant_id: randomId(8)
+  };
+  var RT = { // runtime (not part of payload)
+    active: false, submitted: false, sending: false, tries: 0,
+    phraseIdx: 0, lo: -1, hi: 11, trialsDone: 0, curLevel: 0, trialStart: 0, locked: false,
+    statedOrder: shuffle(ITEMS.statedIds), statedIdx: 0
+  };
+  if (DEBUG) window.__survey = S;
+  if (DEBUG) window.__survey_rt = RT;
+
+  var $screen = document.getElementById("screen");
+  var $bar = document.getElementById("bar-fill");
+  var $barWrap = $bar.parentNode;
+
+  function setProgress(units) {
+    // Units: 4 pre-screens, 9 phrases, 4 stated, 1 comment = 18.
+    var pct = Math.max(0, Math.min(100, Math.round(units / 18 * 100)));
+    $bar.style.width = pct + "%";
+    $barWrap.setAttribute("aria-valuenow", String(pct));
+    $barWrap.setAttribute("aria-label", T.progress);
+  }
+
+  function show(html, focusSel) {
+    $screen.innerHTML = html;
+    window.scrollTo(0, 0);
+    var f = $screen.querySelector(focusSel || "h1, h2");
+    if (f) { f.setAttribute("tabindex", "-1"); try { f.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  function listHtml(arr) { return "<ul>" + arr.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>"; }
+  function radioGroup(name, opts) {
+    return opts.map(function (o) {
+      return '<label class="choice"><input type="radio" name="' + name + '" value="' + esc(o[0]) + '"><span>' + o[1] + "</span></label>";
+    }).join("");
+  }
+  function checkedVal(name) {
+    var el = $screen.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Screens                                                             */
+  /* ------------------------------------------------------------------ */
+  function screenWelcome() {
+    setProgress(0);
+    show(
+      '<section class="card">' +
+      "<h1>" + T.welcome_h + "</h1>" +
+      "<p>" + T.welcome_lead + "</p>" +
+      listHtml(T.welcome_points) +
+      '<label class="choice consent"><input type="checkbox" id="consent"><span>' + T.consent + "</span></label>" +
+      '<button class="btn" id="go" disabled>' + T.start + "</button>" +
+      "</section>"
+    );
+    var c = document.getElementById("consent"), g = document.getElementById("go");
+    c.addEventListener("change", function () { g.disabled = !c.checked; });
+    g.addEventListener("click", function () {
+      if (!c.checked) return;
+      S.started_at = new Date().toISOString();
+      RT.active = true;
+      screenBackground();
+    });
+  }
+
+  function screenBackground() {
+    setProgress(1);
+    var levelKey = LANG === "he" ? "hebrew" : "english";
+    show(
+      '<section class="card">' +
+      "<h2>" + T.bg_h + "</h2>" +
+      '<p class="muted">' + T.bg_lead + "</p>" +
+      '<div class="field"><div class="q">' + T.age_q + "</div>" + radioGroup("age", T.age_opts) + "</div>" +
+      '<div class="field"><div class="q">' + T.level_q + "</div>" + radioGroup("level", T.level_opts) + "</div>" +
+      '<div class="field"><div class="q">' + T.drive_q + "</div>" + radioGroup("drive", T.drive_opts) + "</div>" +
+      '<div class="err" id="err" role="alert"></div>' +
+      '<button class="btn" id="next">' + T.next + "</button>" +
+      "</section>"
+    );
+    document.getElementById("next").addEventListener("click", function () {
+      var level = checkedVal("level");
+      if (!level) { document.getElementById("err").textContent = T.need_level; return; }
+      S.background = {
+        age_group: checkedVal("age"),
+        language_level: level,
+        language_level_of: levelKey,
+        drives_regularly: checkedVal("drive")
+      };
+      screenInstructions();
+    });
+  }
+
+  function screenInstructions() {
+    setProgress(2);
+    show(
+      '<section class="card">' +
+      "<h2>" + T.instr_h + "</h2>" +
+      "<p>" + (DOMAIN === "route" ? T.instr_route : T.instr_flight) + "</p>" +
+      listHtml(T.instr_points) +
+      '<button class="btn" id="next">' + T.example_btn + "</button>" +
+      "</section>"
+    );
+    document.getElementById("next").addEventListener("click", screenExample);
+  }
+
+  // Builds the trial card HTML. levelIdx: index into levels; returns {html, prefFirst}
+  function trialHtml(phraseId, levelIdx, heading, extra) {
+    var opts = ITEMS.options[DOMAIN];
+    var prefFirst = Math.random() < 0.5;
+    var o = {
+      pref: { key: "pref", label: opts.pref[LANG], cost: fmtCost(ITEMS.values[DOMAIN][levelIdx]) },
+      cheap: { key: "cheap", label: opts.base[LANG], cost: fmtCost(ITEMS.base[DOMAIN]) }
+    };
+    var order = prefFirst ? [o.pref, o.cheap] : [o.cheap, o.pref];
+    var btns = order.map(function (x) {
+      return '<button type="button" class="opt" data-choice="' + x.key + '"><span class="lbl">' + esc(x.label) + '</span><span class="cost">' + x.cost + "</span></button>";
+    }).join("");
+    return {
+      prefFirst: prefFirst,
+      html: '<section class="card">' + (heading || "") +
+        '<div class="quote-label">' + T.friend_said + "</div>" +
+        '<blockquote class="quote">' + safeNums(phraseText(phraseId)) + "</blockquote>" +
+        '<p class="muted">' + (DOMAIN === "route" ? T.ctx_route : T.ctx_flight) + "</p>" +
+        "<h2>" + T.which_q + "</h2>" +
+        '<div class="opts">' + btns + "</div>" + (extra || "") + "</section>"
+    };
+  }
+
+  function screenExample() {
+    setProgress(3);
+    var t = trialHtml("prefer", 2, '<span class="badge">' + T.example_h + "</span>", '<p class="note" id="exnote">' + T.example_note + "</p>");
+    show(t.html, ".badge");
+    var done = false;
+    Array.prototype.forEach.call($screen.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () {
+        if (done) return;
+        done = true;
+        document.getElementById("exnote").textContent = T.example_done;
+        var go = document.createElement("button");
+        go.className = "btn"; go.type = "button"; go.textContent = T.example_go;
+        go.addEventListener("click", function () { startPhrase(0); });
+        $screen.querySelector(".card").appendChild(go);
+        go.focus();
+      });
+    });
+  }
+
+  function startPhrase(i) {
+    RT.phraseIdx = i;
+    RT.lo = -1; RT.hi = 11; RT.trialsDone = 0;
+    setProgress(4 + i);
+    show(
+      '<section class="card trans"><h2>' + T.new_phrase + '</h2><p class="muted"><bdi>' + (i + 1) + " / " + S.phrase_order.length + "</bdi></p></section>"
+    );
+    window.setTimeout(function () { if (RT.phraseIdx === i && RT.trialsDone === 0) nextTrial(); }, 1100);
+  }
+
+  function nextTrial() {
+    var id = S.phrase_order[RT.phraseIdx];
+    var mid = Math.floor((RT.lo + RT.hi) / 2);
+    RT.curLevel = mid;
+    RT.locked = false;
+    setProgress(4 + RT.phraseIdx + Math.min(RT.trialsDone / 4, 0.95));
+    var t = trialHtml(id, mid, "");
+    show(t.html, ".quote-label");
+    RT.trialStart = (window.performance && performance.now) ? performance.now() : Date.now();
+    Array.prototype.forEach.call($screen.querySelectorAll(".opt"), function (b) {
+      b.addEventListener("click", function () {
+        if (RT.locked) return;
+        RT.locked = true;
+        var now = (window.performance && performance.now) ? performance.now() : Date.now();
+        answerTrial(id, mid, b.getAttribute("data-choice"), t.prefFirst, Math.round(now - RT.trialStart));
+      });
+    });
+  }
+
+  function answerTrial(id, level, choice, prefFirst, rt) {
+    S.trials.push({
+      phrase: id,
+      level_idx: level,
+      level_pct: ITEMS.levels[level],
+      choice: choice,
+      order: prefFirst ? "pref_first" : "cheap_first",
+      rt_ms: rt
+    });
+    RT.trialsDone++;
+    if (choice === "pref") RT.lo = level; else RT.hi = level;
+    if (RT.hi - RT.lo > 1) { nextTrial(); return; }
+    S.results[id] = {
+      lo: RT.lo,
+      hi: RT.hi,
+      lo_pct: RT.lo >= 0 ? ITEMS.levels[RT.lo] : 0,
+      hi_pct: RT.hi <= 10 ? ITEMS.levels[RT.hi] : null
+    };
+    if (RT.phraseIdx + 1 < S.phrase_order.length) startPhrase(RT.phraseIdx + 1);
+    else { RT.statedIdx = 0; screenStated(); }
+  }
+
+  function screenStated() {
+    var id = RT.statedOrder[RT.statedIdx];
+    setProgress(13 + RT.statedIdx);
+    var q = (DOMAIN === "route" ? T.stated_q_route : T.stated_q_flight).replace("{phrase}", "§P§");
+    var qHtml = esc(q).replace("§P§", safeNums(phraseText(id)));
+    var unit = DOMAIN === "route" ? T.unit_route : T.unit_flight;
+    var ref = DOMAIN === "route" ? T.stated_ref_route : T.stated_ref_flight;
+    show(
+      '<section class="card">' +
+      '<span class="badge"><bdi>' + (RT.statedIdx + 1) + " / " + RT.statedOrder.length + "</bdi></span>" +
+      '<h2 style="font-weight:600">' + qHtml + "</h2>" +
+      '<p class="muted">' + ref + "</p>" +
+      '<div class="field"><label class="q" for="num">' + esc(unit) + '</label>' +
+      '<div class="unit-row"><input type="number" id="num" min="0" step="any" inputmode="decimal"><span>' + esc(unit) + "</span></div></div>" +
+      '<div class="field"><div class="muted">' + T.or_label + "</div>" +
+      radioGroup("alt", [["no_limit", T.no_limit], ["zero", T.zero]]) + "</div>" +
+      '<div class="err" id="err" role="alert"></div>' +
+      '<button class="btn" id="next">' + T.next + "</button>" +
+      "</section>",
+      "h2"
+    );
+    var num = document.getElementById("num");
+    num.addEventListener("input", function () {
+      if (num.value !== "") Array.prototype.forEach.call($screen.querySelectorAll('input[name="alt"]'), function (r) { r.checked = false; });
+    });
+    Array.prototype.forEach.call($screen.querySelectorAll('input[name="alt"]'), function (r) {
+      r.addEventListener("change", function () { num.value = ""; });
+    });
+    document.getElementById("next").addEventListener("click", function () {
+      var alt = checkedVal("alt");
+      var raw = num.value.trim();
+      var rec = null;
+      if (alt && raw === "") {
+        rec = alt === "no_limit" ? { type: "no_limit", value: null } : { type: "zero", value: 0 };
+      } else if (!alt && raw !== "") {
+        var v = parseFloat(raw);
+        if (isFinite(v) && v >= 0) rec = v === 0 ? { type: "zero", value: 0 } : { type: "number", value: v };
+      }
+      if (!rec) { document.getElementById("err").textContent = T.stated_err; return; }
+      S.stated[id] = rec;
+      RT.statedIdx++;
+      if (RT.statedIdx < RT.statedOrder.length) screenStated(); else screenComment();
+    });
+  }
+
+  function screenComment() {
+    setProgress(17);
+    show(
+      '<section class="card">' +
+      "<h2>" + T.comment_h + "</h2>" +
+      '<p class="muted">' + T.comment_lead + "</p>" +
+      '<div class="field"><label class="q" for="cm">' + T.comment_label + '</label><textarea id="cm" maxlength="2000"></textarea></div>' +
+      '<button class="btn" id="sub">' + T.submit + "</button>" +
+      "</section>"
+    );
+    var sub = document.getElementById("sub");
+    sub.addEventListener("click", function () {
+      if (RT.sending || RT.submitted) return;
+      sub.disabled = true;
+      S.comment = document.getElementById("cm").value.trim();
+      S.finished_at = new Date().toISOString();
+      setProgress(18);
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {}
+      screenThanks();
+      if (!DEBUG) doSend();
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Submission                                                          */
+  /* ------------------------------------------------------------------ */
+  function screenThanks() {
+    var body;
+    if (DEBUG) {
+      body = '<p class="status-box ok">' + T.debug_msg + '</p><textarea class="json" readonly id="json">' + esc(JSON.stringify(S, null, 2)) + "</textarea>";
+    } else {
+      body = '<div id="status" class="status-box" role="status">' + T.sending + "</div>" +
+        '<div id="fallback" class="hidden field"><p>' + T.email_msg + '</p><textarea class="json" readonly id="json"></textarea>' +
+        '<button type="button" class="btn secondary" id="copy">' + T.copy + "</button></div>" +
+        '<button type="button" class="btn hidden" id="retry">' + T.retry + "</button>";
+    }
+    show('<section class="card"><h2>' + T.thanks_h + "</h2>" + body + "</section>");
+    var copy = document.getElementById("copy");
+    if (copy) copy.addEventListener("click", doCopy);
+    var retry = document.getElementById("retry");
+    if (retry) retry.addEventListener("click", function () { if (!RT.sending && !RT.submitted) doSend(); });
+  }
+
+  function doCopy() {
+    var ta = document.getElementById("json");
+    var btn = document.getElementById("copy");
+    var txt = ta.value;
+    function done() { btn.textContent = T.copied; window.setTimeout(function () { btn.textContent = T.copy; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, function () { ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} });
+    } else {
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+    }
+  }
+
+  function doSend() {
+    if (RT.sending || RT.submitted) return;
+    RT.sending = true;
+    var status = document.getElementById("status");
+    var retry = document.getElementById("retry");
+    status.className = "status-box";
+    status.textContent = T.sending;
+    retry.classList.add("hidden");
+    var body = {
+      _subject: "Soft-preference survey pilot-1 " + S.participant_id,
+      _template: "box",
+      _captcha: "false",
+      participant_id: S.participant_id,
+      domain: S.domain,
+      lang: S.lang,
+      data: JSON.stringify(S)
+    };
+    fetch("https://formsubmit.co/ajax/me@orifogler.com", {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json().catch(function () { return {}; });
+    }).then(function (j) {
+      if (j && (j.success === "false" || j.success === false)) throw new Error("rejected");
+      RT.submitted = true;
+      RT.sending = false;
+      RT.active = false;
+      status.className = "status-box ok";
+      status.textContent = T.ok_msg;
+      try { localStorage.setItem(STORE_KEY + "_sent", S.participant_id); } catch (e) {}
+    }).catch(function () {
+      RT.sending = false;
+      RT.tries++;
+      status.className = "status-box fail";
+      status.textContent = T.fail_msg;
+      retry.classList.remove("hidden");
+      if (RT.tries >= 2) {
+        document.getElementById("json").value = JSON.stringify(S);
+        document.getElementById("fallback").classList.remove("hidden");
+      }
+    });
+  }
+
+  window.addEventListener("beforeunload", function (e) {
+    if (RT.active && !RT.submitted) {
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
+    }
+  });
+
+  screenWelcome();
+})();
+</script>
+</body>
+</html>
